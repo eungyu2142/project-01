@@ -1,0 +1,38 @@
+[
+  {
+    "match": {
+      "name": "에코특수동물병원"
+    },
+    "patch": {
+      "classification": "confirmed",
+      "supportedAnimals": ["reptile"],
+      "evidence": [
+        "사용자 제보로 파충류 전문 병원 확인"
+      ],
+      "sources": [
+        {
+          "provider": "manual",
+          "label": "사용자 확인"
+        }
+      ]
+    }
+  },
+  {
+    "match": {
+      "name": "이산동물병원"
+    },
+    "patch": {
+      "classification": "confirmed",
+      "supportedAnimals": [],
+      "evidence": [
+        "운영자 수동 오버라이드로 특수동물병원 확정"
+      ],
+      "sources": [
+        {
+          "provider": "manual",
+          "label": "운영자 수동 오버라이드"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,5142 @@
+{
+  "items": [
+    {
+      "id": "dataset-1270198258-375841486-24시애니동물병원",
+      "name": "24시애니동물병원",
+      "address": "서울특별시 성북구 보문로 99 영광빌딩 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5841486,
+      "lng": 127.0198258,
+      "mapX": 1270198258,
+      "mapY": 375841486,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 성북구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "서울특별시 성북구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 성북구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 성북구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1286199209-352522760-24시팔용feel동물병원",
+      "name": "24시팔용feel동물병원",
+      "address": "경상남도 창원시 의창구 평산로 102 녹주빌딩 1층 102호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.252276,
+      "lng": 128.6199209,
+      "mapX": 1286199209,
+      "mapY": 352522760,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 창원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경상남도 창원시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 창원시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 창원시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1267776521-376548274-가람동물병원",
+      "name": "가람동물병원",
+      "address": "경기도 고양시 일산동구 강석로 156 선경상가 101호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6548274,
+      "lng": 126.7776521,
+      "mapX": 1267776521,
+      "mapY": 376548274,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 고양시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 고양시 특수동물병원",
+        "경기도 김포시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 고양시 특수동물병원",
+        "네이버 지역 검색: 경기도 김포시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 김포시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://cafe.daum.net/garamclinic"
+    },
+    {
+      "id": "dataset-1288994289-377578600-강릉동물병원",
+      "name": "강릉동물병원",
+      "address": "강원특별자치도 강릉시 옥가로 18 강릉동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.75786,
+      "lng": 128.8994289,
+      "mapX": 1288994289,
+      "mapY": 377578600,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (강원특별자치도 강릉시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "강원특별자치도 강릉시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 강원특별자치도 강릉시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 강릉시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/skac762"
+    },
+    {
+      "id": "dataset-1268158578-375268712-고강동물병원",
+      "name": "고강동물병원",
+      "address": "경기도 부천시 오정구 역곡로 473",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5268712,
+      "lng": 126.8158578,
+      "mapX": 1268158578,
+      "mapY": 375268712,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 양천구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 양천구 특수동물병원",
+        "서울특별시 구로구 특수동물병원",
+        "경기도 부천시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 양천구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 구로구 특수동물병원",
+        "네이버 지역 검색: 경기도 부천시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 양천구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 구로구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 부천시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://pf.kakao.com/_viEWG"
+    },
+    {
+      "id": "dataset-1270524003-374951097-고려종합동물병원",
+      "name": "고려종합동물병원",
+      "address": "서울특별시 강남구 선릉로 225 도곡렉슬상가 507-2호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4951097,
+      "lng": 127.0524003,
+      "mapX": 1270524003,
+      "mapY": 374951097,
+      "recentSpecies": [
+        "파충류",
+        "조류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 서초구 파충류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "bird",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 서초구 파충류 동물병원",
+        "서울특별시 서초구 조류 동물병원",
+        "서울특별시 서초구 설치류 동물병원",
+        "서울특별시 강남구 특수동물병원",
+        "서울특별시 강남구 파충류 동물병원",
+        "서울특별시 강남구 조류 동물병원",
+        "서울특별시 강남구 설치류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 서초구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 서초구 조류 동물병원",
+        "네이버 지역 검색: 서울특별시 서초구 설치류 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 조류 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 설치류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 설치류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 설치류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1272322725-365185433-고운동물병원",
+      "name": "고운동물병원",
+      "address": "세종특별자치시 마음로 241 지상1, 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.5185433,
+      "lng": 127.2322725,
+      "mapX": 1272322725,
+      "mapY": 365185433,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (세종특별자치시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "세종특별자치시 특수동물병원",
+        "세종특별자치시 토끼 동물병원",
+        "충청남도 공주시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 세종특별자치시 특수동물병원",
+        "네이버 지역 검색: 세종특별자치시 토끼 동물병원",
+        "네이버 지역 검색: 충청남도 공주시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "세종특별자치시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "세종특별자치시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 공주시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/gounamc"
+    },
+    {
+      "id": "dataset-1268653806-375175555-공원옆동물의료센터",
+      "name": "공원옆동물의료센터",
+      "address": "서울특별시 양천구 목동서로 349 목동센트럴프라자 203호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5175555,
+      "lng": 126.8653806,
+      "mapX": 1268653806,
+      "mapY": 375175555,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 양천구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 양천구 햄스터 동물병원",
+        "서울특별시 구로구 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 양천구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 구로구 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 양천구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 구로구 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://pf.kakao.com/_exajxdu/chat"
+    },
+    {
+      "id": "dataset-1290887367-352480623-구서동물병원",
+      "name": "구서동물병원",
+      "address": "부산광역시 금정구 금강로 454",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2480623,
+      "lng": 129.0887367,
+      "mapX": 1290887367,
+      "mapY": 352480623,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 금정구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "부산광역시 금정구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 금정구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 금정구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1281487559-351721867-굿닥터동물병원",
+      "name": "굿닥터동물병원",
+      "address": "경상남도 진주시 사들로 52",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1721867,
+      "lng": 128.1487559,
+      "mapX": 1281487559,
+      "mapY": 351721867,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 진주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경상남도 진주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 진주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 진주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/good_dr_ah"
+    },
+    {
+      "id": "dataset-1268938817-374576643-금나래동물병원",
+      "name": "금나래동물병원",
+      "address": "서울특별시 금천구 벚꽃로 30 지하1층 B127호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4576643,
+      "lng": 126.8938817,
+      "mapX": 1268938817,
+      "mapY": 374576643,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 금천구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 금천구 특수동물병원",
+        "서울특별시 관악구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 금천구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 금천구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/vetgate"
+    },
+    {
+      "id": "dataset-1271272148-368073471-김앤정동물병원",
+      "name": "김앤정동물병원",
+      "address": "충청남도 천안시 서북구 미라16길 19 3층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.8073471,
+      "lng": 127.1272148,
+      "mapX": 1271272148,
+      "mapY": 368073471,
+      "recentSpecies": [
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (충청남도 천안시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "충청남도 천안시 특수동물병원",
+        "충청남도 천안시 조류 동물병원",
+        "충청남도 아산시 특수동물병원",
+        "충청남도 아산시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청남도 천안시 특수동물병원",
+        "네이버 지역 검색: 충청남도 천안시 조류 동물병원",
+        "네이버 지역 검색: 충청남도 아산시 특수동물병원",
+        "네이버 지역 검색: 충청남도 아산시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 아산시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 아산시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1274913148-349558625-김영대동물병원",
+      "name": "김영대동물병원",
+      "address": "전라남도 순천시 용당둑길 183 김영대 동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 34.9558625,
+      "lng": 127.4913148,
+      "mapX": 1274913148,
+      "mapY": 349558625,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (전라남도 순천시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "전라남도 순천시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 전라남도 순천시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "전라남도 순천시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1268379435-375444789-나음동물의료센터",
+      "name": "나음동물의료센터",
+      "address": "서울특별시 강서구 강서로 206 1층 101호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5444789,
+      "lng": 126.8379435,
+      "mapX": 1268379435,
+      "mapY": 375444789,
+      "recentSpecies": [
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 양천구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 양천구 특수동물병원",
+        "서울특별시 양천구 파충류 동물병원",
+        "서울특별시 강서구 특수동물병원",
+        "서울특별시 강서구 파충류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 양천구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 양천구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 강서구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 강서구 파충류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 양천구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 양천구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강서구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강서구 파충류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/naumanimal"
+    },
+    {
+      "id": "dataset-1267324999-374004098-논현동물병원",
+      "name": "논현동물병원",
+      "address": "인천광역시 남동구 소래역남로16번길 75 에코메트로3차 더타워 지하상가 B103-2호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4004098,
+      "lng": 126.7324999,
+      "mapX": 1267324999,
+      "mapY": 374004098,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (인천광역시 남동구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "인천광역시 남동구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 남동구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 남동구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.facebook.com/thenonhyunah"
+    },
+    {
+      "id": "dataset-1270644835-375695995-뉴월드동물병원",
+      "name": "뉴월드동물병원",
+      "address": "서울특별시 동대문구 한천로 94 유성빌딩 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5695995,
+      "lng": 127.0644835,
+      "mapX": 1270644835,
+      "mapY": 375695995,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 동대문구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 동대문구 특수동물병원",
+        "서울특별시 중랑구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 동대문구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 중랑구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 동대문구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 중랑구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/neworld_vet"
+    },
+    {
+      "id": "dataset-1269800433-359650579-늘봄동물병원",
+      "name": "늘봄동물병원",
+      "address": "전북특별자치도 익산시 하나로 499 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.9650579,
+      "lng": 126.9800433,
+      "mapX": 1269800433,
+      "mapY": 359650579,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (전북특별자치도 익산시 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "전북특별자치도 익산시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 전북특별자치도 익산시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "전북특별자치도 익산시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/neulbom_amc"
+    },
+    {
+      "id": "dataset-1276328493-372374695-다란동물병원",
+      "name": "다란동물병원",
+      "address": "경기도 여주시 북벌로 66 103호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2374695,
+      "lng": 127.6328493,
+      "mapX": 1276328493,
+      "mapY": 372374695,
+      "recentSpecies": [
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 이천시 조류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 이천시 조류 동물병원",
+        "경기도 여주시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 이천시 조류 동물병원",
+        "네이버 지역 검색: 경기도 여주시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 이천시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 여주시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/daran_aac"
+    },
+    {
+      "id": "dataset-1270838841-375422296-다봄동물병원",
+      "name": "다봄동물병원",
+      "address": "서울특별시 광진구 자양로 163 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5422296,
+      "lng": 127.0838841,
+      "mapX": 1270838841,
+      "mapY": 375422296,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 광진구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 광진구 특수동물병원",
+        "경기도 남양주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 광진구 특수동물병원",
+        "네이버 지역 검색: 경기도 남양주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 광진구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/dabom_ah"
+    },
+    {
+      "id": "dataset-1271285712-367890092-다솜동물병원",
+      "name": "다솜 동물병원",
+      "address": "충청남도 천안시 동남구 수곡2길 8-3",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.7890092,
+      "lng": 127.1285712,
+      "mapX": 1271285712,
+      "mapY": 367890092,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (충청남도 천안시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "충청남도 천안시 특수동물병원",
+        "충청남도 천안시 토끼 동물병원",
+        "충청남도 아산시 특수동물병원",
+        "충청남도 아산시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청남도 천안시 특수동물병원",
+        "네이버 지역 검색: 충청남도 천안시 토끼 동물병원",
+        "네이버 지역 검색: 충청남도 아산시 특수동물병원",
+        "네이버 지역 검색: 충청남도 아산시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 아산시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 아산시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1290100692-352249624-다은동물병원",
+      "name": "다은동물병원",
+      "address": "부산광역시 북구 금곡대로 180 1층 102호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2249624,
+      "lng": 129.0100692,
+      "mapX": 1290100692,
+      "mapY": 352249624,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 북구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "부산광역시 북구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 북구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 북구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1268752044-351427766-닥터남동물병원",
+      "name": "닥터남동물병원",
+      "address": "광주광역시 서구 염화로 97 닥터남동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1427766,
+      "lng": 126.8752044,
+      "mapX": 1268752044,
+      "mapY": 351427766,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (광주광역시 서구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "광주광역시 서구 햄스터 동물병원",
+        "광주광역시 남구 햄스터 동물병원",
+        "광주광역시 북구 햄스터 동물병원",
+        "전라남도 담양군 햄스터 동물병원",
+        "전라남도 화순군 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 광주광역시 서구 햄스터 동물병원",
+        "네이버 지역 검색: 광주광역시 남구 햄스터 동물병원",
+        "네이버 지역 검색: 광주광역시 북구 햄스터 동물병원",
+        "네이버 지역 검색: 전라남도 담양군 햄스터 동물병원",
+        "네이버 지역 검색: 전라남도 화순군 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "광주광역시 서구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "광주광역시 남구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "광주광역시 북구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 담양군 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 화순군 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1270577712-376292122-닥터스종합동물병원",
+      "name": "닥터스종합동물병원",
+      "address": "서울특별시 노원구 월계로 336 상천빌딩 1층 닥터스종합동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6292122,
+      "lng": 127.0577712,
+      "mapX": 1270577712,
+      "mapY": 376292122,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 성북구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 성북구 햄스터 동물병원",
+        "서울특별시 강북구 햄스터 동물병원",
+        "서울특별시 도봉구 햄스터 동물병원",
+        "서울특별시 노원구 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 성북구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 강북구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 도봉구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 노원구 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 성북구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강북구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 도봉구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 노원구 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1270680248-378367258-덕정동물의료센터",
+      "name": "덕정동물의료센터",
+      "address": "경기도 양주시 고암길 306-53 202, 203호 덕정동물의료센터",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.8367258,
+      "lng": 127.0680248,
+      "mapX": 1270680248,
+      "mapY": 378367258,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 양주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 양주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 양주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 양주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/_dog_jeong/"
+    },
+    {
+      "id": "dataset-1269632231-375690765-독립문동물병원",
+      "name": "독립문동물병원",
+      "address": "서울특별시 서대문구 통일로 171-1",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5690765,
+      "lng": 126.9632231,
+      "mapX": 1269632231,
+      "mapY": 375690765,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 종로구 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 종로구 토끼 동물병원",
+        "서울특별시 종로구 햄스터 동물병원",
+        "서울특별시 중구 토끼 동물병원",
+        "서울특별시 중구 햄스터 동물병원",
+        "서울특별시 은평구 토끼 동물병원",
+        "서울특별시 은평구 햄스터 동물병원",
+        "서울특별시 서대문구 토끼 동물병원",
+        "서울특별시 서대문구 햄스터 동물병원",
+        "서울특별시 마포구 토끼 동물병원",
+        "서울특별시 마포구 햄스터 동물병원",
+        "경기도 고양시 토끼 동물병원",
+        "경기도 고양시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 종로구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 종로구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 중구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 중구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 고양시 토끼 동물병원",
+        "네이버 지역 검색: 경기도 고양시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 종로구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 종로구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.animalhospital.co.kr/"
+    },
+    {
+      "id": "dataset-1269594906-373929170-돌봄동물병원",
+      "name": "돌봄동물병원",
+      "address": "경기도 안양시 동안구 관평로 183 107, 108호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.392917,
+      "lng": 126.9594906,
+      "mapX": 1269594906,
+      "mapY": 373929170,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 안양시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 안양시 특수동물병원",
+        "경기도 의왕시 특수동물병원",
+        "경기도 과천시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 안양시 특수동물병원",
+        "네이버 지역 검색: 경기도 의왕시 특수동물병원",
+        "네이버 지역 검색: 경기도 과천시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 안양시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 의왕시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 과천시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://pf.kakao.com/_LvTUG"
+    },
+    {
+      "id": "dataset-1288257782-378754605-동물병원올펫츠",
+      "name": "동물병원올펫츠",
+      "address": "강원특별자치도 강릉시 주문진읍 매맥이아랫길 30-4",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.8754605,
+      "lng": 128.8257782,
+      "mapX": 1288257782,
+      "mapY": 378754605,
+      "recentSpecies": [
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (강원특별자치도 강릉시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "강원특별자치도 강릉시 특수동물병원",
+        "강원특별자치도 강릉시 파충류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 강원특별자치도 강릉시 특수동물병원",
+        "네이버 지역 검색: 강원특별자치도 강릉시 파충류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 강릉시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 강릉시 파충류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/dvmroh"
+    },
+    {
+      "id": "dataset-1285198837-358130977-두남자동물병원",
+      "name": "두남자동물병원",
+      "address": "대구광역시 달서구 월배로 48",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.8130977,
+      "lng": 128.5198837,
+      "mapX": 1285198837,
+      "mapY": 358130977,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (대구광역시 달서구 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대구광역시 달서구 토끼 동물병원",
+        "대구광역시 달성군 토끼 동물병원",
+        "경상북도 청도군 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대구광역시 달서구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 토끼 동물병원",
+        "네이버 지역 검색: 경상북도 청도군 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대구광역시 달서구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 청도군 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/twomenvh"
+    },
+    {
+      "id": "dataset-1286045134-358624911-두티동물병원",
+      "name": "두티동물병원",
+      "address": "대구광역시 중구 달구벌대로 2208 4층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.8624911,
+      "lng": 128.6045134,
+      "mapX": 1286045134,
+      "mapY": 358624911,
+      "recentSpecies": [
+        "파충류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (대구광역시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대구광역시 중구 특수동물병원",
+        "대구광역시 중구 파충류 동물병원",
+        "대구광역시 중구 토끼 동물병원",
+        "대구광역시 중구 햄스터 동물병원",
+        "대구광역시 동구 특수동물병원",
+        "대구광역시 동구 파충류 동물병원",
+        "대구광역시 동구 토끼 동물병원",
+        "대구광역시 동구 햄스터 동물병원",
+        "대구광역시 남구 특수동물병원",
+        "대구광역시 남구 파충류 동물병원",
+        "대구광역시 남구 토끼 동물병원",
+        "대구광역시 남구 햄스터 동물병원",
+        "대구광역시 수성구 파충류 동물병원",
+        "대구광역시 달성군 특수동물병원",
+        "대구광역시 달성군 파충류 동물병원",
+        "대구광역시 달성군 토끼 동물병원",
+        "대구광역시 달성군 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대구광역시 중구 특수동물병원",
+        "네이버 지역 검색: 대구광역시 중구 파충류 동물병원",
+        "네이버 지역 검색: 대구광역시 중구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 중구 햄스터 동물병원",
+        "네이버 지역 검색: 대구광역시 동구 특수동물병원",
+        "네이버 지역 검색: 대구광역시 동구 파충류 동물병원",
+        "네이버 지역 검색: 대구광역시 동구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 동구 햄스터 동물병원",
+        "네이버 지역 검색: 대구광역시 남구 특수동물병원",
+        "네이버 지역 검색: 대구광역시 남구 파충류 동물병원",
+        "네이버 지역 검색: 대구광역시 남구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 남구 햄스터 동물병원",
+        "네이버 지역 검색: 대구광역시 수성구 파충류 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 특수동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 파충류 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대구광역시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 중구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 중구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 중구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 남구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 남구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 남구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 남구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 수성구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/dutyamc"
+    },
+    {
+      "id": "dataset-1271369723-376098887-래플즈동물병원",
+      "name": "래플즈동물병원",
+      "address": "경기도 구리시 동구릉로 120 인성빌딩",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6098887,
+      "lng": 127.1369723,
+      "mapX": 1271369723,
+      "mapY": 376098887,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 남양주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 남양주시 특수동물병원",
+        "경기도 남양주시 햄스터 동물병원",
+        "경기도 구리시 특수동물병원",
+        "경기도 구리시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 남양주시 특수동물병원",
+        "네이버 지역 검색: 경기도 남양주시 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 구리시 특수동물병원",
+        "네이버 지역 검색: 경기도 구리시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 구리시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 구리시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/raffles7582"
+    },
+    {
+      "id": "dataset-1269992568-372965146-레이동물병원",
+      "name": "레이동물병원",
+      "address": "경기도 수원시 장안구 송정로 20",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2965146,
+      "lng": 126.9992568,
+      "mapX": 1269992568,
+      "mapY": 372965146,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 수원시 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 수원시 토끼 동물병원",
+        "경기도 화성시 토끼 동물병원",
+        "경기도 의왕시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 수원시 토끼 동물병원",
+        "네이버 지역 검색: 경기도 화성시 토끼 동물병원",
+        "네이버 지역 검색: 경기도 의왕시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 수원시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 화성시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 의왕시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1279534454-373413762-로얄종합동물병원",
+      "name": "로얄종합동물병원",
+      "address": "강원특별자치도 원주시 남원로 655",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3413762,
+      "lng": 127.9534454,
+      "mapX": 1279534454,
+      "mapY": 373413762,
+      "recentSpecies": [
+        "파충류",
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (강원특별자치도 원주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "강원특별자치도 원주시 특수동물병원",
+        "강원특별자치도 원주시 파충류 동물병원",
+        "강원특별자치도 원주시 조류 동물병원",
+        "강원특별자치도 횡성군 특수동물병원",
+        "강원특별자치도 횡성군 파충류 동물병원",
+        "강원특별자치도 횡성군 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 강원특별자치도 원주시 특수동물병원",
+        "네이버 지역 검색: 강원특별자치도 원주시 파충류 동물병원",
+        "네이버 지역 검색: 강원특별자치도 원주시 조류 동물병원",
+        "네이버 지역 검색: 강원특별자치도 횡성군 특수동물병원",
+        "네이버 지역 검색: 강원특별자치도 횡성군 파충류 동물병원",
+        "네이버 지역 검색: 강원특별자치도 횡성군 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 원주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 원주시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 원주시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 횡성군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 횡성군 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 횡성군 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/iamdvm"
+    },
+    {
+      "id": "dataset-1271539797-372702831-리치펫동물병원",
+      "name": "리치펫동물병원",
+      "address": "경기도 용인시 기흥구 동백중앙로 177 씨엘뷰오피스텔 106호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2702831,
+      "lng": 127.1539797,
+      "mapX": 1271539797,
+      "mapY": 372702831,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 용인시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 용인시 특수동물병원",
+        "경기도 광주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 용인시 특수동물병원",
+        "네이버 지역 검색: 경기도 광주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 용인시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1271284096-375013610-리틀버드서울버드앤주클리닉",
+      "name": "리틀버드서울 버드앤주클리닉",
+      "address": "서울특별시 송파구 오금로 332 B동 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.501361,
+      "lng": 127.1284096,
+      "mapX": 1271284096,
+      "mapY": 375013610,
+      "recentSpecies": [
+        "파충류",
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 송파구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 송파구 특수동물병원",
+        "서울특별시 송파구 파충류 동물병원",
+        "서울특별시 송파구 조류 동물병원",
+        "경기도 남양주시 특수동물병원",
+        "경기도 남양주시 파충류 동물병원",
+        "경기도 남양주시 조류 동물병원",
+        "경기도 광주시 특수동물병원",
+        "경기도 광주시 파충류 동물병원",
+        "경기도 광주시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 송파구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 송파구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 송파구 조류 동물병원",
+        "네이버 지역 검색: 경기도 남양주시 특수동물병원",
+        "네이버 지역 검색: 경기도 남양주시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 남양주시 조류 동물병원",
+        "네이버 지역 검색: 경기도 광주시 특수동물병원",
+        "네이버 지역 검색: 경기도 광주시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 광주시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1293062861-355416979-리틀쥬동물병원",
+      "name": "리틀쥬동물병원",
+      "address": "울산광역시 남구 봉월로 104 1. 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.5416979,
+      "lng": 129.3062861,
+      "mapX": 1293062861,
+      "mapY": 355416979,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (울산광역시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "울산광역시 중구 특수동물병원",
+        "울산광역시 남구 특수동물병원",
+        "울산광역시 북구 특수동물병원",
+        "울산광역시 울주군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 울산광역시 중구 특수동물병원",
+        "네이버 지역 검색: 울산광역시 남구 특수동물병원",
+        "네이버 지역 검색: 울산광역시 북구 특수동물병원",
+        "네이버 지역 검색: 울산광역시 울주군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "울산광역시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "울산광역시 남구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "울산광역시 북구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "울산광역시 울주군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.littlezoo.com/"
+    },
+    {
+      "id": "dataset-1271192645-358127503-링크늘푸른동물병원",
+      "name": "링크늘푸른동물병원",
+      "address": "전북특별자치도 전주시 완산구 서원로 225 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.8127503,
+      "lng": 127.1192645,
+      "mapX": 1271192645,
+      "mapY": 358127503,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (전북특별자치도 전주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "전북특별자치도 전주시 특수동물병원",
+        "전북특별자치도 완주군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 전북특별자치도 전주시 특수동물병원",
+        "네이버 지역 검색: 전북특별자치도 완주군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "전북특별자치도 전주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전북특별자치도 완주군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/link.evergreen"
+    },
+    {
+      "id": "dataset-1267511566-375053813-맘스동물의료센터",
+      "name": "맘스동물의료센터",
+      "address": "경기도 부천시 원미구 길주로 80 로얄타워 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5053813,
+      "lng": 126.7511566,
+      "mapX": 1267511566,
+      "mapY": 375053813,
+      "recentSpecies": [
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (인천광역시 부평구 파충류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 부평구 파충류 동물병원",
+        "경기도 부천시 파충류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 부평구 파충류 동물병원",
+        "네이버 지역 검색: 경기도 부천시 파충류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 부평구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 부천시 파충류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/momsanimal_"
+    },
+    {
+      "id": "dataset-1268839307-374200791-메디힐동물병원",
+      "name": "메디힐동물병원",
+      "address": "경기도 광명시 신기로 21 GS스틸타워 2층 206호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4200791,
+      "lng": 126.8839307,
+      "mapX": 1268839307,
+      "mapY": 374200791,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 광명시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 광명시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 광명시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 광명시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.instagram.com/mediheal_amc"
+    },
+    {
+      "id": "dataset-1270915782-373894424-메르시동물병원",
+      "name": "메르시동물병원",
+      "address": "경기도 성남시 분당구 운중로 255 201호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3894424,
+      "lng": 127.0915782,
+      "mapX": 1270915782,
+      "mapY": 373894424,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 성남시 페럿 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 성남시 페럿 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 성남시 페럿 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 페럿 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/bairon02"
+    },
+    {
+      "id": "dataset-1279284517-369811639-보드미동물병원",
+      "name": "보드미동물병원",
+      "address": "충청북도 충주시 국원대로 108",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.9811639,
+      "lng": 127.9284517,
+      "mapX": 1279284517,
+      "mapY": 369811639,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (충청북도 충주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "충청북도 충주시 특수동물병원",
+        "충청북도 제천시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청북도 충주시 특수동물병원",
+        "네이버 지역 검색: 충청북도 제천시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청북도 충주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청북도 제천시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/bodmiblog"
+    },
+    {
+      "id": "dataset-1270093453-376105754-보성통증동물병원",
+      "name": "보성통증동물병원",
+      "address": "서울특별시 성북구 보국문로 68-1 (정릉동 정호빌딩) 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6105754,
+      "lng": 127.0093453,
+      "mapX": 1270093453,
+      "mapY": 376105754,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 성북구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 성북구 특수동물병원",
+        "서울특별시 강북구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 성북구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 강북구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 성북구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강북구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1267762317-375042944-부천준동물병원",
+      "name": "부천 준동물병원",
+      "address": "경기도 부천시 원미구 신흥로 230 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5042944,
+      "lng": 126.7762317,
+      "mapX": 1267762317,
+      "mapY": 375042944,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (인천광역시 부평구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 부평구 특수동물병원",
+        "인천광역시 부평구 토끼 동물병원",
+        "경기도 부천시 특수동물병원",
+        "경기도 부천시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 부평구 특수동물병원",
+        "네이버 지역 검색: 인천광역시 부평구 토끼 동물병원",
+        "네이버 지역 검색: 경기도 부천시 특수동물병원",
+        "네이버 지역 검색: 경기도 부천시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 부평구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 부평구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 부천시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 부천시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/jun_animal_hospital/"
+    },
+    {
+      "id": "dataset-1269602878-375989156-북악동물병원",
+      "name": "북악동물병원",
+      "address": "서울특별시 종로구 자하문로 293",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5989156,
+      "lng": 126.9602878,
+      "mapX": 1269602878,
+      "mapY": 375989156,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 종로구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 종로구 특수동물병원",
+        "서울특별시 은평구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 종로구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 종로구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1271150409-373654625-분당데이지동물병원",
+      "name": "분당데이지동물병원",
+      "address": "경기도 성남시 분당구 내정로 58",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3654625,
+      "lng": 127.1150409,
+      "mapX": 1271150409,
+      "mapY": 373654625,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 성남시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 성남시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 성남시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/bundangdaisy"
+    },
+    {
+      "id": "dataset-1269532007-374972599-상도힐링동물병원",
+      "name": "상도힐링동물병원",
+      "address": "서울특별시 동작구 상도로 353 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4972599,
+      "lng": 126.9532007,
+      "mapX": 1269532007,
+      "mapY": 374972599,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 용산구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 용산구 특수동물병원",
+        "서울특별시 영등포구 특수동물병원",
+        "서울특별시 동작구 특수동물병원",
+        "서울특별시 관악구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 용산구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 영등포구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 동작구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 용산구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 영등포구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 동작구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/healing7512"
+    },
+    {
+      "id": "dataset-1270707859-372521490-새봄동물병원",
+      "name": "새봄동물병원",
+      "address": "경기도 수원시 영통구 봉영로 1569 뉴월드프라자 1층 121호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.252149,
+      "lng": 127.0707859,
+      "mapX": 1270707859,
+      "mapY": 372521490,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 수원시 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 수원시 햄스터 동물병원",
+        "경기도 화성시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 수원시 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 화성시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 수원시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 화성시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1268768847-350987719-새봄동물병원",
+      "name": "새봄동물병원",
+      "address": "광주광역시 남구 서문대로 339 그랜드타워2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.0987719,
+      "lng": 126.8768847,
+      "mapX": 1268768847,
+      "mapY": 350987719,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (광주광역시 서구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "광주광역시 서구 특수동물병원",
+        "광주광역시 남구 특수동물병원",
+        "전라남도 나주시 특수동물병원",
+        "전라남도 화순군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 광주광역시 서구 특수동물병원",
+        "네이버 지역 검색: 광주광역시 남구 특수동물병원",
+        "네이버 지역 검색: 전라남도 나주시 특수동물병원",
+        "네이버 지역 검색: 전라남도 화순군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "광주광역시 서구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "광주광역시 남구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 나주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 화순군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1269220605-376075153-새은평동물의료센터",
+      "name": "새은평동물의료센터",
+      "address": "서울특별시 은평구 서오릉로 80",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6075153,
+      "lng": 126.9220605,
+      "mapX": 1269220605,
+      "mapY": 376075153,
+      "recentSpecies": [
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 은평구 조류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 은평구 조류 동물병원",
+        "서울특별시 서대문구 조류 동물병원",
+        "경기도 고양시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 은평구 조류 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 조류 동물병원",
+        "네이버 지역 검색: 경기도 고양시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/wxyz543"
+    },
+    {
+      "id": "dataset-1291062777-352149670-서동동물메디컬센터",
+      "name": "서동 동물메디컬센터",
+      "address": "부산광역시 금정구 서동로175번길 11",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.214967,
+      "lng": 129.1062777,
+      "mapX": 1291062777,
+      "mapY": 352149670,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 동래구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "부산광역시 동래구 특수동물병원",
+        "부산광역시 해운대구 특수동물병원",
+        "부산광역시 금정구 특수동물병원",
+        "부산광역시 기장군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 동래구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 해운대구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 금정구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 기장군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 동래구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 해운대구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 금정구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 기장군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/cats_dogs119"
+    },
+    {
+      "id": "dataset-1287009368-352130547-서울동물병원",
+      "name": "서울동물병원",
+      "address": "경상남도 창원시 성산구 가음로13번길 33 남양종합상가 108호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2130547,
+      "lng": 128.7009368,
+      "mapX": 1287009368,
+      "mapY": 352130547,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 창원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경상남도 창원시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 창원시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 창원시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1266808614-374364360-서울든든동물병원인천",
+      "name": "서울든든동물병원 인천",
+      "address": "인천광역시 미추홀구 문학동 140 로얄캐슬상가 105호, 106호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.436436,
+      "lng": 126.6808614,
+      "mapX": 1266808614,
+      "mapY": 374364360,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (인천광역시 미추홀구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 미추홀구 특수동물병원",
+        "인천광역시 연수구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 미추홀구 특수동물병원",
+        "네이버 지역 검색: 인천광역시 연수구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 미추홀구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 연수구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/parkkies"
+    },
+    {
+      "id": "dataset-1269940605-374849940-서울종합동물병원방배",
+      "name": "서울종합동물병원방배",
+      "address": "서울특별시 서초구 방배로19길 19 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.484994,
+      "lng": 126.9940605,
+      "mapX": 1269940605,
+      "mapY": 374849940,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 관악구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 관악구 특수동물병원",
+        "서울특별시 서초구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 관악구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 서초구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/seoul_vetcargo"
+    },
+    {
+      "id": "dataset-1268429144-375327392-세명동물병원",
+      "name": "세명동물병원",
+      "address": "서울특별시 강서구 강서로17길 52 세명동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5327392,
+      "lng": 126.8429144,
+      "mapX": 1268429144,
+      "mapY": 375327392,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 양천구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 양천구 특수동물병원",
+        "서울특별시 강서구 특수동물병원",
+        "서울특별시 강서구 햄스터 동물병원",
+        "경기도 부천시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 양천구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 강서구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 강서구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 부천시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 양천구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강서구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강서구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 부천시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://smanimal.ad-media.kr/"
+    },
+    {
+      "id": "dataset-1272627112-364793010-세종동물의료센터",
+      "name": "세종동물의료센터",
+      "address": "세종특별자치시 한누리대로 157 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.479301,
+      "lng": 127.2627112,
+      "mapX": 1272627112,
+      "mapY": 364793010,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (대전광역시 유성구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대전광역시 유성구 특수동물병원",
+        "세종특별자치시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대전광역시 유성구 특수동물병원",
+        "네이버 지역 검색: 세종특별자치시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대전광역시 유성구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "세종특별자치시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1273339914-365025368-세종충북대학교동물병원",
+      "name": "세종충북대학교동물병원",
+      "address": "세종특별자치시 집현북로 109 대학동 4 충북대학교 건물",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.5025368,
+      "lng": 127.3339914,
+      "mapX": 1273339914,
+      "mapY": 365025368,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (대전광역시 유성구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대전광역시 유성구 특수동물병원",
+        "세종특별자치시 특수동물병원",
+        "충청북도 청주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대전광역시 유성구 특수동물병원",
+        "네이버 지역 검색: 세종특별자치시 특수동물병원",
+        "네이버 지역 검색: 충청북도 청주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대전광역시 유성구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "세종특별자치시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청북도 청주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.sjcbuanimal.co.kr"
+    },
+    {
+      "id": "dataset-1268330656-376381048-센트럴동물병원",
+      "name": "센트럴동물병원",
+      "address": "경기도 고양시 덕양구 은빛로 45 화정꽃무리조합프라자 202호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6381048,
+      "lng": 126.8330656,
+      "mapX": 1268330656,
+      "mapY": 376381048,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 고양시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 고양시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 고양시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/centralahcom"
+    },
+    {
+      "id": "dataset-1285773246-381989000-속초동물의료센터",
+      "name": "속초동물의료센터",
+      "address": "강원특별자치도 속초시 수복로 69 속초동물의료센터",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 38.1989,
+      "lng": 128.5773246,
+      "mapX": 1285773246,
+      "mapY": 381989000,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (강원특별자치도 속초시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "강원특별자치도 속초시 특수동물병원",
+        "강원특별자치도 고성군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 강원특별자치도 속초시 특수동물병원",
+        "네이버 지역 검색: 강원특별자치도 고성군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 속초시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "강원특별자치도 고성군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/sokcho.animal.hospi1992"
+    },
+    {
+      "id": "dataset-1268280427-351904269-수완종합동물병원",
+      "name": "수완종합동물병원",
+      "address": "광주광역시 광산구 장신로 164 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1904269,
+      "lng": 126.8280427,
+      "mapX": 1268280427,
+      "mapY": 351904269,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (광주광역시 북구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "광주광역시 북구 특수동물병원",
+        "광주광역시 광산구 특수동물병원",
+        "전라남도 화순군 특수동물병원",
+        "전라남도 장성군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 광주광역시 북구 특수동물병원",
+        "네이버 지역 검색: 광주광역시 광산구 특수동물병원",
+        "네이버 지역 검색: 전라남도 화순군 특수동물병원",
+        "네이버 지역 검색: 전라남도 장성군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "광주광역시 북구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "광주광역시 광산구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 화순군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 장성군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1286869614-358414066-시지동물병원",
+      "name": "시지동물병원",
+      "address": "대구광역시 수성구 달구벌대로 3014",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.8414066,
+      "lng": 128.6869614,
+      "mapX": 1286869614,
+      "mapY": 358414066,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (대구광역시 동구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대구광역시 동구 특수동물병원",
+        "대구광역시 동구 토끼 동물병원",
+        "대구광역시 동구 햄스터 동물병원",
+        "대구광역시 수성구 특수동물병원",
+        "대구광역시 수성구 토끼 동물병원",
+        "대구광역시 수성구 햄스터 동물병원",
+        "대구광역시 달성군 특수동물병원",
+        "대구광역시 달성군 토끼 동물병원",
+        "대구광역시 달성군 햄스터 동물병원",
+        "경상북도 영천시 특수동물병원",
+        "경상북도 영천시 토끼 동물병원",
+        "경상북도 영천시 햄스터 동물병원",
+        "경상북도 경산시 특수동물병원",
+        "경상북도 경산시 토끼 동물병원",
+        "경상북도 경산시 햄스터 동물병원",
+        "경상북도 청도군 특수동물병원",
+        "경상북도 청도군 토끼 동물병원",
+        "경상북도 청도군 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대구광역시 동구 특수동물병원",
+        "네이버 지역 검색: 대구광역시 동구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 동구 햄스터 동물병원",
+        "네이버 지역 검색: 대구광역시 수성구 특수동물병원",
+        "네이버 지역 검색: 대구광역시 수성구 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 수성구 햄스터 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 특수동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 토끼 동물병원",
+        "네이버 지역 검색: 대구광역시 달성군 햄스터 동물병원",
+        "네이버 지역 검색: 경상북도 영천시 특수동물병원",
+        "네이버 지역 검색: 경상북도 영천시 토끼 동물병원",
+        "네이버 지역 검색: 경상북도 영천시 햄스터 동물병원",
+        "네이버 지역 검색: 경상북도 경산시 특수동물병원",
+        "네이버 지역 검색: 경상북도 경산시 토끼 동물병원",
+        "네이버 지역 검색: 경상북도 경산시 햄스터 동물병원",
+        "네이버 지역 검색: 경상북도 청도군 특수동물병원",
+        "네이버 지역 검색: 경상북도 청도군 토끼 동물병원",
+        "네이버 지역 검색: 경상북도 청도군 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 동구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 수성구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 수성구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 수성구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대구광역시 달성군 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 영천시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 영천시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 영천시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 경산시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 경산시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 경산시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 청도군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 청도군 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 청도군 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/sigi__ah"
+    },
+    {
+      "id": "dataset-1271106323-368201249-아리스타동물의료센터",
+      "name": "아리스타동물의료센터",
+      "address": "충청남도 천안시 서북구 불당23로 73-30 아리스타 팰리스 1층, 아리스타 동물의료센터",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.8201249,
+      "lng": 127.1106323,
+      "mapX": 1271106323,
+      "mapY": 368201249,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (충청남도 천안시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "충청남도 천안시 특수동물병원",
+        "충청남도 아산시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청남도 천안시 특수동물병원",
+        "네이버 지역 검색: 충청남도 아산시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "충청남도 아산시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/buldangah"
+    },
+    {
+      "id": "dataset-1271294860-376006451-아마존동물병원",
+      "name": "아마존동물병원",
+      "address": "경기도 구리시 경춘로 128 세종사회문제연구소",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6006451,
+      "lng": 127.129486,
+      "mapX": 1271294860,
+      "mapY": 376006451,
+      "recentSpecies": [
+        "파충류",
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 남양주시 파충류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 남양주시 파충류 동물병원",
+        "경기도 남양주시 조류 동물병원",
+        "경기도 구리시 파충류 동물병원",
+        "경기도 구리시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 남양주시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 남양주시 조류 동물병원",
+        "네이버 지역 검색: 경기도 구리시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 구리시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 구리시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 구리시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/amazonvet1"
+    },
+    {
+      "id": "dataset-1269774106-374836401-아우름동물병원",
+      "name": "아우름동물병원",
+      "address": "서울특별시 동작구 사당로 268 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4836401,
+      "lng": 126.9774106,
+      "mapX": 1269774106,
+      "mapY": 374836401,
+      "recentSpecies": [
+        "파충류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 동작구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 동작구 특수동물병원",
+        "서울특별시 동작구 파충류 동물병원",
+        "서울특별시 동작구 햄스터 동물병원",
+        "서울특별시 관악구 특수동물병원",
+        "서울특별시 관악구 파충류 동물병원",
+        "서울특별시 관악구 햄스터 동물병원",
+        "서울특별시 서초구 파충류 동물병원",
+        "서울특별시 서초구 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 동작구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 동작구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 동작구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 서초구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 서초구 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 동작구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 동작구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 동작구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/aurumah"
+    },
+    {
+      "id": "dataset-1288050000-351927262-아쿠아동물메디컬",
+      "name": "아쿠아동물메디컬",
+      "address": "경상남도 김해시 번화2로 42 아쿠아동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1927262,
+      "lng": 128.805,
+      "mapX": 1288050000,
+      "mapY": 351927262,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 김해시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경상남도 김해시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 김해시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 김해시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://www.aquavet.kr"
+    },
+    {
+      "id": "dataset-1270619072-375137162-아크리스동물의료센터",
+      "name": "아크리스동물의료센터",
+      "address": "서울특별시 강남구 봉은사로104길 10 동화빌딩 3층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5137162,
+      "lng": 127.0619072,
+      "mapX": 1270619072,
+      "mapY": 375137162,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 강남구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "서울특별시 강남구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 강남구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://acrisamc.co.kr"
+    },
+    {
+      "id": "dataset-1267143249-374427523-애니힐동물병원",
+      "name": "애니힐동물병원",
+      "address": "인천광역시 남동구 인하로 608",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4427523,
+      "lng": 126.7143249,
+      "mapX": 1267143249,
+      "mapY": 374427523,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (인천광역시 연수구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 연수구 특수동물병원",
+        "인천광역시 남동구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 연수구 특수동물병원",
+        "네이버 지역 검색: 인천광역시 남동구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 연수구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 남동구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1269157535-375729860-어울림동물병원",
+      "name": "어울림동물병원",
+      "address": "서울특별시 서대문구 가재울미래로 2 DMC 파크뷰자이 104동 1층 102A호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.572986,
+      "lng": 126.9157535,
+      "mapX": 1269157535,
+      "mapY": 375729860,
+      "recentSpecies": [
+        "파충류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 은평구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 은평구 특수동물병원",
+        "서울특별시 은평구 파충류 동물병원",
+        "서울특별시 은평구 햄스터 동물병원",
+        "서울특별시 서대문구 특수동물병원",
+        "서울특별시 서대문구 파충류 동물병원",
+        "서울특별시 서대문구 햄스터 동물병원",
+        "서울특별시 마포구 파충류 동물병원",
+        "서울특별시 마포구 햄스터 동물병원",
+        "경기도 고양시 파충류 동물병원",
+        "경기도 고양시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 은평구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 고양시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 고양시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/eoullimah"
+    },
+    {
+      "id": "dataset-1271583980-368196323-에니펫동물병원",
+      "name": "에니펫동물병원",
+      "address": "충청남도 천안시 동남구 터미널2로 8 대흥빌딩 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.8196323,
+      "lng": 127.158398,
+      "mapX": 1271583980,
+      "mapY": 368196323,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (충청남도 천안시 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "충청남도 천안시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청남도 천안시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청남도 천안시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1290864381-352176417-에이치동물메디컬센터",
+      "name": "에이치동물메디컬센터",
+      "address": "부산광역시 금정구 부곡로 3",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2176417,
+      "lng": 129.0864381,
+      "mapX": 1290864381,
+      "mapY": 352176417,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 동래구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "부산광역시 동래구 특수동물병원",
+        "부산광역시 금정구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 동래구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 금정구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 동래구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 금정구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://hamc.kr"
+    },
+    {
+      "id": "dataset-1271280938-374927672-에코동물병원",
+      "name": "에코동물병원",
+      "address": "서울특별시 송파구 동남로 161 101호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4927672,
+      "lng": 127.1280938,
+      "mapX": 1271280938,
+      "mapY": 374927672,
+      "recentSpecies": [
+        "설치류",
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 강남구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent",
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 강남구 햄스터 동물병원",
+        "서울특별시 송파구 특수동물병원",
+        "서울특별시 송파구 햄스터 동물병원",
+        "경기도 광주시 특수동물병원",
+        "경기도 광주시 햄스터 동물병원",
+        "에코특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 강남구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 송파구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 송파구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 광주시 특수동물병원",
+        "네이버 지역 검색: 경기도 광주시 햄스터 동물병원",
+        "네이버 지역 검색: 에코특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "에코특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/ecoanimal"
+    },
+    {
+      "id": "dataset-1270899717-372018098-여울동물병원",
+      "name": "여울동물병원",
+      "address": "경기도 화성시 동탄구 동탄광역환승로 73 207동 E025호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2018098,
+      "lng": 127.0899717,
+      "mapX": 1270899717,
+      "mapY": 372018098,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 화성시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 화성시 특수동물병원",
+        "경기도 오산시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 화성시 특수동물병원",
+        "네이버 지역 검색: 경기도 오산시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 화성시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 오산시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/yeowoolamc_"
+    },
+    {
+      "id": "dataset-1270155231-375444026-오석헌동물병원",
+      "name": "오석헌동물병원",
+      "address": "서울특별시 성동구 독서당로 223 1층 오석헌동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5444026,
+      "lng": 127.0155231,
+      "mapX": 1270155231,
+      "mapY": 375444026,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 중구 특수동물병원",
+        "서울특별시 중구 페럿 동물병원",
+        "서울특별시 용산구 특수동물병원",
+        "서울특별시 용산구 페럿 동물병원",
+        "서울특별시 성동구 특수동물병원",
+        "서울특별시 성동구 페럿 동물병원",
+        "서울특별시 강남구 페럿 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 중구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 중구 페럿 동물병원",
+        "네이버 지역 검색: 서울특별시 용산구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 용산구 페럿 동물병원",
+        "네이버 지역 검색: 서울특별시 성동구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 성동구 페럿 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 페럿 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 페럿 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 용산구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 용산구 페럿 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 성동구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 성동구 페럿 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 페럿 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/oshvetclinic"
+    },
+    {
+      "id": "dataset-1289031476-350840959-오션시티동물병원",
+      "name": "오션시티동물병원",
+      "address": "부산광역시 강서구 명지오션시티11로 66 G타워 203호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.0840959,
+      "lng": 128.9031476,
+      "mapX": 1289031476,
+      "mapY": 350840959,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 강서구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "부산광역시 강서구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 강서구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 강서구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/oceancitydog"
+    },
+    {
+      "id": "dataset-1270574300-377430872-오즈동물병원",
+      "name": "오즈동물병원",
+      "address": "경기도 의정부시 추동로 13 1층 오즈동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.7430872,
+      "lng": 127.05743,
+      "mapX": 1270574300,
+      "mapY": 377430872,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 의정부시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 의정부시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 의정부시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 의정부시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/yaovetoz"
+    },
+    {
+      "id": "dataset-1273848250-363425306-올바로동물병원",
+      "name": "올바로동물병원",
+      "address": "대전광역시 서구 계룡로 550 106호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.3425306,
+      "lng": 127.384825,
+      "mapX": 1273848250,
+      "mapY": 363425306,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (대전광역시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대전광역시 중구 특수동물병원",
+        "대전광역시 서구 특수동물병원",
+        "대전광역시 유성구 특수동물병원",
+        "대전광역시 대덕구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대전광역시 중구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 서구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 유성구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 대덕구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대전광역시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 서구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 유성구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 대덕구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/allbarovet"
+    },
+    {
+      "id": "dataset-1271220720-364528868-이기영수의과병원",
+      "name": "이기영수의과병원",
+      "address": "충청남도 공주시 감영길 7",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.4528868,
+      "lng": 127.122072,
+      "mapX": 1271220720,
+      "mapY": 364528868,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (충청남도 공주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "충청남도 공주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 충청남도 공주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "충청남도 공주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1290860329-351745240-이룸동물병원",
+      "name": "이룸동물병원",
+      "address": "부산광역시 연제구 연수로 140 이룸동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.174524,
+      "lng": 129.0860329,
+      "mapX": 1290860329,
+      "mapY": 351745240,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (부산광역시 부산진구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "부산광역시 부산진구 특수동물병원",
+        "부산광역시 동래구 특수동물병원",
+        "부산광역시 연제구 특수동물병원",
+        "부산광역시 수영구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 부산광역시 부산진구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 동래구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 연제구 특수동물병원",
+        "네이버 지역 검색: 부산광역시 수영구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "부산광역시 부산진구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 동래구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 연제구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "부산광역시 수영구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/irumah2015"
+    },
+    {
+      "id": "dataset-1268080095-373698790-이산동물의료센터",
+      "name": "이산동물의료센터",
+      "address": "경기도 시흥시 능곡번영길 22 더나은프라자 304, 305호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.369879,
+      "lng": 126.8080095,
+      "mapX": 1268080095,
+      "mapY": 373698790,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 안산시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 안산시 특수동물병원",
+        "경기도 시흥시 특수동물병원",
+        "이산동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 안산시 특수동물병원",
+        "네이버 지역 검색: 경기도 시흥시 특수동물병원",
+        "네이버 지역 검색: 이산동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 안산시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 시흥시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "이산동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/shsmedical"
+    },
+    {
+      "id": "dataset-1280625136-351694603-이솝동물메디컬",
+      "name": "이솝동물메디컬",
+      "address": "경상남도 진주시 남강로309번길 20 2층 203호 이솝동물메디컬",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1694603,
+      "lng": 128.0625136,
+      "mapX": 1280625136,
+      "mapY": 351694603,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 진주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경상남도 진주시 특수동물병원",
+        "경상남도 사천시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 진주시 특수동물병원",
+        "네이버 지역 검색: 경상남도 사천시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 진주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상남도 사천시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/aesop.animal.hospital/"
+    },
+    {
+      "id": "dataset-1293601335-356367083-이솝동물병원",
+      "name": "이솝동물병원",
+      "address": "울산광역시 북구 당수골2길 3 이솝동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.6367083,
+      "lng": 129.3601335,
+      "mapX": 1293601335,
+      "mapY": 356367083,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (울산광역시 북구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "울산광역시 북구 햄스터 동물병원",
+        "울산광역시 울주군 햄스터 동물병원",
+        "경상북도 경주시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 울산광역시 북구 햄스터 동물병원",
+        "네이버 지역 검색: 울산광역시 울주군 햄스터 동물병원",
+        "네이버 지역 검색: 경상북도 경주시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "울산광역시 북구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "울산광역시 울주군 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상북도 경주시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1270665448-376653097-이앤박동물병원",
+      "name": "이앤박동물병원",
+      "address": "서울특별시 노원구 한글비석로52길 18 1층 이앤박동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.6653097,
+      "lng": 127.0665448,
+      "mapX": 1270665448,
+      "mapY": 376653097,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 노원구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 노원구 햄스터 동물병원",
+        "경기도 양주시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 노원구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 양주시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 노원구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 양주시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1269786152-372761664-이지훈동물병원",
+      "name": "이지훈동물병원",
+      "address": "경기도 수원시 권선구 금호로 261 이지훈동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2761664,
+      "lng": 126.9786152,
+      "mapX": 1269786152,
+      "mapY": 372761664,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 수원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 수원시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 수원시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 수원시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/work-clinic"
+    },
+    {
+      "id": "dataset-1271067716-375161455-잠실동물병원",
+      "name": "잠실 동물병원",
+      "address": "서울특별시 송파구 올림픽로 329 잠실르엘 상가 403호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5161455,
+      "lng": 127.1067716,
+      "mapX": 1271067716,
+      "mapY": 375161455,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 광진구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 광진구 햄스터 동물병원",
+        "서울특별시 강남구 햄스터 동물병원",
+        "서울특별시 송파구 햄스터 동물병원",
+        "서울특별시 강동구 햄스터 동물병원",
+        "경기도 남양주시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 광진구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 송파구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 강동구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 남양주시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 광진구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 송파구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강동구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 남양주시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://smartstore.naver.com/marium"
+    },
+    {
+      "id": "dataset-1271028620-358321850-전주동물병원",
+      "name": "전주동물병원",
+      "address": "전북특별자치도 전주시 완산구 세내로 509-1",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.832185,
+      "lng": 127.102862,
+      "mapX": 1271028620,
+      "mapY": 358321850,
+      "recentSpecies": [
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (전북특별자치도 전주시 파충류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "전북특별자치도 전주시 파충류 동물병원",
+        "전북특별자치도 완주군 파충류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 전북특별자치도 전주시 파충류 동물병원",
+        "네이버 지역 검색: 전북특별자치도 완주군 파충류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "전북특별자치도 전주시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전북특별자치도 완주군 파충류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/chobong25"
+    },
+    {
+      "id": "dataset-1265327737-334960390-제주키움동물병원",
+      "name": "제주키움동물병원",
+      "address": "제주특별자치도 제주시 중앙로 273 나라키움 복합관사 106호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 33.496039,
+      "lng": 126.5327737,
+      "mapX": 1265327737,
+      "mapY": 334960390,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (제주특별자치도 제주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "제주특별자치도 제주시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 제주특별자치도 제주시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "제주특별자치도 제주시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/kiumclinic"
+    },
+    {
+      "id": "dataset-1270208364-375541208-조형선외과동물병원",
+      "name": "조형선외과동물병원",
+      "address": "서울특별시 성동구 금호로 146 제1층, 2층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5541208,
+      "lng": 127.0208364,
+      "mapX": 1270208364,
+      "mapY": 375541208,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 중구 특수동물병원",
+        "서울특별시 용산구 특수동물병원",
+        "서울특별시 성동구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 중구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 용산구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 성동구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 용산구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 성동구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/sunvsc2022"
+    },
+    {
+      "id": "dataset-1271141163-373206958-죽전동물병원",
+      "name": "죽전동물병원",
+      "address": "경기도 용인시 기흥구 죽전로 49 씨티프라자 101호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3206958,
+      "lng": 127.1141163,
+      "mapX": 1271141163,
+      "mapY": 373206958,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 용인시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 용인시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 용인시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 용인시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/astarose"
+    },
+    {
+      "id": "dataset-1267031601-374529869-찬샘동물병원",
+      "name": "찬샘동물병원",
+      "address": "인천광역시 남동구 인주대로591번길 64 타원벨라움 2층 205호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4529869,
+      "lng": 126.7031601,
+      "mapX": 1267031601,
+      "mapY": 374529869,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (인천광역시 남동구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "인천광역시 남동구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 남동구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 남동구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "http://pf.kakao.com/_Zxdgdn"
+    },
+    {
+      "id": "dataset-1273996459-363488002-케나인동물병원",
+      "name": "케나인동물병원",
+      "address": "대전광역시 서구 둔산남로 200",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.3488002,
+      "lng": 127.3996459,
+      "mapX": 1273996459,
+      "mapY": 363488002,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (대전광역시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대전광역시 중구 특수동물병원",
+        "대전광역시 서구 특수동물병원",
+        "대전광역시 유성구 특수동물병원",
+        "대전광역시 대덕구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대전광역시 중구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 서구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 유성구 특수동물병원",
+        "네이버 지역 검색: 대전광역시 대덕구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대전광역시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 서구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 유성구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 대덕구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1269521422-375461940-콩닥동물의료센터",
+      "name": "콩닥동물의료센터",
+      "address": "서울특별시 마포구 마포대로 127 1층 102호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.546194,
+      "lng": 126.9521422,
+      "mapX": 1269521422,
+      "mapY": 375461940,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 중구 특수동물병원",
+        "서울특별시 용산구 특수동물병원",
+        "서울특별시 마포구 특수동물병원",
+        "서울특별시 영등포구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 중구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 용산구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 영등포구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 용산구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 영등포구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/kongvet"
+    },
+    {
+      "id": "dataset-1265379722-334905215-튼튼동물병원",
+      "name": "튼튼동물병원",
+      "address": "제주특별자치도 제주시 중앙로 351",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 33.4905215,
+      "lng": 126.5379722,
+      "mapX": 1265379722,
+      "mapY": 334905215,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (제주특별자치도 제주시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "제주특별자치도 제주시 특수동물병원",
+        "제주특별자치도 서귀포시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 제주특별자치도 제주시 특수동물병원",
+        "네이버 지역 검색: 제주특별자치도 서귀포시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "제주특별자치도 제주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "제주특별자치도 서귀포시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/jejuttah"
+    },
+    {
+      "id": "dataset-1271234215-373322045-파우동물병원",
+      "name": "파우동물병원",
+      "address": "경기도 용인시 수지구 현암로125번길 6 그린프라자 105호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3322045,
+      "lng": 127.1234215,
+      "mapX": 1271234215,
+      "mapY": 373322045,
+      "recentSpecies": [
+        "조류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 용인시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "bird",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 용인시 특수동물병원",
+        "경기도 용인시 조류 동물병원",
+        "경기도 용인시 햄스터 동물병원",
+        "경기도 성남시 햄스터 동물병원",
+        "경기도 광주시 특수동물병원",
+        "경기도 광주시 조류 동물병원",
+        "경기도 광주시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 용인시 특수동물병원",
+        "네이버 지역 검색: 경기도 용인시 조류 동물병원",
+        "네이버 지역 검색: 경기도 용인시 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 성남시 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 광주시 특수동물병원",
+        "네이버 지역 검색: 경기도 광주시 조류 동물병원",
+        "네이버 지역 검색: 경기도 광주시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 용인시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 용인시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 용인시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 광주시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1271171336-373922939-판교종합동물병원",
+      "name": "판교종합동물병원",
+      "address": "경기도 성남시 분당구 동판교로 122 백현마을 휴먼시아2단지 나상가 104호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3922939,
+      "lng": 127.1171336,
+      "mapX": 1271171336,
+      "mapY": 373922939,
+      "recentSpecies": [
+        "파충류",
+        "조류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 성남시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile",
+        "bird"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 성남시 특수동물병원",
+        "경기도 성남시 파충류 동물병원",
+        "경기도 성남시 조류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 성남시 특수동물병원",
+        "네이버 지역 검색: 경기도 성남시 파충류 동물병원",
+        "네이버 지역 검색: 경기도 성남시 조류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 성남시 조류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1268207529-373416603-퍼피캣동물병원",
+      "name": "퍼피캣동물병원",
+      "address": "경기도 안산시 단원구 선부로 231 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3416603,
+      "lng": 126.8207529,
+      "mapX": 1268207529,
+      "mapY": 373416603,
+      "recentSpecies": [
+        "조류",
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경기도 안산시 조류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "bird",
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 안산시 조류 동물병원",
+        "경기도 안산시 햄스터 동물병원",
+        "경기도 시흥시 조류 동물병원",
+        "경기도 시흥시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 안산시 조류 동물병원",
+        "네이버 지역 검색: 경기도 안산시 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 시흥시 조류 동물병원",
+        "네이버 지역 검색: 경기도 시흥시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 안산시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 안산시 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 시흥시 조류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 시흥시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/seolamuny"
+    },
+    {
+      "id": "dataset-1270351372-375125246-펫코도니아동물의료센터",
+      "name": "펫코도니아 동물의료센터",
+      "address": "서울특별시 강남구 언주로 627 3층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5125246,
+      "lng": 127.0351372,
+      "mapX": 1270351372,
+      "mapY": 375125246,
+      "recentSpecies": [
+        "파충류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 서초구 파충류 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "reptile"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 서초구 파충류 동물병원",
+        "서울특별시 강남구 파충류 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 서초구 파충류 동물병원",
+        "네이버 지역 검색: 서울특별시 강남구 파충류 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 서초구 파충류 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 강남구 파충류 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.youtube.com/@petkodonia"
+    },
+    {
+      "id": "dataset-1266521283-373958843-프라자동물병원",
+      "name": "프라자동물병원",
+      "address": "인천광역시 연수구 신송로 122 송도프라자",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3958843,
+      "lng": 126.6521283,
+      "mapX": 1266521283,
+      "mapY": 373958843,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (인천광역시 중구 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 중구 토끼 동물병원",
+        "인천광역시 중구 햄스터 동물병원",
+        "인천광역시 연수구 토끼 동물병원",
+        "인천광역시 연수구 햄스터 동물병원",
+        "경기도 시흥시 토끼 동물병원",
+        "경기도 시흥시 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 중구 토끼 동물병원",
+        "네이버 지역 검색: 인천광역시 중구 햄스터 동물병원",
+        "네이버 지역 검색: 인천광역시 연수구 토끼 동물병원",
+        "네이버 지역 검색: 인천광역시 연수구 햄스터 동물병원",
+        "네이버 지역 검색: 경기도 시흥시 토끼 동물병원",
+        "네이버 지역 검색: 경기도 시흥시 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 중구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 중구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 연수구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 연수구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 시흥시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 시흥시 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1270610771-375895701-하나동물병원",
+      "name": "하나동물병원",
+      "address": "서울특별시 동대문구 망우로 66",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5895701,
+      "lng": 127.0610771,
+      "mapX": 1270610771,
+      "mapY": 375895701,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 동대문구 햄스터 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 동대문구 햄스터 동물병원",
+        "서울특별시 중랑구 햄스터 동물병원",
+        "서울특별시 성북구 햄스터 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 동대문구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 중랑구 햄스터 동물병원",
+        "네이버 지역 검색: 서울특별시 성북구 햄스터 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 동대문구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 중랑구 햄스터 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 성북구 햄스터 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/hana_ah2014"
+    },
+    {
+      "id": "dataset-1274447342-363326129-하나로동물병원",
+      "name": "하나로동물병원",
+      "address": "대전광역시 동구 동대전로 115",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 36.3326129,
+      "lng": 127.4447342,
+      "mapX": 1274447342,
+      "mapY": 363326129,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (대전광역시 동구 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "대전광역시 동구 토끼 동물병원",
+        "대전광역시 중구 토끼 동물병원",
+        "대전광역시 대덕구 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 대전광역시 동구 토끼 동물병원",
+        "네이버 지역 검색: 대전광역시 중구 토끼 동물병원",
+        "네이버 지역 검색: 대전광역시 대덕구 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "대전광역시 동구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 중구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "대전광역시 대덕구 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://www.instagram.com/drhanaro/"
+    },
+    {
+      "id": "dataset-1264889910-374950095-하늘동물병원",
+      "name": "하늘동물병원",
+      "address": "인천광역시 중구 영종대로 90 103호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4950095,
+      "lng": 126.488991,
+      "mapX": 1264889910,
+      "mapY": 374950095,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (인천광역시 중구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "인천광역시 중구 특수동물병원",
+        "인천광역시 옹진군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 인천광역시 중구 특수동물병원",
+        "네이버 지역 검색: 인천광역시 옹진군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "인천광역시 중구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "인천광역시 옹진군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1285585287-351780619-한강동물병원",
+      "name": "한강동물병원",
+      "address": "경상남도 창원시 마산합포구 월영남로 7 106호, 107호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.1780619,
+      "lng": 128.5585287,
+      "mapX": 1285585287,
+      "mapY": 351780619,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (경상남도 창원시 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경상남도 창원시 토끼 동물병원",
+        "경상남도 함안군 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 창원시 토끼 동물병원",
+        "네이버 지역 검색: 경상남도 함안군 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 창원시 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상남도 함안군 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1264268763-348021741-한빛동물병원",
+      "name": "한빛동물병원",
+      "address": "전라남도 목포시 부흥로 49",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 34.8021741,
+      "lng": 126.4268763,
+      "mapX": 1264268763,
+      "mapY": 348021741,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (전라남도 목포시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "전라남도 목포시 특수동물병원",
+        "전라남도 영암군 특수동물병원",
+        "전라남도 무안군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 전라남도 목포시 특수동물병원",
+        "네이버 지역 검색: 전라남도 영암군 특수동물병원",
+        "네이버 지역 검색: 전라남도 무안군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "전라남도 목포시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 영암군 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "전라남도 무안군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1269472286-375856733-한솔동물병원",
+      "name": "한솔동물병원",
+      "address": "서울특별시 서대문구 통일로 397 인왕산 한신 휴플러스 상가 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5856733,
+      "lng": 126.9472286,
+      "mapX": 1269472286,
+      "mapY": 375856733,
+      "recentSpecies": [
+        "설치류"
+      ],
+      "note": "네이버 지역 검색 결과 (서울특별시 종로구 토끼 동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [
+        "rodent"
+      ],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 종로구 토끼 동물병원",
+        "서울특별시 은평구 토끼 동물병원",
+        "서울특별시 서대문구 토끼 동물병원",
+        "서울특별시 마포구 토끼 동물병원",
+        "경기도 고양시 토끼 동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 종로구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 은평구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 서대문구 토끼 동물병원",
+        "네이버 지역 검색: 서울특별시 마포구 토끼 동물병원",
+        "네이버 지역 검색: 경기도 고양시 토끼 동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 종로구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 은평구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 서대문구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 마포구 토끼 동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 고양시 토끼 동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/dr_yeon"
+    },
+    {
+      "id": "dataset-1270370223-375596656-한양동물메디컬센터",
+      "name": "한양동물메디컬센터",
+      "address": "서울특별시 성동구 왕십리로 282",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.5596656,
+      "lng": 127.0370223,
+      "mapX": 1270370223,
+      "mapY": 375596656,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 성동구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "서울특별시 성동구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 성동구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 성동구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/hyamc"
+    },
+    {
+      "id": "dataset-1285822441-352332009-한일동물병원",
+      "name": "한일동물병원",
+      "address": "경상남도 창원시 마산회원구 양덕로 170 한일동물병원",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2332009,
+      "lng": 128.5822441,
+      "mapX": 1285822441,
+      "mapY": 352332009,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 창원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경상남도 창원시 특수동물병원",
+        "경상남도 함안군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 창원시 특수동물병원",
+        "네이버 지역 검색: 경상남도 함안군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 창원시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상남도 함안군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1270575487-372190381-해솔동물병원",
+      "name": "해솔동물병원",
+      "address": "경기도 화성시 동탄원천로 354-11 동탄퍼스트빌스타오피스텔 A동107호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.2190381,
+      "lng": 127.0575487,
+      "mapX": 1270575487,
+      "mapY": 372190381,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 화성시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "candidate",
+      "matchedQueries": [
+        "경기도 화성시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 화성시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 화성시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/haesolah"
+    },
+    {
+      "id": "dataset-1269062984-374536619-허브동물병원",
+      "name": "허브동물병원",
+      "address": "서울특별시 금천구 독산로 70-1 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.4536619,
+      "lng": 126.9062984,
+      "mapX": 1269062984,
+      "mapY": 374536619,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (서울특별시 금천구 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "서울특별시 금천구 특수동물병원",
+        "서울특별시 관악구 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 서울특별시 금천구 특수동물병원",
+        "네이버 지역 검색: 서울특별시 관악구 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "서울특별시 금천구 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "서울특별시 관악구 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/9407wook"
+    },
+    {
+      "id": "dataset-1286160219-348903557-현대동물병원",
+      "name": "현대동물병원",
+      "address": "경상남도 거제시 장평로 5",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 34.8903557,
+      "lng": 128.6160219,
+      "mapX": 1286160219,
+      "mapY": 348903557,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 통영시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경상남도 통영시 특수동물병원",
+        "경상남도 거제시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 통영시 특수동물병원",
+        "네이버 지역 검색: 경상남도 거제시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 통영시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상남도 거제시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": ""
+    },
+    {
+      "id": "dataset-1285704735-352183749-회원동물메디컬센터",
+      "name": "회원동물메디컬센터",
+      "address": "경상남도 창원시 마산회원구 회원남1길 49 삼성 메르빌상가 101호",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 35.2183749,
+      "lng": 128.5704735,
+      "mapX": 1285704735,
+      "mapY": 352183749,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경상남도 창원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경상남도 창원시 특수동물병원",
+        "경상남도 함안군 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경상남도 창원시 특수동물병원",
+        "네이버 지역 검색: 경상남도 함안군 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경상남도 창원시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경상남도 함안군 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/chan9464"
+    },
+    {
+      "id": "dataset-1269897089-373082593-we동물병원",
+      "name": "WE동물병원",
+      "address": "경기도 수원시 장안구 파장로 109 1층",
+      "phone": "전화번호 정보 없음",
+      "hours": "운영시간 문의",
+      "breakTime": "정보 없음",
+      "lat": 37.3082593,
+      "lng": 126.9897089,
+      "mapX": 1269897089,
+      "mapY": 373082593,
+      "recentSpecies": [],
+      "note": "네이버 지역 검색 결과 (경기도 수원시 특수동물병원)",
+      "liked": false,
+      "likedAt": null,
+      "supportedAnimals": [],
+      "source": "dataset",
+      "classification": "confirmed",
+      "matchedQueries": [
+        "경기도 수원시 특수동물병원",
+        "경기도 의왕시 특수동물병원"
+      ],
+      "evidence": [
+        "네이버 지역 검색: 경기도 수원시 특수동물병원",
+        "네이버 지역 검색: 경기도 의왕시 특수동물병원"
+      ],
+      "sources": [
+        {
+          "provider": "naver",
+          "label": "경기도 수원시 특수동물병원"
+        },
+        {
+          "provider": "naver",
+          "label": "경기도 의왕시 특수동물병원"
+        }
+      ],
+      "lastCollectedAt": "2026-04-25T03:40:59.102Z",
+      "link": "https://blog.naver.com/weanimal1"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "collectedAt": "2026-04-25T03:40:59.102Z",
+  "totalHospitals": 108,
+  "classificationCounts": {
+    "confirmed": 84,
+    "candidate": 24
+  },
+  "overflowQueries": [
+    {
+      "region": "서울특별시 관악구",
+      "query": "서울특별시 관악구 특수동물병원",
+      "count": 5
+    }
+  ],
+  "warnings": [
+    "PUBLIC_DATA_SERVICE_KEY is not configured; skipped public data enrichment."
+  ]
+}
