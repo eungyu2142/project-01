@@ -5,7 +5,7 @@ const links = [
   { to: '/', label: '홈', icon: 'home' as const },
   { to: '/reviews', label: '리뷰', icon: 'reviews' as const },
   { to: '/mypets', label: '마이 펫', icon: 'pets' as const },
-  { to: '/profile', label: 'user', icon: 'profile' as const },
+  { to: '/profile', label: '프로필', icon: 'profile' as const },
 ];
 
 export function BottomNav() {
