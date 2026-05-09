@@ -13,7 +13,7 @@ import { ModalSheet } from './ModalSheet';
 
 const reviewTagOptions = [
   { emoji: '🙂', label: '수의사 님이 친절해요' },
-  { emoji: '🧼', label: '병원의 위생이 깔끔해요' },
+  { emoji: '🧼', label: '병원의 위생이 좋아요' },
   { emoji: '📝', label: '설명이 자세해요' },
   { emoji: '💸', label: '가격이 합리적이에요' },
   { emoji: '🤲', label: '아이를 조심스럽게 잘 다뤄주세요' },
