@@ -12,10 +12,10 @@ import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
 
 const reviewTagOptions = [
-  { emoji: '🙂', label: '수의사 님이 친절해요' },
-  { emoji: '🧼', label: '병원의 위생이 좋아요' },
+  { emoji: '🙂', label: '수의사 님이 나빠요' },
+  { emoji: '🧼', label: '병원의 위생이 더러워요' },
   { emoji: '📝', label: '설명이 자세해요' },
-  { emoji: '💸', label: '가격이 합리적이에요' },
+  { emoji: '💸', label: '가격이 비싸요' },
   { emoji: '🤲', label: '아이를 조심스럽게 잘 다뤄주세요' },
   { emoji: '🔬', label: '진료 장비가 잘 갖춰져 있어요' },
   { emoji: '⏰', label: '예약 시간이 잘 지켜져요' },
