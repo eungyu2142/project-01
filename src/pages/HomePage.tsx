@@ -4,7 +4,13 @@ import { AnimalTabs } from '../components/AnimalTabs';
 import { HomeMap } from '../components/HomeMap';
 import { Icon } from '../components/Icon';
 import { useAppContext } from '../context/AppContext';
-import { formatDistanceKm, getHospitalAnimalCounts, getQualifiedCount } from '../lib/format';
+import {
+  formatDistanceKm,
+  getHospitalAnimalCounts,
+  getQualifiedCount,
+  hospitalMatchesAnimalFilter,
+  mergeHospitalSupportedAnimals,
+} from '../lib/format';
 import { isDatasetHospital } from '../lib/hospitalDataset';
 import type { AnimalFilter, Hospital, Review } from '../types';
 
@@ -65,19 +71,12 @@ function matchesSearchKeyword(hospital: Hospital, keyword: string) {
   );
 }
 
-function matchesAnimalFilter(hospital: Hospital, animalType: AnimalFilter) {
-  if (animalType === 'all') {
-    return true;
-  }
-
-  return hospital.supportedAnimals?.includes(animalType) ?? false;
-}
-
-function getRecentReviewedSpecies(hospitalId: string, reviews: Review[]) {
+function getRecentReviewedSpecies(hospitalId: string, reviews: Review[], animalType: AnimalFilter) {
   const seen = new Set<string>();
 
   return reviews
     .filter((review) => review.hospitalId === hospitalId)
+    .filter((review) => (animalType === 'all' ? true : review.animalType === animalType))
     .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
     .map((review) => review.species.trim())
     .filter(Boolean)
@@ -158,21 +157,52 @@ export function HomePage() {
     [hospitals],
   );
   const hospitalAnimalCounts = useMemo(() => getHospitalAnimalCounts(reviews), [reviews]);
+  const enrichedDatasetHospitals = useMemo(
+    () =>
+      datasetHospitals.map((hospital) => ({
+        ...hospital,
+        supportedAnimals: mergeHospitalSupportedAnimals(
+          hospital.supportedAnimals,
+          hospitalAnimalCounts[hospital.id],
+        ),
+      })),
+    [datasetHospitals, hospitalAnimalCounts],
+  );
 
   const counts = useMemo(
     () => ({
-      all: datasetHospitals.length,
-      reptile: datasetHospitals.filter((hospital) => matchesAnimalFilter(hospital, 'reptile')).length,
-      rodent: datasetHospitals.filter((hospital) => matchesAnimalFilter(hospital, 'rodent')).length,
-      bird: datasetHospitals.filter((hospital) => matchesAnimalFilter(hospital, 'bird')).length,
+      all: enrichedDatasetHospitals.length,
+      reptile: enrichedDatasetHospitals.filter((hospital) =>
+        hospitalMatchesAnimalFilter(
+          hospital.supportedAnimals,
+          hospitalAnimalCounts[hospital.id],
+          'reptile',
+        ),
+      ).length,
+      rodent: enrichedDatasetHospitals.filter((hospital) =>
+        hospitalMatchesAnimalFilter(
+          hospital.supportedAnimals,
+          hospitalAnimalCounts[hospital.id],
+          'rodent',
+        ),
+      ).length,
+      bird: enrichedDatasetHospitals.filter((hospital) =>
+        hospitalMatchesAnimalFilter(hospital.supportedAnimals, hospitalAnimalCounts[hospital.id], 'bird'),
+      ).length,
     }),
-    [datasetHospitals],
+    [enrichedDatasetHospitals, hospitalAnimalCounts],
   );
 
   const visibleHospitals = useMemo(
     () =>
-      datasetHospitals
-        .filter((hospital) => matchesAnimalFilter(hospital, selectedAnimal))
+      enrichedDatasetHospitals
+        .filter((hospital) =>
+          hospitalMatchesAnimalFilter(
+            hospital.supportedAnimals,
+            hospitalAnimalCounts[hospital.id],
+            selectedAnimal,
+          ),
+        )
         .filter((hospital) => matchesSearchKeyword(hospital, searchText))
         .sort((left, right) => {
           const leftDistance = Number.parseFloat(
@@ -184,7 +214,7 @@ export function HomePage() {
 
           return leftDistance - rightDistance || left.name.localeCompare(right.name, 'ko');
         }),
-    [currentLocation.lat, currentLocation.lng, datasetHospitals, searchText, selectedAnimal],
+    [currentLocation.lat, currentLocation.lng, enrichedDatasetHospitals, hospitalAnimalCounts, searchText, selectedAnimal],
   );
 
   const suggestedHospitals = useMemo(
@@ -214,9 +244,15 @@ export function HomePage() {
 
   const selectedHospital = visibleHospitals.find((hospital) => hospital.id === selectedHospitalId);
   const selectedHospitalReviews = selectedHospital
-    ? reviews.filter((review) => review.hospitalId === selectedHospital.id)
+    ? reviews.filter(
+        (review) =>
+          review.hospitalId === selectedHospital.id &&
+          (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal),
+      )
     : [];
-  const recentSpecies = selectedHospital ? getRecentReviewedSpecies(selectedHospital.id, reviews) : [];
+  const recentSpecies = selectedHospital
+    ? getRecentReviewedSpecies(selectedHospital.id, reviews, selectedAnimal)
+    : [];
 
   function handleSelectHospital(hospitalId: string) {
     setSelectedHospitalId(hospitalId);
@@ -310,8 +346,22 @@ export function HomePage() {
                     setTopCollapsed(false);
                   }}
                   placeholder="병원 검색"
-                  className="w-full bg-transparent text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent pr-2 text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
                 />
+                {searchText.trim() || showSuggestions ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchText('');
+                      setShowSuggestions(false);
+                      setSelectedHospitalId('');
+                    }}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                    aria-label="병원 검색 닫기"
+                  >
+                    <Icon name="x" className="h-4 w-4" />
+                  </button>
+                ) : null}
                 </label>
 
                 <div className="mt-3">

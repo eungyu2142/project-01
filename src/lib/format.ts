@@ -88,3 +88,34 @@ export function isQualifiedHospital(
 
   return counts[animalType] >= 3;
 }
+
+export function mergeHospitalSupportedAnimals(
+  supportedAnimals: AnimalType[] | undefined,
+  counts: Record<AnimalType, number> | undefined,
+) {
+  const merged = new Set<AnimalType>(supportedAnimals ?? []);
+
+  if (!counts) {
+    return Array.from(merged);
+  }
+
+  (['reptile', 'rodent', 'bird'] as const).forEach((animalType) => {
+    if (counts[animalType] >= 3) {
+      merged.add(animalType);
+    }
+  });
+
+  return Array.from(merged);
+}
+
+export function hospitalMatchesAnimalFilter(
+  supportedAnimals: AnimalType[] | undefined,
+  counts: Record<AnimalType, number> | undefined,
+  animalType: AnimalFilter,
+) {
+  if (animalType === 'all') {
+    return true;
+  }
+
+  return mergeHospitalSupportedAnimals(supportedAnimals, counts).includes(animalType);
+}

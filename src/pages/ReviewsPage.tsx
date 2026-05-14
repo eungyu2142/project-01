@@ -1,9 +1,15 @@
 ﻿import { useDeferredValue, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
 import { AnimalTabs } from '../components/AnimalTabs';
 import { Icon } from '../components/Icon';
 import { ReviewComposer } from '../components/ReviewComposer';
 import { useAppContext } from '../context/AppContext';
+import {
+  getHospitalAnimalCounts,
+  hospitalMatchesAnimalFilter,
+  mergeHospitalSupportedAnimals,
+} from '../lib/format';
 import { formatCurrency, formatDate, getAnimalLabel } from '../lib/format';
 import { isDatasetHospital } from '../lib/hospitalDataset';
 import type { AnimalFilter, Review, ReviewDraft } from '../types';
@@ -22,6 +28,32 @@ interface ReviewResultsProps {
   onToggleLike: (reviewId: string) => void;
   onDelete: (reviewId: string) => void;
   onEdit: (review: Review) => void;
+}
+
+function matchesReviewSearch(
+  review: Review,
+  hospital: { name: string; address: string } | undefined,
+  keyword: string,
+) {
+  const normalizedKeyword = keyword.trim().toLowerCase();
+
+  if (!normalizedKeyword) {
+    return true;
+  }
+
+  return [
+    hospital?.name,
+    hospital?.address,
+    review.species,
+    review.petName,
+    review.diagnosis,
+    review.medicine,
+    review.body,
+    ...review.tags,
+    ...review.customTags,
+  ]
+    .filter((value): value is string => Boolean(value))
+    .some((value) => value.toLowerCase().includes(normalizedKeyword));
 }
 
 function ReviewResults({
@@ -168,6 +200,7 @@ export function ReviewsPage() {
     return hospitals.find((item) => item.id === routeState.hospitalId)?.name ?? '';
   });
   const [selectedHospitalId, setSelectedHospitalId] = useState(routeState?.hospitalId ?? '');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [composerOpen, setComposerOpen] = useState(Boolean(routeState?.openComposer));
   const [draft, setDraft] = useState<ReviewDraft | undefined>(() => {
     if (routeState?.draft) {
@@ -182,21 +215,80 @@ export function ReviewsPage() {
   });
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const deferredSearch = useDeferredValue(hospitalSearch);
-
-  const hospitalMatches = datasetHospitals.filter((hospital) =>
-    hospital.name.toLowerCase().includes(deferredSearch.toLowerCase()),
+  const hospitalAnimalCounts = useMemo(() => getHospitalAnimalCounts(reviews), [reviews]);
+  const enrichedDatasetHospitals = useMemo(
+    () =>
+      datasetHospitals.map((hospital) => ({
+        ...hospital,
+        supportedAnimals: mergeHospitalSupportedAnimals(
+          hospital.supportedAnimals,
+          hospitalAnimalCounts[hospital.id],
+        ),
+      })),
+    [datasetHospitals, hospitalAnimalCounts],
   );
+  const filteredHospitals = useMemo(
+    () =>
+      enrichedDatasetHospitals.filter((hospital) =>
+        hospitalMatchesAnimalFilter(
+          hospital.supportedAnimals,
+          hospitalAnimalCounts[hospital.id],
+          selectedAnimal,
+        ),
+      ),
+    [enrichedDatasetHospitals, hospitalAnimalCounts, selectedAnimal],
+  );
+
+  const normalizedSearchKeyword = deferredSearch.trim().toLowerCase();
+  const hospitalMatches = useMemo(
+    () =>
+      filteredHospitals
+        .filter((hospital) => {
+          if (!normalizedSearchKeyword) {
+            return true;
+          }
+
+          if (
+            hospital.name.toLowerCase().includes(normalizedSearchKeyword) ||
+            hospital.address.toLowerCase().includes(normalizedSearchKeyword)
+          ) {
+            return true;
+          }
+
+          return reviews.some(
+            (review) =>
+              review.hospitalId === hospital.id &&
+              (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal) &&
+              matchesReviewSearch(review, hospital, normalizedSearchKeyword),
+          );
+        })
+        .sort((left, right) => left.name.localeCompare(right.name, 'ko')),
+    [filteredHospitals, normalizedSearchKeyword, reviews, selectedAnimal],
+  );
+
+  useEffect(() => {
+    if (!selectedHospitalId) {
+      return;
+    }
+
+    const exists = filteredHospitals.some((hospital) => hospital.id === selectedHospitalId);
+
+    if (!exists) {
+      setSelectedHospitalId('');
+      setHospitalSearch('');
+    }
+  }, [filteredHospitals, selectedHospitalId]);
 
   const filteredReviews = [...reviews]
     .filter((review) => (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal))
     .filter((review) => (selectedHospitalId ? review.hospitalId === selectedHospitalId : true))
     .filter((review) => {
-      if (!deferredSearch.trim() || selectedHospitalId) {
+      if (!normalizedSearchKeyword || selectedHospitalId) {
         return true;
       }
 
       const hospital = hospitals.find((item) => item.id === review.hospitalId);
-      return hospital?.name.toLowerCase().includes(deferredSearch.toLowerCase()) ?? false;
+      return matchesReviewSearch(review, hospital, normalizedSearchKeyword);
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
@@ -244,47 +336,72 @@ export function ReviewsPage() {
                 value={hospitalSearch}
                 onChange={(event) => {
                   setHospitalSearch(event.target.value);
+                  setShowSuggestions(true);
                   if (!event.target.value) {
                     setSelectedHospitalId('');
                   }
                 }}
-                placeholder="병원 검색"
+                onFocus={() => setShowSuggestions(true)}
+                placeholder="병원, 종, 태그 검색"
                 className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
               />
-              {hospitalSearch ? (
+              {hospitalSearch || showSuggestions ? (
                 <button
                   type="button"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => {
                     setHospitalSearch('');
                     setSelectedHospitalId('');
+                    setShowSuggestions(false);
                   }}
                   className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
-                  aria-label="병원 검색어 지우기"
+                  aria-label="병원 검색 닫기"
                 >
                   <Icon name="x" className="h-4 w-4" />
                 </button>
               ) : null}
             </label>
 
-            {deferredSearch && !selectedHospitalId ? (
+            {showSuggestions && !selectedHospitalId ? (
               <div className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-10 overflow-hidden rounded-3xl bg-white text-slate-700 shadow-xl">
-                {hospitalMatches.slice(0, 5).map((hospital) => (
-                  <button
-                    key={hospital.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedHospitalId(hospital.id);
-                      setHospitalSearch(hospital.name);
-                    }}
-                    className="flex w-full items-center justify-between border-b border-slate-100 px-4 py-3 text-left last:border-b-0"
-                  >
-                    <span>{hospital.name}</span>
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400">
-                      <Icon name="chevron" className="h-5 w-5" />
-                    </span>
-                  </button>
-                ))}
+                {!normalizedSearchKeyword ? (
+                  <p className="px-4 pb-2 pt-3 text-xs font-semibold text-emerald-700">현재 탭의 병원 리스트</p>
+                ) : null}
+                {hospitalMatches.length > 0 ? (
+                  hospitalMatches.slice(0, 8).map((hospital) => {
+                    const reviewCount = reviews.filter(
+                      (review) =>
+                        review.hospitalId === hospital.id &&
+                        (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal),
+                    ).length;
+
+                    return (
+                      <button
+                        key={hospital.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedHospitalId(hospital.id);
+                          setHospitalSearch(hospital.name);
+                          setShowSuggestions(false);
+                        }}
+                        className="flex w-full items-center justify-between border-b border-slate-100 px-4 py-3 text-left last:border-b-0"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate font-medium text-slate-800">{hospital.name}</p>
+                          <p className="mt-1 truncate text-xs text-slate-500">{hospital.address}</p>
+                        </div>
+                        <div className="ml-3 shrink-0 text-right">
+                          <p className="text-xs font-semibold text-emerald-700">리뷰 {reviewCount}</p>
+                          <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 text-slate-400">
+                            <Icon name="chevron" className="h-4 w-4" />
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <p className="px-4 py-4 text-sm text-slate-500">검색 조건에 맞는 병원이 없어요</p>
+                )}
               </div>
             ) : null}
           </div>
