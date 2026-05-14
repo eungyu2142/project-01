@@ -230,65 +230,69 @@ export function ReviewsPage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
       <div className="relative">
-      <section className="min-h-[9rem] pt-2">
-        <div className="relative mt-2">
-          <label className="relative flex items-center gap-3 rounded-full bg-white/90 px-4 py-3 text-slate-500 shadow-sm">
-            <Icon name="search" className="h-5 w-5 text-emerald-600" />
-            <input
-              value={hospitalSearch}
-              onChange={(event) => {
-                setHospitalSearch(event.target.value);
-                if (!event.target.value) {
-                  setSelectedHospitalId('');
-                }
-              }}
-              placeholder="병원 검색"
-              className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
-            />
-            {hospitalSearch ? (
-              <button
-                type="button"
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => {
-                  setHospitalSearch('');
-                  setSelectedHospitalId('');
+        <section className="flex min-h-[11rem] flex-col justify-end pb-5 pt-4">
+          <div className="mb-3 text-white">
+            <p className="text-sm text-emerald-50/90">병원 후기</p>
+            <h1 className="mt-1 text-[2rem] font-semibold tracking-[-0.03em]">리뷰</h1>
+          </div>
+          <div className="relative">
+            <label className="relative flex items-center gap-3 rounded-full bg-white/90 px-4 py-3 text-slate-500 shadow-sm">
+              <Icon name="search" className="h-5 w-5 text-emerald-600" />
+              <input
+                value={hospitalSearch}
+                onChange={(event) => {
+                  setHospitalSearch(event.target.value);
+                  if (!event.target.value) {
+                    setSelectedHospitalId('');
+                  }
                 }}
-                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
-                aria-label="병원 검색어 지우기"
-              >
-                <Icon name="x" className="h-4 w-4" />
-              </button>
-            ) : null}
-          </label>
-
-          {deferredSearch && !selectedHospitalId ? (
-            <div className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-10 overflow-hidden rounded-3xl bg-white text-slate-700 shadow-xl">
-              {hospitalMatches.slice(0, 5).map((hospital) => (
+                placeholder="병원 검색"
+                className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
+              />
+              {hospitalSearch ? (
                 <button
-                  key={hospital.id}
                   type="button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => {
-                    setSelectedHospitalId(hospital.id);
-                    setHospitalSearch(hospital.name);
+                    setHospitalSearch('');
+                    setSelectedHospitalId('');
                   }}
-                  className="flex w-full items-center justify-between border-b border-slate-100 px-4 py-3 text-left last:border-b-0"
+                  className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                  aria-label="병원 검색어 지우기"
                 >
-                  <span>{hospital.name}</span>
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400">
-                    <Icon name="chevron" className="h-5 w-5" />
-                  </span>
+                  <Icon name="x" className="h-4 w-4" />
                 </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
+              ) : null}
+            </label>
 
-        <div className="mt-4">
-          <AnimalTabs value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
-        </div>
-      </section>
+            {deferredSearch && !selectedHospitalId ? (
+              <div className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-10 overflow-hidden rounded-3xl bg-white text-slate-700 shadow-xl">
+                {hospitalMatches.slice(0, 5).map((hospital) => (
+                  <button
+                    key={hospital.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedHospitalId(hospital.id);
+                      setHospitalSearch(hospital.name);
+                    }}
+                    className="flex w-full items-center justify-between border-b border-slate-100 px-4 py-3 text-left last:border-b-0"
+                  >
+                    <span>{hospital.name}</span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400">
+                      <Icon name="chevron" className="h-5 w-5" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="mt-5">
+            <AnimalTabs value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
+          </div>
+        </section>
 
       {selectedHospitalId ? (
         <div className="mt-4 flex items-center justify-between rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">

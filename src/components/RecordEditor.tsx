@@ -1,13 +1,21 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
+import { useAppContext } from '../context/AppContext';
 import { validateUserText } from '../lib/contentModeration';
-import type { Hospital, MedicalRecord, MedicalRecordInput, Pet } from '../types';
+import type {
+  Hospital,
+  MedicalRecord,
+  MedicalRecordDraft,
+  MedicalRecordInput,
+  Pet,
+} from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
 
 interface RecordEditorProps {
   open: boolean;
   record?: MedicalRecord | null;
+  draft?: MedicalRecordDraft | null;
   pets: Pet[];
   hospitals: Hospital[];
   presetPetId?: string;
@@ -18,23 +26,34 @@ interface RecordEditorProps {
 export function RecordEditor({
   open,
   record,
+  draft,
   pets,
   hospitals,
   presetPetId,
   onClose,
   onSave,
 }: RecordEditorProps) {
-  const [petId, setPetId] = useState(record?.petId ?? presetPetId ?? pets[0]?.id ?? '');
-  const [hospitalId, setHospitalId] = useState(record?.hospitalId ?? '');
+  const { saveMedicalRecordDraft, deleteMedicalRecordDraft } = useAppContext();
+  const [petId, setPetId] = useState(record?.petId ?? draft?.petId ?? presetPetId ?? pets[0]?.id ?? '');
+  const [hospitalId, setHospitalId] = useState(record?.hospitalId ?? draft?.hospitalId ?? '');
   const [hospitalSearchText, setHospitalSearchText] = useState('');
   const [showHospitalOptions, setShowHospitalOptions] = useState(false);
-  const [date, setDate] = useState(record?.date ?? '2026-04-16');
-  const [diagnosis, setDiagnosis] = useState(record?.diagnosis ?? '');
-  const [veterinarianNote, setVeterinarianNote] = useState(record?.veterinarianNote ?? '');
-  const [prescription, setPrescription] = useState(record?.prescription ?? '');
-  const [costText, setCostText] = useState(record?.cost ? record.cost.toLocaleString('ko-KR') : '');
-  const [memo, setMemo] = useState(record?.memo ?? '');
+  const [date, setDate] = useState(record?.date ?? draft?.date ?? '2026-04-16');
+  const [diagnosis, setDiagnosis] = useState(record?.diagnosis ?? draft?.diagnosis ?? '');
+  const [veterinarianNote, setVeterinarianNote] = useState(
+    record?.veterinarianNote ?? draft?.veterinarianNote ?? '',
+  );
+  const [prescription, setPrescription] = useState(record?.prescription ?? draft?.prescription ?? '');
+  const [costText, setCostText] = useState(
+    typeof record?.cost === 'number'
+      ? record.cost.toLocaleString('ko-KR')
+      : typeof draft?.cost === 'number'
+        ? draft.cost.toLocaleString('ko-KR')
+        : '',
+  );
+  const [memo, setMemo] = useState(record?.memo ?? draft?.memo ?? '');
   const [moderationMessage, setModerationMessage] = useState('');
+  const [requiredMessage, setRequiredMessage] = useState('');
 
   const selectedHospital = hospitals.find((hospital) => hospital.id === hospitalId);
   const hospitalMatches = useMemo(() => {
@@ -62,6 +81,8 @@ export function RecordEditor({
     event.preventDefault();
 
     if (!petId || !hospitalId || !date || !diagnosis.trim()) {
+      setRequiredMessage('반려동물, 병원, 날짜, 진단 항목을 입력해 주세요.');
+      setModerationMessage('');
       return;
     }
 
@@ -88,6 +109,36 @@ export function RecordEditor({
       cost: costText ? Number(costText.replaceAll(',', '')) : null,
       memo: memo.trim(),
     });
+
+    if (draft?.id) {
+      deleteMedicalRecordDraft(draft.id);
+    }
+
+    setRequiredMessage('');
+    setModerationMessage('');
+    onClose();
+  }
+
+  function handleSaveDraft() {
+    const savedDraftId = saveMedicalRecordDraft({
+      id: draft?.id,
+      petId,
+      hospitalId,
+      date,
+      diagnosis,
+      veterinarianNote,
+      prescription,
+      cost: costText ? Number(costText.replaceAll(',', '')) : null,
+      memo,
+    });
+
+    if (!savedDraftId) {
+      setRequiredMessage('임시 저장할 내용이 아직 없어요.');
+      setModerationMessage('');
+      return;
+    }
+
+    setRequiredMessage('');
     setModerationMessage('');
     onClose();
   }
@@ -100,6 +151,12 @@ export function RecordEditor({
       description="리뷰에서 선택한 병원과 반려동물 정보에 맞춰 진료 기록을 남길 수 있어요."
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
+        {requiredMessage ? (
+          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+            {requiredMessage}
+          </div>
+        ) : null}
+
         {moderationMessage ? (
           <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
@@ -150,7 +207,7 @@ export function RecordEditor({
                 setShowHospitalOptions(true);
               }}
               onFocus={() => setShowHospitalOptions(true)}
-              placeholder="병원을 입력해주세요"
+              placeholder="병원 이름을 입력해 주세요"
               className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
             />
             {hospitalSearchText ? (
@@ -182,12 +239,8 @@ export function RecordEditor({
                     className="flex w-full items-start justify-between gap-3 border-b border-slate-100 px-4 py-3.5 text-left last:border-b-0"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-900">
-                        {hospital.name}
-                      </p>
-                      <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-                        {hospital.address}
-                      </p>
+                      <p className="truncate text-sm font-semibold text-slate-900">{hospital.name}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-slate-500">{hospital.address}</p>
                     </div>
                     <span className="shrink-0 rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
                       선택
@@ -196,7 +249,7 @@ export function RecordEditor({
                 ))
               ) : (
                 <div className="px-4 py-5 text-center text-sm text-slate-500">
-                  검색한 병원이 없어요. 다른 이름이나 주소로 다시 찾아주세요.
+                  검색한 병원이 없어요. 다른 이름이나 주소로 다시 찾아 주세요.
                 </div>
               )}
             </div>
@@ -217,7 +270,7 @@ export function RecordEditor({
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
             className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
-            placeholder="예: 식욕부진, 영양 상담"
+            placeholder="예: 식욕 부진, 영양 상담"
           />
         </label>
 
@@ -267,12 +320,25 @@ export function RecordEditor({
           />
         </label>
 
-        <button
-          type="submit"
-          className="w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
-        >
-          저장하기
-        </button>
+        <div className="grid grid-cols-2 gap-3">
+          {!record ? (
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              className="rounded-2xl border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
+            >
+              {draft?.id ? '임시 저장 업데이트' : '임시 저장'}
+            </button>
+          ) : (
+            <div />
+          )}
+          <button
+            type="submit"
+            className="rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
+          >
+            저장하기
+          </button>
+        </div>
       </form>
     </ModalSheet>
   );

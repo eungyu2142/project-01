@@ -15,8 +15,8 @@ interface PetEditorProps {
 const avatarOptions = ['🐍', '🐹', '🦜', '🦎', '🐢'];
 const ageOptionsByAnimalType = {
   reptile: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
-  rodent: ['1살', '2살', '3살', '4살 이상'],
-  bird: ['1살', '2살', '3살', '4살 이상'],
+  rodent: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
+  bird: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
 } as const;
 
 export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {

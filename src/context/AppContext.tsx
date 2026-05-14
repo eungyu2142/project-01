@@ -17,21 +17,25 @@ import {
   deleteMedicalRecordRemote,
   deletePetRemote,
   deleteReviewRemote,
+  insertReview,
   loadUserAppData,
   loadUserProfile,
   upsertMedicalRecord,
   upsertPet,
   upsertReview,
+  updateReview,
   upsertUserProfile,
 } from '../lib/supabaseAppStore';
 import { isSupabaseConfigured } from '../lib/supabase';
 import type {
   Hospital,
   MedicalRecord,
+  MedicalRecordDraft,
   MedicalRecordInput,
   Pet,
   PetInput,
   Review,
+  ReviewDraft,
   ReviewInput,
   UserProfile,
   UserProfileInput,
@@ -44,6 +48,8 @@ interface AppContextValue {
   pets: Pet[];
   medicalRecords: MedicalRecord[];
   reviews: Review[];
+  reviewDrafts: ReviewDraft[];
+  medicalRecordDrafts: MedicalRecordDraft[];
   datasetStatus: 'loading' | 'ready' | 'error';
   datasetError: string;
   markOnboardingComplete: () => void;
@@ -54,10 +60,14 @@ interface AppContextValue {
   upsertHospitals: (nextHospitals: Hospital[]) => void;
   saveReview: (input: ReviewInput) => void;
   deleteReview: (reviewId: string) => void;
+  saveReviewDraft: (input: ReviewDraft) => string | null;
+  deleteReviewDraft: (draftId: string) => void;
   savePet: (input: PetInput) => void;
   deletePet: (petId: string) => void;
   saveMedicalRecord: (input: MedicalRecordInput) => void;
   deleteMedicalRecord: (recordId: string) => void;
+  saveMedicalRecordDraft: (input: MedicalRecordDraft | Omit<MedicalRecordDraft, 'id' | 'updatedAt'> & { id?: string }) => string | null;
+  deleteMedicalRecordDraft: (draftId: string) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -68,9 +78,19 @@ const STORAGE_KEYS = {
   pets: 'exopet-pets',
   medicalRecords: 'exopet-medical-records',
   reviews: 'exopet-reviews',
+  reviewDrafts: 'exopet-review-drafts',
+  medicalRecordDrafts: 'exopet-medical-record-drafts',
 } as const;
 const ONBOARDING_COMPLETION_KEY = 'exopet-onboarding-completed-users';
-const USER_SCOPED_STORAGE_KEY_NAMES = ['user', 'hospitals', 'pets', 'medicalRecords', 'reviews'] as const;
+const USER_SCOPED_STORAGE_KEY_NAMES = [
+  'user',
+  'hospitals',
+  'pets',
+  'medicalRecords',
+  'reviews',
+  'reviewDrafts',
+  'medicalRecordDrafts',
+] as const;
 const APP_REVALIDATION_IDLE_MS = 60_000;
 
 const LEGACY_PET_IDS = new Set(initialPets.map((pet) => pet.id));
@@ -188,6 +208,14 @@ function loadCachedReviews(userId: string) {
   );
 }
 
+function loadCachedReviewDrafts(userId: string) {
+  return loadStoredValue<ReviewDraft[]>(getScopedStorageKey('reviewDrafts', userId), []);
+}
+
+function loadCachedMedicalRecordDrafts(userId: string) {
+  return loadStoredValue<MedicalRecordDraft[]>(getScopedStorageKey('medicalRecordDrafts', userId), []);
+}
+
 function mapReviewsForViewer(reviews: Review[], viewerUserId: string) {
   return reviews.map((review) => ({
     ...review,
@@ -203,6 +231,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [pets, setPets] = useState(() => loadCachedPets(appUserId));
   const [medicalRecords, setMedicalRecords] = useState(() => loadCachedMedicalRecords(appUserId));
   const [reviews, setReviews] = useState(() => mapReviewsForViewer(loadCachedReviews(appUserId), appUserId));
+  const [reviewDrafts, setReviewDrafts] = useState(() => loadCachedReviewDrafts(appUserId));
+  const [medicalRecordDrafts, setMedicalRecordDrafts] = useState(() =>
+    loadCachedMedicalRecordDrafts(appUserId),
+  );
   const [datasetStatus, setDatasetStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [datasetError, setDatasetError] = useState('');
   const [appReady, setAppReady] = useState(() => !isSupabaseConfigured || !authUser);
@@ -217,6 +249,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPets(loadCachedPets(appUserId));
     setMedicalRecords(loadCachedMedicalRecords(appUserId));
     setReviews(mapReviewsForViewer(loadCachedReviews(appUserId), appUserId));
+    setReviewDrafts(loadCachedReviewDrafts(appUserId));
+    setMedicalRecordDrafts(loadCachedMedicalRecordDrafts(appUserId));
   }, [appUserId]);
 
   useEffect(() => {
@@ -435,7 +469,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [appUserId]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -476,6 +510,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     window.localStorage.setItem(getScopedStorageKey('reviews', appUserId), JSON.stringify(reviews));
   }, [appUserId, reviews]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(getScopedStorageKey('reviewDrafts', appUserId), JSON.stringify(reviewDrafts));
+  }, [appUserId, reviewDrafts]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(
+      getScopedStorageKey('medicalRecordDrafts', appUserId),
+      JSON.stringify(medicalRecordDrafts),
+    );
+  }, [appUserId, medicalRecordDrafts]);
 
   function saveUserProfile(input: UserProfileInput) {
     const nextUser: UserProfile = {
@@ -523,6 +576,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPets([]);
     setMedicalRecords([]);
     setReviews([]);
+    setReviewDrafts([]);
+    setMedicalRecordDrafts([]);
   }
 
   function toggleHospitalLike(hospitalId: string) {
@@ -621,8 +676,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return [nextReview, ...current];
       });
 
-      void upsertReview(appUserId, nextReview).catch((error) =>
-        persistError('saveReview', error),
+      void (input.id ? updateReview(appUserId, nextReview) : insertReview(appUserId, nextReview)).catch(
+        (error) => persistError('saveReview', error),
       );
 
       if (input.saveToRecord) {
@@ -654,6 +709,45 @@ export function AppProvider({ children }: { children: ReactNode }) {
   function deleteReview(reviewId: string) {
     setReviews((current) => current.filter((review) => review.id !== reviewId));
     void deleteReviewRemote(reviewId).catch((error) => persistError('deleteReview', error));
+  }
+
+  function saveReviewDraft(input: ReviewDraft) {
+    const hasDraftContent = Boolean(
+      input.hospitalId ||
+        input.petId ||
+        input.date ||
+        input.diagnosis?.trim() ||
+        input.medicine?.trim() ||
+        input.body?.trim() ||
+        (typeof input.cost === 'number' && Number.isFinite(input.cost)) ||
+        (input.tags && input.tags.length > 0) ||
+        (input.customTags && input.customTags.length > 0) ||
+        (input.imageUrls && input.imageUrls.length > 0),
+    );
+
+    if (!hasDraftContent) {
+      return null;
+    }
+
+    const nextDraft: ReviewDraft = {
+      ...input,
+      id: input.id ?? makeId('review-draft'),
+      updatedAt: new Date().toISOString(),
+    };
+
+    setReviewDrafts((current) => {
+      const filtered = current.filter((draft) => draft.id !== nextDraft.id);
+      return [nextDraft, ...filtered].sort(
+        (left, right) =>
+          new Date(right.updatedAt ?? 0).getTime() - new Date(left.updatedAt ?? 0).getTime(),
+      );
+    });
+
+    return nextDraft.id ?? null;
+  }
+
+  function deleteReviewDraft(draftId: string) {
+    setReviewDrafts((current) => current.filter((draft) => draft.id !== draftId));
   }
 
   function savePet(input: PetInput) {
@@ -719,6 +813,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }
 
+  function saveMedicalRecordDraft(
+    input: MedicalRecordDraft | (Omit<MedicalRecordDraft, 'id' | 'updatedAt'> & { id?: string }),
+  ) {
+    const hasDraftContent = Boolean(
+      input.petId ||
+        input.hospitalId ||
+        input.date ||
+        input.diagnosis?.trim() ||
+        input.veterinarianNote?.trim() ||
+        input.prescription?.trim() ||
+        input.memo?.trim() ||
+        (typeof input.cost === 'number' && Number.isFinite(input.cost)),
+    );
+
+    if (!hasDraftContent) {
+      return null;
+    }
+
+    const nextDraft: MedicalRecordDraft = {
+      ...input,
+      id: input.id ?? makeId('record-draft'),
+      updatedAt: new Date().toISOString(),
+    };
+
+    setMedicalRecordDrafts((current) => {
+      const filtered = current.filter((draft) => draft.id !== nextDraft.id);
+      return [nextDraft, ...filtered].sort(
+        (left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime(),
+      );
+    });
+
+    return nextDraft.id;
+  }
+
+  function deleteMedicalRecordDraft(draftId: string) {
+    setMedicalRecordDrafts((current) => current.filter((draft) => draft.id !== draftId));
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -731,6 +863,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         pets,
         medicalRecords,
         reviews,
+        reviewDrafts,
+        medicalRecordDrafts,
         datasetStatus,
         datasetError,
         toggleHospitalLike,
@@ -738,10 +872,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
         upsertHospitals,
         saveReview,
         deleteReview,
+        saveReviewDraft,
+        deleteReviewDraft,
         savePet,
         deletePet,
         saveMedicalRecord,
         deleteMedicalRecord,
+        saveMedicalRecordDraft,
+        deleteMedicalRecordDraft,
       }}
     >
       {children}

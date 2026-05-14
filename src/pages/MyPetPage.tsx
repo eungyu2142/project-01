@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { ModalSheet } from '../components/ModalSheet';
 import { PetEditor } from '../components/PetEditor';
@@ -8,7 +8,12 @@ import { RecordEditor } from '../components/RecordEditor';
 import { useAppContext } from '../context/AppContext';
 import { formatCurrency, formatDate } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
-import type { MedicalRecord, Pet } from '../types';
+import type { MedicalRecord, MedicalRecordDraft, Pet } from '../types';
+
+interface MyPetRouteState {
+  openRecordEditor?: boolean;
+  draftRecord?: MedicalRecordDraft;
+}
 
 interface PetCardsProps {
   pets: Pet[];
@@ -223,7 +228,9 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
 }
 
 export function MyPetPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const routeState = location.state as MyPetRouteState | null;
   const {
     hospitals,
     medicalRecords,
@@ -236,8 +243,9 @@ export function MyPetPage() {
   const [selectedPetId, setSelectedPetId] = useState(pets[0]?.id ?? '');
   const [petEditorOpen, setPetEditorOpen] = useState(false);
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
-  const [recordEditorOpen, setRecordEditorOpen] = useState(false);
+  const [recordEditorOpen, setRecordEditorOpen] = useState(Boolean(routeState?.openRecordEditor));
   const [editingRecord, setEditingRecord] = useState<MedicalRecord | null>(null);
+  const [draftRecord, setDraftRecord] = useState<MedicalRecordDraft | null>(routeState?.draftRecord ?? null);
   const [allRecordsOpen, setAllRecordsOpen] = useState(false);
 
   useEffect(() => {
@@ -322,12 +330,12 @@ export function MyPetPage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
       <div className="relative">
-        <section className="min-h-[9rem] text-white">
+        <section className="flex min-h-[11rem] flex-col justify-center pb-4 text-white">
           <p className="text-sm text-emerald-50/90">보호자 관리</p>
-          <h1 className="text-3xl font-semibold">마이 펫</h1>
-          <p className="mt-2 text-sm text-emerald-50/90">우리 아이들의 건강 기록</p>
+          <h1 className="mt-1 text-[2.2rem] font-semibold tracking-[-0.03em]">마이 펫</h1>
+          <p className="mt-3 text-sm text-emerald-50/90">우리 아이들의 건강 기록</p>
         </section>
 
         <section className="mt-2">
@@ -387,6 +395,7 @@ export function MyPetPage() {
             <button
               type="button"
               onClick={() => {
+                setDraftRecord(null);
                 setEditingRecord(null);
                 setRecordEditorOpen(true);
               }}
@@ -432,6 +441,7 @@ export function MyPetPage() {
                   <button
                     type="button"
                     onClick={() => {
+                      setDraftRecord(null);
                       setEditingRecord(expandedRecord);
                       setRecordEditorOpen(true);
                     }}
@@ -536,15 +546,20 @@ export function MyPetPage() {
           onSave={savePet}
         />
         <RecordEditor
-          key={`record-editor-${editingRecord?.id ?? 'new'}-${recordEditorOpen ? 'open' : 'closed'}`}
+          key={`${editingRecord?.id ?? draftRecord?.id ?? 'new'}-${recordEditorOpen ? 'open' : 'closed'}`}
           open={recordEditorOpen}
           record={editingRecord}
+          draft={draftRecord}
           pets={pets}
           hospitals={hospitals}
           presetPetId={selectedPet?.id}
           onClose={() => {
             setRecordEditorOpen(false);
             setEditingRecord(null);
+            setDraftRecord(null);
+            if (location.state) {
+              navigate(location.pathname, { replace: true, state: null });
+            }
           }}
           onSave={saveMedicalRecord}
         />

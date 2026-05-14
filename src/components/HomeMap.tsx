@@ -18,6 +18,7 @@ interface HomeMapProps {
   markerReviewCounts: Record<string, number>;
   selectedHospitalId: string;
   onSelectHospital: (hospitalId: string) => void;
+  onRequestCurrentLocation: () => void;
 }
 
 type MapPhase = 'loading' | 'ready' | 'missing-key' | 'error';
@@ -100,6 +101,7 @@ export function HomeMap({
   markerReviewCounts,
   selectedHospitalId,
   onSelectHospital,
+  onRequestCurrentLocation,
 }: HomeMapProps) {
   const hasClientId = getNaverMapClientId() !== '';
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -269,6 +271,7 @@ export function HomeMap({
     map.setCenter(new maps.LatLng(currentLocation.lat, currentLocation.lng));
     followCurrentLocationRef.current = true;
     onSelectHospital('');
+    onRequestCurrentLocation();
   }
 
   return (

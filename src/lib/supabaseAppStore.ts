@@ -62,6 +62,15 @@ interface ReviewRow {
   created_at: string;
 }
 
+const LEGACY_REVIEW_OPTIONAL_COLUMNS = [
+  'is_mine',
+  'author_name',
+  'liked_at',
+  'image_urls',
+  'custom_tags',
+  'pet_name',
+] as const;
+
 function toPetRow(userId: string, pet: Pet): PetRow {
   return {
     id: pet.id,
@@ -198,6 +207,54 @@ function fromReviewRow(row: ReviewRow): Review {
     isMine: row.is_mine,
     createdAt: row.created_at,
   };
+}
+
+function getMissingReviewColumn(error: { message?: string } | null | undefined) {
+  const message = error?.message ?? '';
+  const directMatch = message.match(/column ["']?([a-z_]+)["']? .* does not exist/i);
+
+  if (directMatch?.[1]) {
+    return directMatch[1];
+  }
+
+  const loweredMessage = message.toLowerCase();
+  return LEGACY_REVIEW_OPTIONAL_COLUMNS.find((column) => loweredMessage.includes(column)) ?? null;
+}
+
+async function executeReviewWrite(
+  mode: 'insert' | 'update' | 'upsert',
+  row: ReviewRow,
+  userId: string,
+) {
+  if (!supabase) {
+    return;
+  }
+
+  let payload: Partial<ReviewRow> = { ...row };
+
+  while (true) {
+    const query =
+      mode === 'insert'
+        ? supabase.from('reviews').insert(payload)
+        : mode === 'update'
+          ? supabase.from('reviews').update(payload).eq('id', row.id).eq('user_id', userId)
+          : supabase.from('reviews').upsert(payload);
+
+    const { error } = await query;
+
+    if (!error) {
+      return;
+    }
+
+    const missingColumn = getMissingReviewColumn(error) as keyof ReviewRow | null;
+
+    if (!missingColumn || !(missingColumn in payload)) {
+      throw error;
+    }
+
+    const { [missingColumn]: _unused, ...nextPayload } = payload;
+    payload = nextPayload;
+  }
 }
 
 export async function loadUserAppData(userId: string) {
@@ -357,8 +414,23 @@ export async function upsertReview(userId: string, review: Review) {
     return;
   }
 
-  const { error } = await supabase.from('reviews').upsert(toReviewRow(userId, review));
-  if (error) throw error;
+  await executeReviewWrite('upsert', toReviewRow(userId, review), userId);
+}
+
+export async function insertReview(userId: string, review: Review) {
+  if (!isSupabaseConfigured || !supabase) {
+    return;
+  }
+
+  await executeReviewWrite('insert', toReviewRow(userId, review), userId);
+}
+
+export async function updateReview(userId: string, review: Review) {
+  if (!isSupabaseConfigured || !supabase) {
+    return;
+  }
+
+  await executeReviewWrite('update', toReviewRow(userId, review), userId);
 }
 
 export async function deleteReviewRemote(reviewId: string) {

@@ -1,33 +1,33 @@
 import { useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useAppContext } from '../context/AppContext';
+import { validateUserText } from '../lib/contentModeration';
 import { getAnimalLabel } from '../lib/format';
 import {
   getHospitalClassificationLabel,
   isDatasetHospital,
 } from '../lib/hospitalDataset';
-import { validateUserText } from '../lib/contentModeration';
 import type { Hospital, Review, ReviewDraft } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
 
 const reviewTagOptions = [
-  { emoji: '🙂', label: '수의사 님이 친절해요' },
-  { emoji: '🧼', label: '병원의 위생이 좋아요' },
-  { emoji: '📝', label: '설명이 자세해요' },
+  { emoji: '🩺', label: '수의사 설명이 친절해요' },
+  { emoji: '✨', label: '병원이 위생적이에요' },
+  { emoji: '📋', label: '설명이 자세해요' },
   { emoji: '💸', label: '가격이 합리적이에요' },
-  { emoji: '🤲', label: '아이를 조심스럽게 잘 다뤄주세요' },
-  { emoji: '🔬', label: '진료 장비가 잘 갖춰져 있어요' },
+  { emoji: '🤍', label: '아이를 조심스럽게 다뤄줘요' },
+  { emoji: '💊', label: '진료 소비가 과하지 않았어요' },
   { emoji: '⏰', label: '예약 시간이 잘 지켜져요' },
-  { emoji: '🚶', label: '대기 시간이 짧아요' },
-  { emoji: '🚑', label: '응급 상황에 빠르게 대응해요' },
-  { emoji: '📋', label: '검사 결과를 쉽게 알려줘요' },
+  { emoji: '🪑', label: '대기 시간이 짧아요' },
+  { emoji: '🚨', label: '응급 상황도 빠르게 대응해요' },
+  { emoji: '🧪', label: '검사 결과를 쉽게 알려줘요' },
   { emoji: '🏠', label: '집에서 관리하는 법을 알려줘요' },
-  { emoji: '🦎', label: '동물 특성을 잘 이해해요' },
-  { emoji: '✅', label: '과잉진료가 없어요' },
-  { emoji: '💬', label: '비용 안내가 투명해요' },
+  { emoji: '🐾', label: '특수동물 특성을 잘 이해해요' },
+  { emoji: '🥼', label: '과잉진료가 없었어요' },
+  { emoji: '🪙', label: '비용 안내가 명확해요' },
   { emoji: '🌿', label: '병원 분위기가 차분해요' },
-  { emoji: '⭐', label: '재방문하고 싶어요' },
+  { emoji: '🤝', label: '보호자를 안심시켜줘요' },
 ];
 
 interface ReviewComposerProps {
@@ -57,7 +57,7 @@ function getSupportedAnimalSummary(hospital: Hospital) {
       }
 
       if (animalType === 'rodent') {
-        return '설치류';
+        return '소동물';
       }
 
       return '조류';
@@ -94,7 +94,14 @@ export function ReviewComposer({
   initialDraft,
   editingReview,
 }: ReviewComposerProps) {
-  const { hospitals, pets, saveReview, user } = useAppContext();
+  const {
+    hospitals,
+    pets,
+    saveReview,
+    saveReviewDraft,
+    deleteReviewDraft,
+    user,
+  } = useAppContext();
   const availableHospitals = useMemo(
     () => hospitals.filter((hospital) => isDatasetHospital(hospital)),
     [hospitals],
@@ -125,6 +132,7 @@ export function ReviewComposer({
   const [saveToRecord, setSaveToRecord] = useState(false);
   const [moderationMessage, setModerationMessage] = useState('');
   const [requiredMessage, setRequiredMessage] = useState('');
+  const draftId = initialDraft?.id;
 
   const selectedPet = pets.find((pet) => pet.id === petId);
   const selectedHospital = availableHospitals.find((hospital) => hospital.id === hospitalId);
@@ -197,7 +205,7 @@ export function ReviewComposer({
     event.preventDefault();
 
     if (!selectedPet || !hospitalId || !date) {
-      setRequiredMessage('필수 입력해주세요.');
+      setRequiredMessage('필수 항목을 입력해 주세요.');
       setModerationMessage('');
       return;
     }
@@ -206,9 +214,9 @@ export function ReviewComposer({
 
     const moderation = validateUserText([
       { label: '진단 항목', value: diagnosis },
-      { label: '처방받은 약', value: medicine },
+      { label: '처방 받은 약', value: medicine },
       { label: '직접 태그', value: customTags.join(' ') },
-      { label: '직접 작성란', value: body },
+      { label: '리뷰 본문', value: body },
     ]);
 
     if (!moderation.ok) {
@@ -235,6 +243,37 @@ export function ReviewComposer({
       saveToRecord,
     });
 
+    if (draftId) {
+      deleteReviewDraft(draftId);
+    }
+
+    setModerationMessage('');
+    onClose();
+  }
+
+  function handleSaveDraft() {
+    const savedDraftId = saveReviewDraft({
+      id: draftId,
+      hospitalId,
+      petId,
+      date,
+      diagnosis,
+      cost: costText ? Number(costText.replaceAll(',', '')) : null,
+      medicine,
+      tags,
+      customTags,
+      body,
+      rating,
+      imageUrls,
+    });
+
+    if (!savedDraftId) {
+      setRequiredMessage('임시 저장할 내용이 아직 없어요.');
+      setModerationMessage('');
+      return;
+    }
+
+    setRequiredMessage('');
     setModerationMessage('');
     onClose();
   }
@@ -268,7 +307,7 @@ export function ReviewComposer({
             onChange={(event) => setPetId(event.target.value)}
             className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3"
           >
-            <option value="">동물을 선택해주세요</option>
+            <option value="">반려동물을 선택해 주세요</option>
             {pets.map((pet) => (
               <option key={pet.id} value={pet.id}>
                 {pet.name} · {pet.species}
@@ -316,7 +355,7 @@ export function ReviewComposer({
                 setShowHospitalOptions(true);
               }}
               onFocus={() => setShowHospitalOptions(true)}
-              placeholder="병원 이름을 검색해서 선택해주세요"
+              placeholder="병원 이름을 검색해 선택해 주세요"
               className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
             />
             {hospitalSearchText ? (
@@ -371,7 +410,7 @@ export function ReviewComposer({
                 ))
               ) : (
                 <div className="px-4 py-5 text-center text-sm text-slate-500">
-                  병원 데이터셋이 비어 있어요. 홈에서 데이터셋이 로드됐는지 먼저 확인해주세요.
+                  병원 데이터가 아직 없어요. 병원 목록이 로드됐는지 먼저 확인해 주세요.
                 </div>
               )}
             </div>
@@ -419,13 +458,13 @@ export function ReviewComposer({
             type="text"
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
-            placeholder="예: 식욕부진, 호흡기 검진"
+            placeholder="예: 식욕 부진, 체중 검사"
             className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">처방받은 약</span>
+          <span className="text-sm font-medium text-slate-700">처방 받은 약</span>
           <input
             type="text"
             value={medicine}
@@ -480,7 +519,7 @@ export function ReviewComposer({
               type="text"
               value={customTag}
               onChange={(event) => setCustomTag(event.target.value)}
-              placeholder="예: 야간진료, 입원가능"
+              placeholder="예: 야간진료, 입원 가능"
               className="flex-1 rounded-2xl border border-emerald-100 bg-white px-4 py-3"
             />
             <button
@@ -506,12 +545,12 @@ export function ReviewComposer({
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">직접 작성란</span>
+          <span className="text-sm font-medium text-slate-700">리뷰 본문</span>
           <textarea
             value={body}
             onChange={(event) => setBody(event.target.value)}
             rows={4}
-            placeholder="진료 경험을 자유롭게 적어주세요."
+            placeholder="진료 경험을 자유롭게 적어 주세요."
             className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
@@ -553,12 +592,25 @@ export function ReviewComposer({
           <span>마이 펫 기록에도 저장하기</span>
         </label>
 
-        <button
-          type="submit"
-          className="w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
-        >
-          {editingReview ? '리뷰 수정 완료' : '리뷰 등록하기'}
-        </button>
+        <div className="grid grid-cols-2 gap-3">
+          {!editingReview ? (
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              className="rounded-2xl border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
+            >
+              {draftId ? '임시 저장 업데이트' : '임시 저장'}
+            </button>
+          ) : (
+            <div />
+          )}
+          <button
+            type="submit"
+            className="rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
+          >
+            {editingReview ? '리뷰 수정 완료' : '리뷰 등록하기'}
+          </button>
+        </div>
       </form>
     </ModalSheet>
   );

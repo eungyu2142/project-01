@@ -103,8 +103,8 @@ export function HomePage() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [topCollapsed, setTopCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (!navigator.geolocation) {
+  function requestCurrentLocation() {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
       return;
     }
 
@@ -119,9 +119,13 @@ export function HomePage() {
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000,
+        maximumAge: 0,
       },
     );
+  }
+
+  useEffect(() => {
+    requestCurrentLocation();
   }, []);
 
   useEffect(() => {
@@ -183,7 +187,10 @@ export function HomePage() {
     [currentLocation.lat, currentLocation.lng, datasetHospitals, searchText, selectedAnimal],
   );
 
-  const suggestedHospitals = useMemo(() => visibleHospitals.slice(0, 6), [visibleHospitals]);
+  const suggestedHospitals = useMemo(
+    () => (searchText.trim() ? visibleHospitals.slice(0, 8) : visibleHospitals),
+    [searchText, visibleHospitals],
+  );
   const markerReviewCounts = useMemo(
     () =>
       visibleHospitals.reduce<Record<string, number>>((acc, hospital) => {
@@ -214,6 +221,12 @@ export function HomePage() {
   function handleSelectHospital(hospitalId: string) {
     setSelectedHospitalId(hospitalId);
     setShowSuggestions(false);
+  }
+
+  function handleRecenterToCurrentLocation() {
+    setSelectedHospitalId('');
+    setShowSuggestions(false);
+    requestCurrentLocation();
   }
 
   async function handleCopyAddress(hospitalId: string, address: string) {
@@ -250,6 +263,7 @@ export function HomePage() {
         markerReviewCounts={markerReviewCounts}
         selectedHospitalId={selectedHospitalId}
         onSelectHospital={handleSelectHospital}
+        onRequestCurrentLocation={handleRecenterToCurrentLocation}
       />
 
       <div className="fixed inset-x-0 top-0 z-30">
@@ -266,20 +280,23 @@ export function HomePage() {
           </div>
         ) : (
           <div className="mx-auto max-w-[32rem] px-4 transition-transform duration-300 translate-y-0">
-            <div className="pointer-events-auto rounded-b-[2rem] bg-white/88 px-3 pb-3 pt-2 shadow-[0_20px_45px_rgba(15,118,110,0.18)] backdrop-blur">
-              <div className="mb-2 flex justify-center">
+            <div className="pointer-events-auto rounded-b-[2.25rem] border-x border-b border-white/65 bg-[linear-gradient(180deg,_rgba(255,255,255,0.95),_rgba(236,253,245,0.9))] px-4 pb-4 pt-3 shadow-[0_24px_50px_rgba(15,118,110,0.18)] backdrop-blur">
+              <div className="mb-3 flex justify-center">
                 <button
                   type="button"
                   onClick={() => setTopCollapsed(true)}
-                  className="inline-flex h-8 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+                  className="inline-flex h-8 w-14 items-center justify-center rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-[0_8px_22px_rgba(15,118,110,0.08)]"
                   aria-label="상단 접기"
                 >
                   <Icon name="chevron" className="h-4 w-4 -rotate-90" />
                 </button>
               </div>
 
-              <label className="flex items-center gap-3 rounded-full bg-emerald-50/80 px-4 py-3 text-slate-500">
-                <Icon name="search" className="h-5 w-5 text-emerald-600" />
+              <div className="mx-auto max-w-[28.5rem]">
+                <label className="flex items-center gap-3 rounded-[1.6rem] border border-white/90 bg-white/96 px-5 py-4 text-slate-500 shadow-[0_16px_34px_rgba(15,118,110,0.12)]">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                  <Icon name="search" className="h-5 w-5" />
+                </span>
                 <input
                   value={searchText}
                   onChange={(event) => {
@@ -288,20 +305,28 @@ export function HomePage() {
                     setTopCollapsed(false);
                   }}
                   onFocus={() => {
+                    requestCurrentLocation();
                     setShowSuggestions(true);
                     setTopCollapsed(false);
                   }}
                   placeholder="병원 검색"
-                  className="w-full bg-transparent text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
                 />
-              </label>
+                </label>
 
-              <div className="mt-3">
-                <AnimalTabs value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
+                <div className="mt-3">
+                  <AnimalTabs value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
+                </div>
               </div>
 
-              {showSuggestions && searchText.trim() ? (
-                <div className="mt-3 rounded-[1.5rem] border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
+              {showSuggestions ? (
+                <div className="mx-auto mt-3 max-w-[28.5rem] rounded-[1.5rem] border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
+                  {!searchText.trim() ? (
+                    <p className="px-3 pb-2 pt-1 text-xs font-semibold text-emerald-700">
+                      현재 위치 기준 가까운 병원
+                    </p>
+                  ) : null}
+                  <div className="max-h-[min(22rem,calc(100dvh-16rem))] overflow-y-auto">
                   {suggestedHospitals.length > 0 ? (
                     suggestedHospitals.map((hospital) => (
                       <button
@@ -322,6 +347,7 @@ export function HomePage() {
                   ) : (
                     <p className="px-3 py-4 text-sm text-slate-500">검색 결과가 없어요.</p>
                   )}
+                  </div>
                 </div>
               ) : null}
             </div>

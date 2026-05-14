@@ -145,6 +145,7 @@ export interface MedicalRecordInput {
 }
 
 export interface ReviewDraft {
+  id?: string;
   hospitalId?: string;
   petId?: string;
   animalType?: AnimalType;
@@ -157,4 +158,18 @@ export interface ReviewDraft {
   body?: string;
   rating?: number;
   imageUrls?: string[];
+  updatedAt?: string;
+}
+
+export interface MedicalRecordDraft {
+  id: string;
+  petId?: string;
+  hospitalId?: string;
+  date?: string;
+  diagnosis?: string;
+  veterinarianNote?: string;
+  prescription?: string;
+  cost?: number | null;
+  memo?: string;
+  updatedAt: string;
 }
