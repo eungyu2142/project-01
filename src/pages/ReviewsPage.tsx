@@ -378,19 +378,42 @@ export function ReviewsPage() {
     bird: reviews.filter((review) => review.animalType === 'bird').length,
   };
 
+  const allSortedReviews = useMemo(
+    () =>
+      [...filteredReviews].sort((left, right) => {
+        if (prioritizeDistance) {
+          const leftHospital = hospitalById[left.hospitalId];
+          const rightHospital = hospitalById[right.hospitalId];
+          const leftDistance = leftHospital
+            ? getDistanceValueKm(user.location.lat, user.location.lng, leftHospital.lat, leftHospital.lng)
+            : Number.POSITIVE_INFINITY;
+          const rightDistance = rightHospital
+            ? getDistanceValueKm(user.location.lat, user.location.lng, rightHospital.lat, rightHospital.lng)
+            : Number.POSITIVE_INFINITY;
+
+          return leftDistance - rightDistance || compareReviews(left, right, sortBy);
+        }
+
+        return compareReviews(left, right, sortBy);
+      }),
+    [filteredReviews, hospitalById, prioritizeDistance, sortBy, user.location.lat, user.location.lng],
+  );
+
+  const isAllSelected = selectedHospitalId === '';
   const selectedGroup = groupedReviews.find((group) => group.hospitalId === selectedHospitalId) ?? null;
 
   useEffect(() => {
     if (groupedReviews.length === 0) {
-      if (selectedHospitalId) {
-        setSelectedHospitalId('');
-      }
+      return;
+    }
+
+    if (!selectedHospitalId) {
       return;
     }
 
     const exists = groupedReviews.some((group) => group.hospitalId === selectedHospitalId);
 
-    if (!selectedHospitalId || !exists) {
+    if (!exists) {
       setSelectedHospitalId(groupedReviews[0].hospitalId);
     }
   }, [groupedReviews, selectedHospitalId]);
@@ -539,12 +562,23 @@ export function ReviewsPage() {
                   : 'border border-sky-100 bg-white/92 text-sky-700 shadow-[0_8px_18px_rgba(14,165,233,0.06)]'
               }`}
             >
-              거리 우선
+              거리순
             </button>
           </div>
 
           {groupedReviews.length > 0 ? (
             <div className="flex gap-2 overflow-x-auto pb-1">
+              <button
+                type="button"
+                onClick={() => setSelectedHospitalId('')}
+                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  isAllSelected
+                    ? 'bg-slate-900 text-white shadow-[0_10px_22px_rgba(15,23,42,0.20)]'
+                    : 'border border-slate-200 bg-white/92 text-slate-600 shadow-[0_8px_18px_rgba(15,23,42,0.05)]'
+                }`}
+              >
+                전체 {allSortedReviews.length}
+              </button>
               {groupedReviews.map((group) => {
                 const active = group.hospitalId === selectedHospitalId;
 
@@ -568,7 +602,37 @@ export function ReviewsPage() {
         </section>
 
         <section className="mt-4 space-y-4">
-          {selectedGroup ? (
+          {isAllSelected && allSortedReviews.length > 0 ? (
+            <section className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
+              <div className="flex flex-wrap gap-2 text-xs">
+                <span className="rounded-full bg-emerald-100 px-2 py-1 font-semibold text-emerald-700">
+                  전체 리뷰 {allSortedReviews.length}
+                </span>
+                <span className="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600">
+                  병원 {groupedReviews.length}
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {allSortedReviews.map((review) => (
+                  <ReviewCard
+                    key={review.id}
+                    review={review}
+                    hospitalName={hospitalById[review.hospitalId]?.name ?? '이름 없는 병원'}
+                    currentNickname={user.nickname}
+                    showHospitalName
+                    onToggleLike={toggleReviewLike}
+                    onDelete={handleDeleteReview}
+                    onEdit={(currentReview) => {
+                      setDraft(undefined);
+                      setEditingReview(currentReview);
+                      setComposerOpen(true);
+                    }}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : selectedGroup ? (
             <section className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
