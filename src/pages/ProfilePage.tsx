@@ -5,8 +5,12 @@ import { Icon } from '../components/Icon';
 import { useAuth } from '../context/AuthContext';
 import { useAppContext } from '../context/AppContext';
 import { formatDate } from '../lib/format';
-import { loadNaverMapSdk } from '../lib/naverMaps';
+import {
+  GEOLOCATION_LOADING_MESSAGE,
+  GEOLOCATION_PERMISSION_MESSAGE,
+} from '../lib/currentLocation';
 import { isImageAvatar } from '../lib/petAvatar';
+import { loadNaverMapSdk } from '../lib/naverMaps';
 import type { NaverGlobal, NaverReverseGeocodeResponse } from '../lib/naverMaps';
 
 type ActivityTarget = 'likedHospitals' | 'likedReviews' | 'reviewDrafts' | 'recordDrafts';
@@ -61,7 +65,7 @@ export function ProfilePage() {
     user,
   } = useAppContext();
   const accountEmail = authUser?.email ?? user.email;
-  const [currentRegion, setCurrentRegion] = useState('현재 위치 확인 중');
+  const [currentRegion, setCurrentRegion] = useState(user.city || GEOLOCATION_LOADING_MESSAGE);
   const [selectedAccountAction, setSelectedAccountAction] = useState<AccountAction | null>(null);
   const [draftNickname, setDraftNickname] = useState(user.nickname);
   const [draftProfileEmoji, setDraftProfileEmoji] = useState(user.profileEmoji);
@@ -126,6 +130,15 @@ export function ProfilePage() {
     setDraftNickname(user.nickname);
     setDraftProfileEmoji(user.profileEmoji);
   }, [user]);
+
+  useEffect(() => {
+    if (user.city) {
+      setCurrentRegion(user.city);
+      return;
+    }
+
+    setCurrentRegion(GEOLOCATION_LOADING_MESSAGE);
+  }, [user.city]);
 
   function scrollToActivitySection(target: ActivityTarget) {
     const targetRef = {
@@ -211,6 +224,10 @@ export function ProfilePage() {
 
   useEffect(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      if (!user.city) {
+        setCurrentRegion(GEOLOCATION_PERMISSION_MESSAGE);
+      }
+
       return;
     }
 
@@ -230,13 +247,13 @@ export function ProfilePage() {
             setCurrentRegion(nextRegion);
           }
         } catch {
-          if (!cancelled) {
+          if (!cancelled && !user.city) {
             setCurrentRegion('현재 위치를 불러오지 못했어요');
           }
         }
       },
       () => {
-        if (!cancelled) {
+        if (!cancelled && !user.city) {
           setCurrentRegion('위치 권한을 허용하면 현재 위치가 보여요');
         }
       },
@@ -251,14 +268,14 @@ export function ProfilePage() {
       cancelled = true;
       navigator.geolocation.clearWatch(watchId);
     };
-  }, []);
+  }, [user.city]);
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f6fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[linear-gradient(180deg,_#19c39b_0%,_#11ab8b_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,_#19c39b_0%,_#11ab8b_100%)]" />
 
       <div className="relative">
-        <section className="min-h-[11rem] text-white">
+        <section className="min-h-[12rem] text-white">
           <p className="text-sm font-medium text-emerald-50/90">내 정보</p>
           <div className="mt-3 flex items-center gap-4">
             <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[2rem] bg-white/18 text-4xl shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur">

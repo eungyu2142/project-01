@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimalTabs } from '../components/AnimalTabs';
 import { HomeMap } from '../components/HomeMap';
 import { Icon } from '../components/Icon';
@@ -12,7 +12,13 @@ import {
   mergeHospitalSupportedAnimals,
 } from '../lib/format';
 import { isDatasetHospital } from '../lib/hospitalDataset';
+import { resolveCurrentRegion } from '../lib/currentLocation';
 import type { AnimalFilter, Hospital, Review } from '../types';
+
+interface HomeRouteState {
+  hospitalId?: string;
+  animalType?: AnimalFilter;
+}
 
 const animalLabels: Record<string, string> = {
   all: '전체',
@@ -92,15 +98,18 @@ function getRecentReviewedSpecies(hospitalId: string, reviews: Review[], animalT
 }
 
 export function HomePage() {
+  const location = useLocation();
   const navigate = useNavigate();
-  const { datasetError, datasetStatus, hospitals, reviews, toggleHospitalLike, user } = useAppContext();
-  const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>('all');
+  const routeState = location.state as HomeRouteState | null;
+  const { datasetError, datasetStatus, hospitals, reviews, saveUserLocation, toggleHospitalLike, user } =
+    useAppContext();
+  const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>(routeState?.animalType ?? 'all');
   const [searchText, setSearchText] = useState('');
-  const [selectedHospitalId, setSelectedHospitalId] = useState('');
+  const [selectedHospitalId, setSelectedHospitalId] = useState(routeState?.hospitalId ?? '');
   const [copiedAddressHospitalId, setCopiedAddressHospitalId] = useState<string | null>(null);
-  const [currentLocation, setCurrentLocation] = useState(user.location);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [topCollapsed, setTopCollapsed] = useState(false);
+  const currentLocation = user.location;
 
   function requestCurrentLocation() {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
@@ -109,10 +118,20 @@ export function HomePage() {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setCurrentLocation({
+        const nextLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-        });
+        };
+
+        saveUserLocation({ location: nextLocation });
+        void resolveCurrentRegion(nextLocation.lat, nextLocation.lng)
+          .then((nextCity) => {
+            saveUserLocation({
+              location: nextLocation,
+              city: nextCity,
+            });
+          })
+          .catch(() => {});
       },
       () => {},
       {
@@ -151,6 +170,23 @@ export function HomePage() {
 
     return () => window.clearTimeout(timeoutId);
   }, [copiedAddressHospitalId]);
+
+  useEffect(() => {
+    if (!routeState?.hospitalId) {
+      return;
+    }
+
+    setSelectedHospitalId(routeState.hospitalId);
+
+    if (routeState.animalType) {
+      setSelectedAnimal(routeState.animalType);
+    }
+
+    setSearchText('');
+    setShowSuggestions(false);
+    setTopCollapsed(false);
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.pathname, navigate, routeState?.animalType, routeState?.hospitalId]);
 
   const datasetHospitals = useMemo(
     () => hospitals.filter((hospital) => isDatasetHospital(hospital)),

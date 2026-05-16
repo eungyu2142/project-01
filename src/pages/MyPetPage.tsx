@@ -330,11 +330,10 @@ export function MyPetPage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
       <div className="relative">
-        <section className="flex min-h-[11rem] flex-col justify-center pb-4 text-white">
-          <p className="text-sm text-emerald-50/90">보호자 관리</p>
-          <h1 className="mt-1 text-[2.2rem] font-semibold tracking-[-0.03em]">마이 펫</h1>
+        <section className="flex min-h-[12rem] flex-col justify-center pb-4 text-white">
+          <h1 className="text-[2.2rem] font-semibold tracking-[-0.03em]">마이 펫</h1>
           <p className="mt-3 text-sm text-emerald-50/90">우리 아이들의 건강 기록</p>
         </section>
 

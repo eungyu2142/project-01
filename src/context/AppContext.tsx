@@ -13,6 +13,7 @@ import {
   normalizeHospitalDatasetItem,
   type HospitalDatasetPayload,
 } from '../lib/hospitalDataset';
+import { resolveCurrentRegion } from '../lib/currentLocation';
 import {
   deleteMedicalRecordRemote,
   deletePetRemote,
@@ -38,6 +39,7 @@ import type {
   ReviewDraft,
   ReviewInput,
   UserProfile,
+  UserLocationInput,
   UserProfileInput,
 } from '../types';
 
@@ -54,6 +56,7 @@ interface AppContextValue {
   datasetError: string;
   markOnboardingComplete: () => void;
   saveUserProfile: (input: UserProfileInput) => void;
+  saveUserLocation: (input: UserLocationInput) => void;
   clearAllLocalData: (userId?: string) => void;
   toggleHospitalLike: (hospitalId: string) => void;
   toggleReviewLike: (reviewId: string) => void;
@@ -92,6 +95,7 @@ const USER_SCOPED_STORAGE_KEY_NAMES = [
   'medicalRecordDrafts',
 ] as const;
 const APP_REVALIDATION_IDLE_MS = 60_000;
+const LOCATION_SYNC_MIN_DISTANCE_METERS = 30;
 
 const LEGACY_PET_IDS = new Set(initialPets.map((pet) => pet.id));
 const LEGACY_MEDICAL_RECORD_IDS = new Set(initialMedicalRecords.map((record) => record.id));
@@ -116,6 +120,26 @@ function loadStoredValue<T>(key: string, fallback: T): T {
 
 function persistError(scope: string, error: unknown) {
   console.error(`[AppContext:${scope}]`, error);
+}
+
+function toRadians(value: number) {
+  return (value * Math.PI) / 180;
+}
+
+function getDistanceMeters(
+  left: { lat: number; lng: number },
+  right: { lat: number; lng: number },
+) {
+  const earthRadiusMeters = 6_371_000;
+  const latDelta = toRadians(right.lat - left.lat);
+  const lngDelta = toRadians(right.lng - left.lng);
+  const leftLat = toRadians(left.lat);
+  const rightLat = toRadians(right.lat);
+  const haversine =
+    Math.sin(latDelta / 2) ** 2 +
+    Math.cos(leftLat) * Math.cos(rightLat) * Math.sin(lngDelta / 2) ** 2;
+
+  return 2 * earthRadiusMeters * Math.asin(Math.sqrt(haversine));
 }
 
 function getScopedStorageKey(key: keyof typeof STORAGE_KEYS, userId: string) {
@@ -241,6 +265,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [rehydrationTick, setRehydrationTick] = useState(0);
   const hiddenAtRef = useRef<number | null>(null);
   const lastHydratedUserIdRef = useRef<string | null>(null);
+  const latestLocationRequestIdRef = useRef(0);
 
   useEffect(() => {
     removeLegacySharedStorage();
@@ -530,6 +555,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, [appUserId, medicalRecordDrafts]);
 
+  function saveUserLocation(input: UserLocationInput) {
+    setUser((current) => {
+      const nextCity = input.city?.trim() ? input.city.trim() : current.city;
+      const distanceMeters = getDistanceMeters(current.location, input.location);
+      const cityChanged = nextCity !== current.city;
+
+      if (!cityChanged && distanceMeters < LOCATION_SYNC_MIN_DISTANCE_METERS) {
+        return current;
+      }
+
+      const nextUser: UserProfile = {
+        ...current,
+        city: nextCity,
+        location: input.location,
+      };
+
+      void upsertUserProfile(nextUser).catch((error) => persistError('saveUserLocation', error));
+      return nextUser;
+    });
+  }
+
   function saveUserProfile(input: UserProfileInput) {
     const nextUser: UserProfile = {
       ...user,
@@ -542,6 +588,51 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUser(nextUser);
     void upsertUserProfile(nextUser).catch((error) => persistError('saveUserProfile', error));
   }
+
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation || !authUser) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const nextLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        const requestId = latestLocationRequestIdRef.current + 1;
+
+        latestLocationRequestIdRef.current = requestId;
+        saveUserLocation({ location: nextLocation });
+
+        void resolveCurrentRegion(nextLocation.lat, nextLocation.lng)
+          .then((nextCity) => {
+            if (cancelled || requestId !== latestLocationRequestIdRef.current) {
+              return;
+            }
+
+            saveUserLocation({
+              location: nextLocation,
+              city: nextCity,
+            });
+          })
+          .catch(() => {});
+      },
+      () => {},
+      {
+        enableHighAccuracy: true,
+        maximumAge: 60_000,
+        timeout: 10_000,
+      },
+    );
+
+    return () => {
+      cancelled = true;
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }, [authUser?.id]);
 
   function markOnboardingComplete() {
     setUser((current) => {
@@ -858,6 +949,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         user,
         markOnboardingComplete,
         saveUserProfile,
+        saveUserLocation,
         clearAllLocalData,
         hospitals,
         pets,

@@ -31,6 +31,14 @@ export interface UserProfileInput {
   profileEmoji: string;
 }
 
+export interface UserLocationInput {
+  location: {
+    lat: number;
+    lng: number;
+  };
+  city?: string;
+}
+
 export interface Hospital {
   id: string;
   name: string;
