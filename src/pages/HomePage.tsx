@@ -325,7 +325,7 @@ export function HomePage() {
   }
 
   const bottomOverlayClass =
-    'pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-[calc(env(safe-area-inset-bottom)+6.75rem)]';
+    'pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] sm:pb-[calc(env(safe-area-inset-bottom)+8.5rem)]';
 
   return (
     <section className="relative h-[100dvh] overflow-hidden bg-slate-950">
@@ -479,7 +479,7 @@ export function HomePage() {
                   }`}
                   aria-label="병원 좋아요"
                 >
-                  <Icon name="heart" className="h-5 w-5" />
+                  <Icon name="heart" className="h-5 w-5" filled={selectedHospital.liked} />
                 </button>
                 <button
                   type="button"

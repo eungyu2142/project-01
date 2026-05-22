@@ -26,9 +26,10 @@ type IconName =
 interface IconProps {
   name: IconName;
   className?: string;
+  filled?: boolean;
 }
 
-export function Icon({ name, className = 'h-5 w-5' }: IconProps) {
+export function Icon({ name, className = 'h-5 w-5', filled = false }: IconProps) {
   const commonProps = {
     fill: 'none',
     stroke: 'currentColor',
@@ -71,7 +72,7 @@ export function Icon({ name, className = 'h-5 w-5' }: IconProps) {
       );
     case 'heart':
       return (
-        <svg {...commonProps}>
+        <svg {...commonProps} fill={filled ? 'currentColor' : 'none'}>
           <path d="m12 20-1.2-1C5.4 14.3 2 11.2 2 7.4 2 4.6 4.2 2.5 7 2.5c1.6 0 3.1.7 4 1.9.9-1.2 2.4-1.9 4-1.9 2.8 0 5 2.1 5 4.9 0 3.8-3.4 6.9-8.8 11.6L12 20Z" />
         </svg>
       );

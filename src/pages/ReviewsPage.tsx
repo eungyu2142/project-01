@@ -106,28 +106,18 @@ function compareReviews(left: Review, right: Review, sort: ReviewSort) {
 
 function compareGroupsByBaseSort(left: HospitalReviewGroup, right: HospitalReviewGroup, sort: ReviewSort) {
   if (sort === 'popular') {
-    return (
-      right.totalLikes - left.totalLikes ||
-      right.reviewCount - left.reviewCount ||
-      right.latestCreatedAt - left.latestCreatedAt
-    );
+    return right.totalLikes - left.totalLikes;
   }
 
-  return right.latestCreatedAt - left.latestCreatedAt || right.reviewCount - left.reviewCount;
+  return right.latestCreatedAt - left.latestCreatedAt;
 }
 
 function compareGroups(
   left: HospitalReviewGroup,
   right: HospitalReviewGroup,
   sort: ReviewSort,
-  prioritizeDistance: boolean,
 ) {
   const baseSortResult = compareGroupsByBaseSort(left, right, sort);
-
-  if (prioritizeDistance) {
-    return left.distanceValue - right.distanceValue || baseSortResult;
-  }
-
   return baseSortResult || left.distanceValue - right.distanceValue;
 }
 
@@ -241,11 +231,12 @@ export function ReviewsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const routeState = location.state as ReviewRouteState | null;
-  const { hospitals, reviews, toggleReviewLike, deleteReview, user } = useAppContext();
+  const { hospitals, reviews, toggleHospitalLike, toggleReviewLike, deleteReview, user } =
+    useAppContext();
   const datasetHospitals = hospitals.filter((hospital) => isDatasetHospital(hospital));
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>(routeState?.animalType ?? 'all');
   const [sortBy, setSortBy] = useState<ReviewSort>('popular');
-  const [prioritizeDistance, setPrioritizeDistance] = useState(false);
+  const prioritizeDistance = true;
   const [hospitalSearch, setHospitalSearch] = useState('');
   const [selectedHospitalId, setSelectedHospitalId] = useState(routeState?.hospitalId ?? '');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -307,6 +298,7 @@ export function ReviewsPage() {
   const hospitalMatches = useMemo(
     () =>
       filteredHospitals
+        .filter((hospital) => animalFilteredReviews.some((review) => review.hospitalId === hospital.id))
         .filter((hospital) => {
           if (!normalizedSearchKeyword) {
             return true;
@@ -368,42 +360,26 @@ export function ReviewsPage() {
           reviews: sortedReviews,
         } satisfies HospitalReviewGroup;
       })
-      .sort((left, right) => compareGroups(left, right, sortBy, prioritizeDistance));
-  }, [filteredReviews, hospitalById, prioritizeDistance, sortBy, user.location.lat, user.location.lng]);
-
-  const counts = {
-    all: reviews.length,
-    reptile: reviews.filter((review) => review.animalType === 'reptile').length,
-    rodent: reviews.filter((review) => review.animalType === 'rodent').length,
-    bird: reviews.filter((review) => review.animalType === 'bird').length,
-  };
-
-  const allSortedReviews = useMemo(
-    () =>
-      [...filteredReviews].sort((left, right) => {
-        if (prioritizeDistance) {
-          const leftHospital = hospitalById[left.hospitalId];
-          const rightHospital = hospitalById[right.hospitalId];
-          const leftDistance = leftHospital
-            ? getDistanceValueKm(user.location.lat, user.location.lng, leftHospital.lat, leftHospital.lng)
-            : Number.POSITIVE_INFINITY;
-          const rightDistance = rightHospital
-            ? getDistanceValueKm(user.location.lat, user.location.lng, rightHospital.lat, rightHospital.lng)
-            : Number.POSITIVE_INFINITY;
-
-          return leftDistance - rightDistance || compareReviews(left, right, sortBy);
-        }
-
-        return compareReviews(left, right, sortBy);
-      }),
-    [filteredReviews, hospitalById, prioritizeDistance, sortBy, user.location.lat, user.location.lng],
-  );
+      .sort((left, right) => compareGroups(left, right, sortBy));
+  }, [filteredReviews, hospitalById, sortBy, user.location.lat, user.location.lng]);
 
   const isAllSelected = selectedHospitalId === '';
   const selectedGroup = groupedReviews.find((group) => group.hospitalId === selectedHospitalId) ?? null;
+  const reviewScopeForCounts = selectedHospitalId
+    ? reviews.filter((review) => review.hospitalId === selectedHospitalId)
+    : reviews;
+  const counts = {
+    all: reviewScopeForCounts.length,
+    reptile: reviewScopeForCounts.filter((review) => review.animalType === 'reptile').length,
+    rodent: reviewScopeForCounts.filter((review) => review.animalType === 'rodent').length,
+    bird: reviewScopeForCounts.filter((review) => review.animalType === 'bird').length,
+  };
 
   useEffect(() => {
     if (groupedReviews.length === 0) {
+      if (selectedHospitalId) {
+        setSelectedHospitalId('');
+      }
       return;
     }
 
@@ -414,12 +390,21 @@ export function ReviewsPage() {
     const exists = groupedReviews.some((group) => group.hospitalId === selectedHospitalId);
 
     if (!exists) {
-      setSelectedHospitalId(groupedReviews[0].hospitalId);
+      setSelectedHospitalId('');
     }
   }, [groupedReviews, selectedHospitalId]);
 
   function selectHospital(hospitalId: string) {
+    const hospital = hospitals.find((item) => item.id === hospitalId);
+
     setSelectedHospitalId(hospitalId);
+    setHospitalSearch(hospital?.name ?? '');
+    setShowSuggestions(false);
+  }
+
+  function returnToHospitalList() {
+    setSelectedHospitalId('');
+    setHospitalSearch('');
     setShowSuggestions(false);
   }
 
@@ -448,6 +433,10 @@ export function ReviewsPage() {
     deleteReview(reviewId);
   }
 
+  function isHospitalLiked(hospitalId: string) {
+    return hospitalById[hospitalId]?.liked ?? false;
+  }
+
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
@@ -466,6 +455,7 @@ export function ReviewsPage() {
                 onChange={(event) => {
                   setHospitalSearch(event.target.value);
                   setShowSuggestions(true);
+                  setSelectedHospitalId('');
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="병원, 종, 태그 검색"
@@ -477,6 +467,7 @@ export function ReviewsPage() {
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => {
                     setHospitalSearch('');
+                    setSelectedHospitalId('');
                     setShowSuggestions(false);
                   }}
                   className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
@@ -503,7 +494,6 @@ export function ReviewsPage() {
                         key={hospital.id}
                         type="button"
                         onClick={() => {
-                          setHospitalSearch('');
                           selectHospital(hospital.id);
                         }}
                         className="flex w-full items-center justify-between border-b border-slate-100 px-4 py-3 text-left last:border-b-0"
@@ -555,8 +545,8 @@ export function ReviewsPage() {
             })}
             <button
               type="button"
-              onClick={() => setPrioritizeDistance((current) => !current)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              onClick={() => undefined}
+              className={`hidden rounded-full px-4 py-2 text-sm font-semibold transition ${
                 prioritizeDistance
                   ? 'bg-[linear-gradient(135deg,_#0ea5e9,_#0284c7)] text-white shadow-[0_10px_22px_rgba(14,165,233,0.20)]'
                   : 'border border-sky-100 bg-white/92 text-sky-700 shadow-[0_8px_18px_rgba(14,165,233,0.06)]'
@@ -566,72 +556,74 @@ export function ReviewsPage() {
             </button>
           </div>
 
-          {groupedReviews.length > 0 ? (
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              <button
-                type="button"
-                onClick={() => setSelectedHospitalId('')}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                  isAllSelected
-                    ? 'bg-slate-900 text-white shadow-[0_10px_22px_rgba(15,23,42,0.20)]'
-                    : 'border border-slate-200 bg-white/92 text-slate-600 shadow-[0_8px_18px_rgba(15,23,42,0.05)]'
-                }`}
-              >
-                전체 {allSortedReviews.length}
-              </button>
-              {groupedReviews.map((group) => {
-                const active = group.hospitalId === selectedHospitalId;
-
-                return (
-                  <button
-                    key={group.hospitalId}
-                    type="button"
-                    onClick={() => selectHospital(group.hospitalId)}
-                    className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                      active
-                        ? 'bg-[linear-gradient(135deg,_#059669,_#10b981)] text-white shadow-[0_10px_22px_rgba(16,185,129,0.20)]'
-                        : 'border border-emerald-100 bg-white/92 text-emerald-700 shadow-[0_8px_18px_rgba(15,118,110,0.06)]'
-                    }`}
-                  >
-                    {group.hospitalName} {group.reviewCount}
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
         </section>
 
         <section className="mt-4 space-y-4">
-          {isAllSelected && allSortedReviews.length > 0 ? (
-            <section className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
-              <div className="flex flex-wrap gap-2 text-xs">
-                <span className="rounded-full bg-emerald-100 px-2 py-1 font-semibold text-emerald-700">
-                  전체 리뷰 {allSortedReviews.length}
-                </span>
-                <span className="rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-600">
-                  병원 {groupedReviews.length}
-                </span>
-              </div>
+          {isAllSelected && groupedReviews.length > 0 ? (
+            groupedReviews.map((group) => (
+              <section
+                key={group.hospitalId}
+                className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <span className="rounded-full bg-emerald-100 px-2 py-1 font-semibold text-emerald-700">
+                        리뷰 {group.reviewCount}
+                      </span>
+                      <span className="rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-700">
+                        좋아요 {group.totalLikes}
+                      </span>
+                      <span className="rounded-full bg-sky-50 px-2 py-1 font-semibold text-sky-700">
+                        {group.distanceLabel}
+                      </span>
+                    </div>
+                    <h2 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-slate-900">
+                      {group.hospitalName}
+                    </h2>
+                    <p className="mt-1 text-sm text-slate-500">{group.hospitalAddress}</p>
+                  </div>
 
-              <div className="mt-5 space-y-3">
-                {allSortedReviews.map((review) => (
-                  <ReviewCard
-                    key={review.id}
-                    review={review}
-                    hospitalName={hospitalById[review.hospitalId]?.name ?? '이름 없는 병원'}
-                    currentNickname={user.nickname}
-                    showHospitalName
-                    onToggleLike={toggleReviewLike}
-                    onDelete={handleDeleteReview}
-                    onEdit={(currentReview) => {
-                      setDraft(undefined);
-                      setEditingReview(currentReview);
-                      setComposerOpen(true);
-                    }}
-                  />
-                ))}
-              </div>
-            </section>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleHospitalLike(group.hospitalId)}
+                      className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                        isHospitalLiked(group.hospitalId)
+                          ? 'bg-rose-50 text-rose-500'
+                          : 'bg-slate-100 text-slate-400'
+                      }`}
+                      aria-label="병원 좋아요"
+                    >
+                      <Icon name="heart" className="h-5 w-5" filled={isHospitalLiked(group.hospitalId)} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openHospitalOnMap(group.hospitalId)}
+                      className="rounded-full bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700"
+                    >
+                      지도에서 보기
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => selectHospital(group.hospitalId)}
+                      className="rounded-full bg-[linear-gradient(135deg,_#059669,_#10b981)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(16,185,129,0.22)]"
+                    >
+                      리뷰 펼쳐보기
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-[1.5rem] border border-emerald-100 bg-emerald-50/60 px-4 py-4">
+                  <p className="text-sm font-semibold text-slate-800">
+                    이 병원 리뷰 {group.reviewCount}개
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    병원을 선택하면 해당 리뷰가 아래에 펼쳐져요.
+                  </p>
+                </div>
+              </section>
+            ))
           ) : selectedGroup ? (
             <section className="rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
               <div className="flex items-start justify-between gap-4">
@@ -653,13 +645,38 @@ export function ReviewsPage() {
                   <p className="mt-1 text-sm text-slate-500">{selectedGroup.hospitalAddress}</p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => openHospitalOnMap(selectedGroup.hospitalId)}
-                  className="shrink-0 rounded-full bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700"
-                >
-                  지도에서 보기
-                </button>
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleHospitalLike(selectedGroup.hospitalId)}
+                    className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                      isHospitalLiked(selectedGroup.hospitalId)
+                        ? 'bg-rose-50 text-rose-500'
+                        : 'bg-slate-100 text-slate-400'
+                    }`}
+                    aria-label="병원 좋아요"
+                  >
+                    <Icon
+                      name="heart"
+                      className="h-5 w-5"
+                      filled={isHospitalLiked(selectedGroup.hospitalId)}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openHospitalOnMap(selectedGroup.hospitalId)}
+                    className="rounded-full bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700"
+                  >
+                    지도에서 보기
+                  </button>
+                  <button
+                    type="button"
+                    onClick={returnToHospitalList}
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600"
+                  >
+                    ← 병원 목록으로
+                  </button>
+                </div>
               </div>
 
               <div className="mt-5 space-y-3">

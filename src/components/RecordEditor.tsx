@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { validateUserText } from '../lib/contentModeration';
+import { validateMedicalRecordText } from '../lib/contentModeration';
+import { getTodayDateValue } from '../lib/date';
 import type {
   Hospital,
   MedicalRecord,
@@ -38,7 +39,7 @@ export function RecordEditor({
   const [hospitalId, setHospitalId] = useState(record?.hospitalId ?? draft?.hospitalId ?? '');
   const [hospitalSearchText, setHospitalSearchText] = useState('');
   const [showHospitalOptions, setShowHospitalOptions] = useState(false);
-  const [date, setDate] = useState(record?.date ?? draft?.date ?? '2026-04-16');
+  const [date, setDate] = useState(record?.date ?? draft?.date ?? getTodayDateValue());
   const [diagnosis, setDiagnosis] = useState(record?.diagnosis ?? draft?.diagnosis ?? '');
   const [veterinarianNote, setVeterinarianNote] = useState(
     record?.veterinarianNote ?? draft?.veterinarianNote ?? '',
@@ -80,13 +81,13 @@ export function RecordEditor({
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    if (!petId || !hospitalId || !date || !diagnosis.trim()) {
-      setRequiredMessage('반려동물, 병원, 날짜, 진단 항목을 입력해 주세요.');
+    if (!petId || !hospitalId || !date) {
+      setRequiredMessage('반려동물, 병원, 날짜를 입력해 주세요.');
       setModerationMessage('');
       return;
     }
 
-    const moderation = validateUserText([
+    const moderation = validateMedicalRecordText([
       { label: '진료 내용', value: diagnosis },
       { label: '수의사 소견', value: veterinarianNote },
       { label: '처방', value: prescription },

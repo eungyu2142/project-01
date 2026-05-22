@@ -872,12 +872,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   function saveMedicalRecord(input: MedicalRecordInput) {
+    const pet = pets.find((item) => item.id === input.petId);
+    const normalizedDiagnosis = input.diagnosis.trim() || `${pet?.name ?? '진료'} 진료 기록`;
     const nextRecord: MedicalRecord = {
       id: input.id ?? makeId('record'),
       petId: input.petId,
       hospitalId: input.hospitalId,
       date: input.date,
-      diagnosis: input.diagnosis,
+      diagnosis: normalizedDiagnosis,
       veterinarianNote: input.veterinarianNote,
       prescription: input.prescription,
       cost: input.cost,

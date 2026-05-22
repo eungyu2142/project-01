@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { validateUserText } from '../lib/contentModeration';
+import { validateReviewText } from '../lib/contentModeration';
+import { getTodayDateValue } from '../lib/date';
 import { getAnimalLabel } from '../lib/format';
 import {
   getHospitalClassificationLabel,
@@ -115,7 +116,7 @@ export function ReviewComposer({
   );
   const [hospitalSearchText, setHospitalSearchText] = useState('');
   const [showHospitalOptions, setShowHospitalOptions] = useState(false);
-  const [date, setDate] = useState(editingReview?.date ?? initialDraft?.date ?? '2026-04-16');
+  const [date, setDate] = useState(editingReview?.date ?? initialDraft?.date ?? getTodayDateValue());
   const [diagnosis, setDiagnosis] = useState(editingReview?.diagnosis ?? initialDraft?.diagnosis ?? '');
   const [medicine, setMedicine] = useState(editingReview?.medicine ?? initialDraft?.medicine ?? '');
   const [costText, setCostText] = useState(buildCostText(editingReview?.cost ?? initialDraft?.cost));
@@ -183,7 +184,7 @@ export function ReviewComposer({
       return;
     }
 
-    const moderation = validateUserText([{ label: '직접 태그', value: cleaned }]);
+    const moderation = validateReviewText([{ label: '직접 태그', value: cleaned }]);
 
     if (!moderation.ok) {
       setModerationMessage(moderation.message);
@@ -212,7 +213,7 @@ export function ReviewComposer({
 
     setRequiredMessage('');
 
-    const moderation = validateUserText([
+    const moderation = validateReviewText([
       { label: '진단 항목', value: diagnosis },
       { label: '처방 받은 약', value: medicine },
       { label: '직접 태그', value: customTags.join(' ') },

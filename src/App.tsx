@@ -120,6 +120,35 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [appReady, authReady, forceAuthView, loginIdRecoveryResult, passwordRecovery, phase, session, user.onboardingCompletedAt]);
 
+  useEffect(() => {
+    if (
+      phase === 'splash' ||
+      !authReady ||
+      !appReady ||
+      !session ||
+      forceAuthView ||
+      passwordRecovery ||
+      loginIdRecoveryResult
+    ) {
+      return;
+    }
+
+    const nextPhase = user.onboardingCompletedAt ? 'app' : 'welcome';
+
+    if (phase !== nextPhase) {
+      setPhase(nextPhase);
+    }
+  }, [
+    appReady,
+    authReady,
+    forceAuthView,
+    loginIdRecoveryResult,
+    passwordRecovery,
+    phase,
+    session,
+    user.onboardingCompletedAt,
+  ]);
+
   function handleEnterApp() {
     markOnboardingComplete();
     setPhase('app');
