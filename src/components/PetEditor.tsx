@@ -214,7 +214,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
 
         <button
           type="submit"
-          className="w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
+          className="w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
         >
           저장하기
         </button>

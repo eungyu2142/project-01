@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimalTabs } from '../components/AnimalTabs';
 import { HomeMap } from '../components/HomeMap';
 import { Icon } from '../components/Icon';
+import { SearchBar } from '../components/SearchBar';
 import { useAppContext } from '../context/AppContext';
 import {
   formatDistanceKm,
@@ -325,10 +326,10 @@ export function HomePage() {
   }
 
   const bottomOverlayClass =
-    'pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] sm:pb-[calc(env(safe-area-inset-bottom)+8.5rem)]';
+    'home-bottom-overlay pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] sm:pb-[calc(env(safe-area-inset-bottom)+8.5rem)]';
 
   return (
-    <section className="relative h-[100dvh] overflow-hidden bg-slate-950">
+    <section className="home-page relative h-full overflow-hidden bg-slate-950">
       <HomeMap
         currentLocation={currentLocation}
         hospitals={visibleHospitals}
@@ -338,9 +339,9 @@ export function HomePage() {
         onRequestCurrentLocation={handleRecenterToCurrentLocation}
       />
 
-      <div className="fixed inset-x-0 top-0 z-30">
+      <div className="home-top-overlay fixed inset-x-0 top-0 z-30">
         {topCollapsed ? (
-          <div className="mx-auto flex max-w-[32rem] justify-center px-4 pt-2">
+          <div className="home-collapsed-wrap mx-auto flex max-w-[32rem] justify-center px-4 pt-2">
             <button
               type="button"
               onClick={() => setTopCollapsed(false)}
@@ -351,8 +352,8 @@ export function HomePage() {
             </button>
           </div>
         ) : (
-          <div className="mx-auto max-w-[32rem] px-4 transition-transform duration-300 translate-y-0">
-            <div className="pointer-events-auto rounded-b-[2.25rem] border-x border-b border-white/65 bg-[linear-gradient(180deg,_rgba(255,255,255,0.95),_rgba(236,253,245,0.9))] px-4 pb-4 pt-3 shadow-[0_24px_50px_rgba(15,118,110,0.18)] backdrop-blur">
+          <div className="home-search-shell mx-auto max-w-[32rem] px-4 transition-transform duration-300 translate-y-0">
+            <div className="home-search-panel pointer-events-auto rounded-b-[2.25rem] border-x border-b border-white/65 bg-white/95 px-4 pb-4 pt-3 shadow-[0_24px_50px_rgba(15,118,110,0.18)] backdrop-blur">
               <div className="mb-3 flex justify-center">
                 <button
                   type="button"
@@ -364,15 +365,11 @@ export function HomePage() {
                 </button>
               </div>
 
-              <div className="mx-auto max-w-[28.5rem]">
-                <label className="flex items-center gap-3 rounded-[1.6rem] border border-white/90 bg-white/96 px-5 py-4 text-slate-500 shadow-[0_16px_34px_rgba(15,118,110,0.12)]">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                  <Icon name="search" className="h-5 w-5" />
-                </span>
-                <input
+              <div className="home-search-inner mx-auto max-w-[28.5rem]">
+                <SearchBar
                   value={searchText}
-                  onChange={(event) => {
-                    setSearchText(event.target.value);
+                  onValueChange={(nextValue) => {
+                    setSearchText(nextValue);
                     setShowSuggestions(true);
                     setTopCollapsed(false);
                   }}
@@ -382,27 +379,14 @@ export function HomePage() {
                     setTopCollapsed(false);
                   }}
                   placeholder="병원 검색"
-                  className="w-full bg-transparent pr-2 text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
+                  clearVisible={Boolean(searchText.trim() || showSuggestions)}
+                  onClear={() => {
+                    setSearchText('');
+                    setShowSuggestions(false);
+                    setSelectedHospitalId('');
+                  }}
                 />
-                {searchText.trim() || showSuggestions ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchText('');
-                      setShowSuggestions(false);
-                      setSelectedHospitalId('');
-                    }}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
-                    aria-label="병원 검색 닫기"
-                  >
-                    <Icon name="x" className="h-4 w-4" />
-                  </button>
-                ) : null}
-                </label>
-
-                <div className="mt-3">
-                  <AnimalTabs value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
-                </div>
+                <AnimalTabs className="mt-3" value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
               </div>
 
               {showSuggestions ? (
@@ -540,7 +524,7 @@ export function HomePage() {
                     },
                   })
                 }
-                className="rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-2.5 text-sm font-medium text-white"
+                className="rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white"
               >
                 리뷰 작성
               </button>

@@ -272,7 +272,7 @@ export function ProfilePage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f6fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,_#19c39b_0%,_#11ab8b_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[#18b996]" />
 
       <div className="relative">
         <section className="min-h-[12rem] text-white">
@@ -306,7 +306,7 @@ export function ProfilePage() {
                   key={card.label}
                   type="button"
                   onClick={() => scrollToActivitySection(card.target)}
-                  className="rounded-[1.6rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f5fffb,_#eefaf6)] p-4 text-left transition active:scale-[0.98]"
+                  className="rounded-[1.6rem] border border-emerald-100 bg-[#f4fbf7] p-4 text-left transition active:scale-[0.98]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm">
@@ -378,7 +378,7 @@ export function ProfilePage() {
             ) : null}
 
             {selectedAccountAction ? (
-              <div className="mt-4 rounded-[1.5rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f9fffc,_#f1fbf7)] p-4">
+              <div className="mt-4 rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="font-semibold text-slate-900">
@@ -453,7 +453,7 @@ export function ProfilePage() {
                 <button
                   type="button"
                   onClick={handleSaveSelectedAction}
-                  className="mt-4 w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
+                  className="mt-4 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
                 >
                   저장하기
                 </button>
@@ -475,7 +475,7 @@ export function ProfilePage() {
                 likedHospitals.map((hospital) => (
                   <div
                     key={hospital.id}
-                    className="flex items-center justify-between rounded-[1.5rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f9fffc,_#f1fbf7)] p-4"
+                    className="flex items-center justify-between rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
                   >
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-slate-900">{hospital.name}</p>
@@ -506,7 +506,7 @@ export function ProfilePage() {
                 likedReviews.map((review) => (
                   <div
                     key={review.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f9fffc,_#f1fbf7)] p-4"
+                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -546,7 +546,7 @@ export function ProfilePage() {
                 sortedReviewDrafts.map((draft) => (
                   <div
                     key={draft.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f9fffc,_#f1fbf7)] p-4"
+                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -612,7 +612,7 @@ export function ProfilePage() {
                 sortedRecordDrafts.map((draft) => (
                   <div
                     key={draft.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[linear-gradient(180deg,_#f9fffc,_#f1fbf7)] p-4"
+                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">

@@ -8,6 +8,7 @@ import {
   getHospitalClassificationLabel,
   isDatasetHospital,
 } from '../lib/hospitalDataset';
+import { findRecordForReview } from '../lib/recordReviewLink';
 import type { Hospital, Review, ReviewDraft } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
@@ -97,6 +98,7 @@ export function ReviewComposer({
 }: ReviewComposerProps) {
   const {
     hospitals,
+    medicalRecords,
     pets,
     saveReview,
     saveReviewDraft,
@@ -131,12 +133,22 @@ export function ReviewComposer({
     editingReview?.imageUrls ?? initialDraft?.imageUrls ?? [],
   );
   const [saveToRecord, setSaveToRecord] = useState(false);
+  const [saveToRecordMemo, setSaveToRecordMemo] = useState('');
   const [moderationMessage, setModerationMessage] = useState('');
   const [requiredMessage, setRequiredMessage] = useState('');
   const draftId = initialDraft?.id;
 
   const selectedPet = pets.find((pet) => pet.id === petId);
   const selectedHospital = availableHospitals.find((hospital) => hospital.id === hospitalId);
+  const existingLinkedRecord = selectedPet
+    ? findRecordForReview(medicalRecords, {
+        petId: selectedPet.id,
+        hospitalId,
+        date,
+        diagnosis,
+        cost: costText ? Number(costText.replaceAll(',', '')) : null,
+      })
+    : null;
   const hospitalMatches = useMemo(() => {
     const keyword = hospitalSearchText.trim().toLowerCase();
     const sortedHospitals = [...availableHospitals].sort((left, right) =>
@@ -241,7 +253,8 @@ export function ReviewComposer({
       body,
       imageUrls,
       rating,
-      saveToRecord,
+      saveToRecord: saveToRecord && !existingLinkedRecord,
+      saveToRecordMemo,
     });
 
     if (draftId) {
@@ -279,10 +292,31 @@ export function ReviewComposer({
     onClose();
   }
 
+  function handleClose() {
+    if (!editingReview && draftId) {
+      saveReviewDraft({
+        id: draftId,
+        hospitalId,
+        petId,
+        date,
+        diagnosis,
+        cost: costText ? Number(costText.replaceAll(',', '')) : null,
+        medicine,
+        tags,
+        customTags,
+        body,
+        rating,
+        imageUrls,
+      });
+    }
+
+    onClose();
+  }
+
   return (
     <ModalSheet
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       title={editingReview ? '리뷰 수정' : '리뷰 작성'}
       description="반려동물과 병원을 선택하면 종 정보와 병원 이름을 자동으로 연결해드려요."
     >
@@ -583,15 +617,34 @@ export function ReviewComposer({
           ) : null}
         </div>
 
-        <label className="flex items-center gap-3 rounded-2xl bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
-          <input
-            type="checkbox"
-            checked={saveToRecord}
-            onChange={(event) => setSaveToRecord(event.target.checked)}
-            className="h-4 w-4 accent-emerald-600"
-          />
-          <span>마이 펫 기록에도 저장하기</span>
-        </label>
+        {existingLinkedRecord ? (
+          <div className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
+            이미 같은 진료 기록이 있어요.
+          </div>
+        ) : (
+          <label className="flex items-center gap-3 rounded-2xl bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={saveToRecord}
+              onChange={(event) => setSaveToRecord(event.target.checked)}
+              className="h-4 w-4 accent-emerald-600"
+            />
+            <span>마이펫 기록에도 저장하기</span>
+          </label>
+        )}
+
+        {saveToRecord && !existingLinkedRecord ? (
+          <label className="block space-y-2">
+            <span className="text-sm font-medium text-slate-700">기록 메모</span>
+            <textarea
+              rows={3}
+              value={saveToRecordMemo}
+              onChange={(event) => setSaveToRecordMemo(event.target.value)}
+              placeholder="마이펫 진료 기록에 남길 메모를 적어주세요."
+              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            />
+          </label>
+        ) : null}
 
         <div className="grid grid-cols-2 gap-3">
           {!editingReview ? (
@@ -607,7 +660,7 @@ export function ReviewComposer({
           )}
           <button
             type="submit"
-            className="rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
+            className="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
           >
             {editingReview ? '리뷰 수정 완료' : '리뷰 등록하기'}
           </button>

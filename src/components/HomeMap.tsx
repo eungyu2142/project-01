@@ -35,11 +35,7 @@ function createHospitalMarker(active: boolean, reviewCount: number): NaverMapIco
   const maps = getNaverMaps();
   const isBlue = reviewCount >= 4;
   const isMint = reviewCount >= 2;
-  const background = isBlue
-    ? 'linear-gradient(135deg, #60a5fa, #2563eb)'
-    : isMint
-      ? 'linear-gradient(135deg, #2dd4bf, #0f766e)'
-      : '#ffffff';
+  const background = isBlue ? '#0f766e' : isMint ? '#10b981' : '#ffffff';
   const color = isBlue || isMint ? '#ffffff' : '#047857';
   const boxShadow = active
     ? '0 18px 34px rgba(15, 118, 110, 0.34)'
@@ -85,7 +81,7 @@ function createCurrentLocationMarker(): NaverMapIcon {
           width: 100%;
           height: 100%;
           border-radius: 999px;
-          background: linear-gradient(135deg, #0ea5e9, #0284c7);
+          background: #0f766e;
           border: 3px solid rgba(255, 255, 255, 0.9);
           box-shadow: 0 16px 32px rgba(2, 132, 199, 0.28);
         "></div>
@@ -275,7 +271,7 @@ export function HomeMap({
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(209,250,229,0.9),_rgba(236,253,245,0.75)_42%,_rgba(240,253,250,0.9)_100%)]">
+    <div className="relative h-full w-full overflow-hidden bg-[#e8f8f1]">
       <div ref={containerRef} className="h-full w-full" />
 
       {phase === 'ready' ? (

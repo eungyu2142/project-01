@@ -360,17 +360,34 @@ export async function deleteAccountRemote() {
     return;
   }
 
-  const { data, error } = await supabase.functions.invoke('delete-account', {
+  const functionResult = await supabase.functions.invoke('delete-account', {
     body: {},
   });
 
-  if (error) {
-    throw new Error('怨꾩젙 ??젣 ?⑥닔瑜??몄텧?섏? 紐삵뻽?댁슂. Supabase Edge Function `delete-account`媛 諛고룷?섏뼱 ?덈뒗吏 ?뺤씤?댁＜?몄슂.');
+  if (!functionResult.error) {
+    const { data } = functionResult;
+
+    if (data && typeof data === 'object' && 'error' in data && typeof data.error === 'string') {
+      throw new Error(data.error);
+    }
+
+    return;
   }
 
-  if (data && typeof data === 'object' && 'error' in data && typeof data.error === 'string') {
-    throw new Error(data.error);
+  const rpcResult = await supabase.rpc('delete_my_account');
+
+  if (!rpcResult.error) {
+    return;
   }
+
+  throw new Error(
+    [
+      '계정을 삭제하지 못했어요.',
+      'Supabase Edge Function `delete-account` 배포 상태와 SQL 함수 `delete_my_account()` 적용 여부를 확인해 주세요.',
+      `Function error: ${functionResult.error.message}`,
+      `RPC error: ${rpcResult.error.message}`,
+    ].join(' '),
+  );
 }
 
 export async function upsertPet(userId: string, pet: Pet) {

@@ -13,6 +13,7 @@ import {
   normalizeHospitalDatasetItem,
   type HospitalDatasetPayload,
 } from '../lib/hospitalDataset';
+import { findRecordForReview } from '../lib/recordReviewLink';
 import { resolveCurrentRegion } from '../lib/currentLocation';
 import {
   deleteMedicalRecordRemote,
@@ -300,7 +301,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      setAppReady(false);
       setRehydrationTick((current) => current + 1);
     };
 
@@ -318,8 +318,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const shouldBlockForHydration =
-      rehydrationTick > 0 || lastHydratedUserIdRef.current !== authUser.id;
+    const shouldBlockForHydration = lastHydratedUserIdRef.current !== authUser.id;
 
     if (shouldBlockForHydration) {
       setAppReady(false);
@@ -773,7 +772,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       if (input.saveToRecord) {
         const pet = pets.find((item) => item.id === input.petId);
-        if (!pet) {
+        const existingRecord = findRecordForReview(medicalRecords, nextReview);
+
+        if (!pet || existingRecord) {
           return;
         }
 
@@ -786,10 +787,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
           veterinarianNote: input.medicine ? `처방: ${input.medicine}` : '리뷰에서 저장한 진료 기록',
           prescription: input.medicine,
           cost: input.cost,
-          memo: '',
+          memo: input.saveToRecordMemo?.trim() ?? '',
         };
 
-        setMedicalRecords((current) => [nextRecord, ...current]);
+        setMedicalRecords((current) =>
+          findRecordForReview(current, nextReview) ? current : [nextRecord, ...current],
+        );
         void upsertMedicalRecord(appUserId, nextRecord).catch((error) =>
           persistError('saveReview:saveToRecord', error),
         );

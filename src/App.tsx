@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { BottomNav } from './components/BottomNav';
 import { useAuth } from './context/AuthContext';
 import { useAppContext } from './context/AppContext';
@@ -25,9 +25,9 @@ function AppLayout() {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-[linear-gradient(180deg,_#f3fff9_0%,_#d4f7ec_45%,_#b2eadf_100%)] px-0 py-0 text-slate-800 sm:px-4 sm:py-6">
-      <div className="relative mx-auto flex h-[100dvh] w-full max-w-md flex-col overflow-hidden bg-white/70 shadow-[0_32px_80px_rgba(27,94,82,0.20)] backdrop-blur sm:h-[calc(100dvh-3rem)] sm:rounded-[2.5rem] sm:border sm:border-white/70">
-        <main className={`relative min-h-0 flex-1 ${isHomePage ? 'overflow-hidden' : 'overflow-y-auto'}`}>
+    <div className="app-viewport h-[100dvh] overflow-hidden bg-[#e8f8f1] px-0 py-0 text-slate-800 sm:px-4 sm:py-6">
+      <div className="app-shell relative mx-auto flex h-[100dvh] w-full max-w-md flex-col overflow-hidden bg-white/70 shadow-[0_32px_80px_rgba(27,94,82,0.20)] backdrop-blur sm:h-[calc(100dvh-3rem)] sm:rounded-[2.5rem] sm:border sm:border-white/70">
+        <main className={`app-main relative min-h-0 flex-1 ${isHomePage ? 'overflow-hidden' : 'overflow-y-auto'}`}>
           <Outlet />
         </main>
         <BottomNav />
@@ -37,6 +37,22 @@ function AppLayout() {
 }
 
 function AppRoutes() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const didResetInitialRouteRef = useRef(false);
+
+  useEffect(() => {
+    if (didResetInitialRouteRef.current) {
+      return;
+    }
+
+    didResetInitialRouteRef.current = true;
+
+    if (location.pathname !== '/' || location.search || location.hash) {
+      navigate('/', { replace: true });
+    }
+  }, [location.hash, location.pathname, location.search, navigate]);
+
   return (
     <Routes>
       <Route element={<AppLayout />}>

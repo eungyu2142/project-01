@@ -245,7 +245,7 @@ export function AuthPage() {
 
   if (passwordRecovery) {
     return (
-      <main className="min-h-[100dvh] bg-[linear-gradient(180deg,_#ecfdf5_0%,_#ccfbf1_100%)] px-5 py-8 text-slate-900">
+      <main className="min-h-[100dvh] bg-[#e8f8f1] px-5 py-8 text-slate-900">
         <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-md flex-col justify-center">
           <section className="rounded-[2rem] border border-white/80 bg-white/90 p-6 shadow-[0_24px_60px_rgba(15,118,110,0.16)] backdrop-blur">
             <div>
@@ -261,11 +261,13 @@ export function AuthPage() {
                 <span className="text-sm font-medium text-slate-700">새 비밀번호</span>
                 <div className="relative">
                   <input
+                    name="reset-new-password"
                     type={showNextPassword ? 'text' : 'password'}
                     value={nextPassword}
                     onChange={(event) => setNextPassword(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
                     placeholder="6자 이상"
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
@@ -282,11 +284,13 @@ export function AuthPage() {
                 <span className="text-sm font-medium text-slate-700">새 비밀번호 확인</span>
                 <div className="relative">
                   <input
+                    name="reset-new-password-confirm"
                     type={showNextPasswordConfirm ? 'text' : 'password'}
                     value={nextPasswordConfirm}
                     onChange={(event) => setNextPasswordConfirm(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
                     placeholder="비밀번호 다시 입력"
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
@@ -308,7 +312,7 @@ export function AuthPage() {
               <button
                 type="submit"
                 disabled={passwordResetSubmitting}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
               >
                 <Icon name="check" className="h-5 w-5" />
                 {passwordResetSubmitting ? '변경 중' : '새 비밀번호 저장'}
@@ -329,7 +333,7 @@ export function AuthPage() {
   }
 
   return (
-    <main className="min-h-[100dvh] bg-[linear-gradient(180deg,_#ecfdf5_0%,_#ccfbf1_100%)] px-5 py-8 text-slate-900">
+    <main className="min-h-[100dvh] bg-[#e8f8f1] px-5 py-8 text-slate-900">
       <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-md flex-col justify-center">
         <section className="rounded-[2rem] border border-white/80 bg-white/90 p-6 shadow-[0_24px_60px_rgba(15,118,110,0.16)] backdrop-blur">
           <div>
@@ -339,12 +343,13 @@ export function AuthPage() {
             </h1>
           </div>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <form className="mt-6 space-y-4" onSubmit={handleSubmit} autoComplete={mode === 'signup' ? 'off' : 'on'}>
             {mode === 'signup' ? (
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-slate-700">아이디</span>
                 <div className="flex gap-2">
                   <input
+                    name="signup-login-id"
                     value={loginId}
                     onChange={(event) => {
                       setLoginId(event.target.value.replace(/[^a-zA-Z0-9_]/g, '').slice(0, 20));
@@ -354,6 +359,7 @@ export function AuthPage() {
                     }}
                     className="min-w-0 flex-1 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
                     placeholder="dimi_go"
+                    autoComplete="off"
                     autoCapitalize="none"
                     autoCorrect="off"
                   />
@@ -385,10 +391,12 @@ export function AuthPage() {
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-slate-700">닉네임</span>
                 <input
+                  name="signup-nickname"
                   value={nickname}
                   onChange={(event) => setNickname(event.target.value)}
                   className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
                   placeholder="고디미"
+                  autoComplete="nickname"
                 />
               </label>
             ) : null}
@@ -398,11 +406,13 @@ export function AuthPage() {
                 {mode === 'signin' ? '이메일 또는 아이디' : '이메일'}
               </span>
               <input
+                name={mode === 'signin' ? 'username' : 'signup-email'}
                 type={mode === 'signin' ? 'text' : 'email'}
                 value={identifier}
                 onChange={(event) => setIdentifier(event.target.value)}
                 className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
                 placeholder={mode === 'signin' ? 'dimigo@gmail.com 또는 dimi_go' : 'dimigo@gmail.com'}
+                autoComplete={mode === 'signin' ? 'username' : 'email'}
               />
             </label>
 
@@ -410,11 +420,13 @@ export function AuthPage() {
               <span className="text-sm font-medium text-slate-700">비밀번호</span>
               <div className="relative">
                 <input
+                  name={mode === 'signin' ? 'current-password' : 'new-password'}
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
                   placeholder="6자 이상"
+                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
                 />
                 <button
                   type="button"
@@ -432,11 +444,13 @@ export function AuthPage() {
                 <span className="text-sm font-medium text-slate-700">비밀번호 확인</span>
                 <div className="relative">
                   <input
+                    name="new-password-confirm"
                     type={showPasswordConfirm ? 'text' : 'password'}
                     value={passwordConfirm}
                     onChange={(event) => setPasswordConfirm(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
                     placeholder="비밀번호 다시 입력"
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
@@ -459,7 +473,7 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
             >
               <Icon name="check" className="h-5 w-5" />
               {submitting ? '처리 중' : mode === 'signin' ? '로그인하기' : '가입하기'}
@@ -475,7 +489,10 @@ export function AuthPage() {
               setLoginIdChecked(false);
               setLoginIdAvailable(false);
               setLoginIdCheckMessage('');
+              setPassword('');
               setPasswordConfirm('');
+              setShowPassword(false);
+              setShowPasswordConfirm(false);
             }}
             className="mt-5 w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700"
           >

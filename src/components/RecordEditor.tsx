@@ -144,10 +144,28 @@ export function RecordEditor({
     onClose();
   }
 
+  function handleClose() {
+    if (!record && draft?.id) {
+      saveMedicalRecordDraft({
+        id: draft.id,
+        petId,
+        hospitalId,
+        date,
+        diagnosis,
+        veterinarianNote,
+        prescription,
+        cost: costText ? Number(costText.replaceAll(',', '')) : null,
+        memo,
+      });
+    }
+
+    onClose();
+  }
+
   return (
     <ModalSheet
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       title={record ? '진료 기록 수정' : '진료 기록 추가'}
       description="리뷰에서 선택한 병원과 반려동물 정보에 맞춰 진료 기록을 남길 수 있어요."
     >
@@ -335,7 +353,7 @@ export function RecordEditor({
           )}
           <button
             type="submit"
-            className="rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
+            className="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
           >
             저장하기
           </button>

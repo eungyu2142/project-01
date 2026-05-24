@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AnimalTabs } from '../components/AnimalTabs';
 import { Icon } from '../components/Icon';
 import { ModalSheet } from '../components/ModalSheet';
 import { PetEditor } from '../components/PetEditor';
 import { RecordEditor } from '../components/RecordEditor';
+import { SearchBar } from '../components/SearchBar';
 import { useAppContext } from '../context/AppContext';
 import { formatCurrency, formatDate } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
-import type { MedicalRecord, MedicalRecordDraft, Pet } from '../types';
+import { findReviewForRecord } from '../lib/recordReviewLink';
+import type { AnimalFilter, MedicalRecord, MedicalRecordDraft, Pet } from '../types';
 
 interface MyPetRouteState {
   openRecordEditor?: boolean;
@@ -96,7 +99,7 @@ function RecordDetailCard({
         <button
           type="button"
           onClick={onOpenReview}
-          className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
+          className="mt-5 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
         >
           이 경험을 리뷰로 작성하기
         </button>
@@ -127,12 +130,12 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
             key={pet.id}
             type="button"
             onClick={() => onSelect(pet.id)}
-            className={`flex w-full items-center justify-between rounded-[1.8rem] border bg-white px-4 py-4 text-left shadow-[0_14px_35px_rgba(15,118,110,0.08)] ${
+            className={`flex w-full items-center rounded-[1.8rem] border bg-white px-4 py-4 text-left shadow-[0_14px_35px_rgba(15,118,110,0.08)] ${
               pet.id === selectedPetId ? 'border-emerald-400' : 'border-white'
             }`}
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,_#ecfdf5,_#bbf7d0)] text-3xl">
+              <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-emerald-100 text-3xl">
                 {isImageAvatar(pet.avatar) ? (
                   <img src={pet.avatar} alt={`${pet.name} 사진`} className="h-full w-full object-cover" />
                 ) : (
@@ -151,9 +154,6 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
                 </div>
               </div>
             </div>
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-              <Icon name="chevron" className="h-6 w-6" />
-            </span>
           </button>
         ))}
       </div>
@@ -206,9 +206,6 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
                 <p className="mt-3 text-lg font-semibold text-slate-900">{record.diagnosis}</p>
                 <p className="mt-1 text-sm text-slate-500">{hospitalNames[record.hospitalId]}</p>
               </div>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                <Icon name="chevron" className="h-6 w-6" />
-              </span>
             </div>
           </button>
         ))}
@@ -235,40 +232,81 @@ export function MyPetPage() {
     hospitals,
     medicalRecords,
     pets,
+    reviews,
     saveMedicalRecord,
     deleteMedicalRecord,
     savePet,
     deletePet,
   } = useAppContext();
-  const [selectedPetId, setSelectedPetId] = useState(pets[0]?.id ?? '');
+  const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>('all');
+  const [petSearchText, setPetSearchText] = useState('');
+  const [selectedPetId, setSelectedPetId] = useState('');
   const [petEditorOpen, setPetEditorOpen] = useState(false);
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
   const [recordEditorOpen, setRecordEditorOpen] = useState(Boolean(routeState?.openRecordEditor));
   const [editingRecord, setEditingRecord] = useState<MedicalRecord | null>(null);
   const [draftRecord, setDraftRecord] = useState<MedicalRecordDraft | null>(routeState?.draftRecord ?? null);
   const [allRecordsOpen, setAllRecordsOpen] = useState(false);
+  const [expandedRecordId, setExpandedRecordId] = useState('');
 
-  useEffect(() => {
-    if (pets.length === 0) {
-      setSelectedPetId('');
-      return;
+  const petCounts = useMemo(
+    () => ({
+      all: pets.length,
+      reptile: pets.filter((pet) => pet.animalType === 'reptile').length,
+      rodent: pets.filter((pet) => pet.animalType === 'rodent').length,
+      bird: pets.filter((pet) => pet.animalType === 'bird').length,
+    }),
+    [pets],
+  );
+
+  const filteredPets = useMemo(() => {
+    const keyword = petSearchText.trim().toLowerCase();
+    const animalFilteredPets =
+      selectedAnimal === 'all' ? pets : pets.filter((pet) => pet.animalType === selectedAnimal);
+
+    if (!keyword) {
+      return animalFilteredPets;
     }
 
-    if (!pets.some((pet) => pet.id === selectedPetId)) {
-      setSelectedPetId(pets[0].id);
-    }
-  }, [pets, selectedPetId]);
+    return animalFilteredPets.filter(
+      (pet) =>
+        pet.name.toLowerCase().includes(keyword) ||
+        pet.species.toLowerCase().includes(keyword),
+    );
+  }, [petSearchText, pets, selectedAnimal]);
 
-  const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? pets[0];
+  const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? null;
   const selectedPetRecords = [...medicalRecords]
     .filter((record) => record.petId === selectedPet?.id)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const [expandedRecordId, setExpandedRecordId] = useState(selectedPetRecords[0]?.id ?? '');
   const activeRecordId = selectedPetRecords.some((record) => record.id === expandedRecordId)
     ? expandedRecordId
-    : (selectedPetRecords[0]?.id ?? '');
-  const expandedRecord =
-    selectedPetRecords.find((record) => record.id === activeRecordId) ?? selectedPetRecords[0];
+    : '';
+  const expandedRecord = activeRecordId
+    ? selectedPetRecords.find((record) => record.id === activeRecordId)
+    : undefined;
+  const expandedRecordHasReview = expandedRecord ? Boolean(findReviewForRecord(reviews, expandedRecord)) : false;
+
+  useEffect(() => {
+    if (!selectedPetId) {
+      setExpandedRecordId('');
+      return;
+    }
+
+    const selectedPetExists = pets.some((pet) => pet.id === selectedPetId);
+    const selectedPetVisible = filteredPets.some((pet) => pet.id === selectedPetId);
+
+    if (!selectedPetExists || !selectedPetVisible) {
+      setSelectedPetId('');
+      setExpandedRecordId('');
+    }
+  }, [filteredPets, pets, selectedPetId]);
+
+  useEffect(() => {
+    if (expandedRecordId && !selectedPetRecords.some((record) => record.id === expandedRecordId)) {
+      setExpandedRecordId('');
+    }
+  }, [expandedRecordId, selectedPetRecords]);
 
   const hospitalNames = hospitals.reduce<Record<string, string>>((acc, hospital) => {
     acc[hospital.id] = hospital.name;
@@ -288,6 +326,7 @@ export function MyPetPage() {
           diagnosis: record.diagnosis,
           cost: record.cost,
           medicine: record.prescription,
+          body: record.memo,
         },
       },
     });
@@ -301,17 +340,6 @@ export function MyPetPage() {
     const shouldDelete = window.confirm('정말 삭제하시겠습니까?');
 
     if (!shouldDelete) {
-      return;
-    }
-
-    deletePet(selectedPet.id);
-    return;
-
-    const confirmed = window.confirm(
-      `${selectedPet.name} 프로필을 삭제할까요?\n연결된 진료 기록과 리뷰도 함께 삭제됩니다.`,
-    );
-
-    if (!confirmed) {
       return;
     }
 
@@ -330,11 +358,19 @@ export function MyPetPage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,_#18c19a_0%,_#0faa8c_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[#18b996]" />
       <div className="relative">
         <section className="flex min-h-[12rem] flex-col justify-center pb-4 text-white">
           <h1 className="text-[2.2rem] font-semibold tracking-[-0.03em]">마이 펫</h1>
-          <p className="mt-3 text-sm text-emerald-50/90">우리 아이들의 건강 기록</p>
+          <AnimalTabs
+            className="mt-11"
+            value={selectedAnimal}
+            onChange={(nextAnimal) => {
+              setSelectedAnimal(nextAnimal);
+              setExpandedRecordId('');
+            }}
+            counts={petCounts}
+          />
         </section>
 
         <section className="mt-2">
@@ -368,18 +404,39 @@ export function MyPetPage() {
                   setEditingPet(null);
                   setPetEditorOpen(true);
                 }}
-                className="rounded-full bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-2 text-sm font-medium text-white"
+                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
               >
                 + 등록
               </button>
             </div>
           </div>
 
+          <SearchBar
+            className="mt-4"
+            value={petSearchText}
+            onValueChange={(nextValue) => {
+              setPetSearchText(nextValue);
+              setSelectedPetId('');
+              setExpandedRecordId('');
+            }}
+            placeholder="반려동물 이름, 종 검색"
+            clearVisible={Boolean(petSearchText)}
+            onClear={() => {
+              setPetSearchText('');
+              setSelectedPetId('');
+              setExpandedRecordId('');
+            }}
+            clearLabel="반려동물 검색 지우기"
+          />
+
           <PetCards
-            key={`pets-${pets.length}`}
-            pets={pets}
+            key={`pets-${selectedAnimal}-${filteredPets.length}`}
+            pets={filteredPets}
             selectedPetId={selectedPetId}
-            onSelect={setSelectedPetId}
+            onSelect={(petId) => {
+              setSelectedPetId(petId);
+              setExpandedRecordId('');
+            }}
           />
         </section>
 
@@ -401,7 +458,7 @@ export function MyPetPage() {
               disabled={!selectedPet}
               className={`rounded-full px-4 py-2 text-sm font-medium ${
                 selectedPet
-                  ? 'bg-[linear-gradient(135deg,_#10b981,_#0f766e)] text-white'
+                  ? 'bg-emerald-600 text-white'
                   : 'cursor-not-allowed bg-slate-200 text-slate-400'
               }`}
             >
@@ -409,23 +466,20 @@ export function MyPetPage() {
             </button>
           </div>
 
-          <RecordCards
-            key={`records-${selectedPet?.id ?? 'none'}-${selectedPetRecords.length}`}
-            records={selectedPetRecords}
-            hospitalNames={hospitalNames}
-            activeRecordId={activeRecordId}
-            onSelect={setExpandedRecordId}
-          />
-
-          {selectedPetRecords.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => setAllRecordsOpen(true)}
-              className="mt-4 w-full rounded-[1.6rem] border border-emerald-200 bg-white/90 px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.08)]"
-            >
-              기록 전체 보기
-            </button>
-          ) : null}
+          {selectedPet ? (
+            <RecordCards
+              key={`records-${selectedPet.id}-${selectedPetRecords.length}`}
+              records={selectedPetRecords}
+              hospitalNames={hospitalNames}
+              activeRecordId={activeRecordId}
+              onSelect={setExpandedRecordId}
+            />
+          ) : (
+            <div className="mt-4 rounded-[1.8rem] bg-white/90 px-4 py-8 text-center shadow-[0_14px_35px_rgba(15,118,110,0.08)]">
+              <p className="text-base font-semibold text-slate-800">반려동물을 선택해주세요.</p>
+              <p className="mt-2 text-sm text-slate-500">선택한 반려동물의 진료 기록이 여기에 보여요.</p>
+            </div>
+          )}
 
           {expandedRecord && selectedPet ? (
             <div className="mt-5 rounded-[2rem] bg-white p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
@@ -492,13 +546,19 @@ export function MyPetPage() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => startRecordToReview(expandedRecord, selectedPet)}
-                className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-4 py-3 font-semibold text-white"
-              >
-                이 경험을 리뷰로 작성하기
-              </button>
+              {expandedRecordHasReview ? (
+                <p className="mt-5 rounded-2xl bg-slate-100 px-4 py-3 text-center text-sm font-medium text-slate-600">
+                  이미 이 기록으로 작성한 리뷰가 있어요.
+                </p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => startRecordToReview(expandedRecord, selectedPet)}
+                  className="mt-5 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
+                >
+                  이 기록으로 리뷰 작성
+                </button>
+              )}
             </div>
           ) : null}
         </section>
@@ -516,7 +576,9 @@ export function MyPetPage() {
                   record={record}
                   hospitalNames={hospitalNames}
                   onOpenReview={
-                    selectedPet ? () => startRecordToReview(record, selectedPet) : undefined
+                    selectedPet && !findReviewForRecord(reviews, record)
+                      ? () => startRecordToReview(record, selectedPet)
+                      : undefined
                   }
                 />
                 <button

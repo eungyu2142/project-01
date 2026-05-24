@@ -23,7 +23,7 @@ const features = [
 export function LaunchPage({ mode, onEnter }: LaunchPageProps) {
   if (mode === 'splash') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#78e4c4_0%,_#15b981_45%,_#0f766e_100%)] px-6 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-emerald-600 px-6 text-white">
         <div className="flex flex-col items-center text-center">
           <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white/16 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur">
             <Icon name="paw" className="h-12 w-12" />
@@ -37,9 +37,9 @@ export function LaunchPage({ mode, onEnter }: LaunchPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,_#ecfff7_0%,_#c7f3e4_40%,_#f7fffb_100%)] px-5 pb-10 pt-[max(1.75rem,env(safe-area-inset-top))] text-slate-800">
+    <div className="min-h-screen bg-[#e8f8f1] px-5 pb-10 pt-[max(1.75rem,env(safe-area-inset-top))] text-slate-800">
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-md flex-col overflow-hidden rounded-[2.5rem] border border-white/80 bg-white/70 shadow-[0_30px_80px_rgba(16,185,129,0.18)] backdrop-blur">
-        <div className="bg-[linear-gradient(160deg,_#19c59b_0%,_#0f9d83_100%)] px-6 pb-8 pt-8 text-white">
+        <div className="bg-[#18b996] px-6 pb-8 pt-8 text-white">
           <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white/15 backdrop-blur">
             <Icon name="paw" className="h-8 w-8" />
           </div>
@@ -63,7 +63,7 @@ export function LaunchPage({ mode, onEnter }: LaunchPageProps) {
             ))}
           </div>
 
-          <div className="mt-6 rounded-[1.6rem] bg-[linear-gradient(135deg,_#f0fdf4,_#ecfeff)] p-4">
+          <div className="mt-6 rounded-[1.6rem] bg-[#f4fbf7] p-4">
             <p className="text-sm font-medium text-emerald-800">시작 전에 이런 흐름으로 사용해요</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               앱에서 병원을 찾고, 리뷰를 남기고, 마이 펫 기록과 연결해서 진료 이력까지 함께 관리할 수 있어요.
@@ -73,7 +73,7 @@ export function LaunchPage({ mode, onEnter }: LaunchPageProps) {
           <button
             type="button"
             onClick={onEnter}
-            className="mt-auto rounded-[1.6rem] bg-[linear-gradient(135deg,_#10b981,_#0f766e)] px-5 py-4 text-base font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
+            className="mt-auto rounded-[1.6rem] bg-emerald-600 px-5 py-4 text-base font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
           >
             엑조펫 시작하기
           </button>

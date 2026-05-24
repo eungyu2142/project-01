@@ -128,6 +128,7 @@ export interface ReviewInput {
   imageUrls: string[];
   rating: number;
   saveToRecord: boolean;
+  saveToRecordMemo?: string;
 }
 
 export interface PetInput {
