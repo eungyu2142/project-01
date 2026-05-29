@@ -19,7 +19,6 @@ interface RecordEditorProps {
   draft?: MedicalRecordDraft | null;
   pets: Pet[];
   hospitals: Hospital[];
-  presetPetId?: string;
   onClose: () => void;
   onSave: (input: MedicalRecordInput) => void;
 }
@@ -30,12 +29,11 @@ export function RecordEditor({
   draft,
   pets,
   hospitals,
-  presetPetId,
   onClose,
   onSave,
 }: RecordEditorProps) {
   const { saveMedicalRecordDraft, deleteMedicalRecordDraft } = useAppContext();
-  const [petId, setPetId] = useState(record?.petId ?? draft?.petId ?? presetPetId ?? pets[0]?.id ?? '');
+  const [petId, setPetId] = useState(record?.petId ?? draft?.petId ?? '');
   const [hospitalId, setHospitalId] = useState(record?.hospitalId ?? draft?.hospitalId ?? '');
   const [hospitalSearchText, setHospitalSearchText] = useState('');
   const [showHospitalOptions, setShowHospitalOptions] = useState(false);
@@ -171,13 +169,13 @@ export function RecordEditor({
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         {requiredMessage ? (
-          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {requiredMessage}
           </div>
         ) : null}
 
         {moderationMessage ? (
-          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
           </div>
         ) : null}
@@ -188,8 +186,9 @@ export function RecordEditor({
             <select
               value={petId}
               onChange={(event) => setPetId(event.target.value)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             >
+              <option value="">선택</option>
               {pets.map((pet) => (
                 <option key={pet.id} value={pet.id}>
                   {pet.name}
@@ -203,7 +202,7 @@ export function RecordEditor({
               type="date"
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
           </label>
         </div>
@@ -215,7 +214,7 @@ export function RecordEditor({
           }}
         >
           <span className="text-sm font-medium">병원</span>
-          <label className="relative flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white px-4 py-3">
+          <label className="relative flex items-center gap-3 rounded-lg border border-emerald-100 bg-white px-4 py-3">
             <Icon name="search" className="h-5 w-5 text-emerald-600" />
             <input
               type="text"
@@ -238,7 +237,7 @@ export function RecordEditor({
                   setHospitalId('');
                   setShowHospitalOptions(false);
                 }}
-                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md bg-slate-100 text-slate-500"
                 aria-label="병원 검색어 지우기"
               >
                 <Icon name="x" className="h-4 w-4" />
@@ -247,7 +246,7 @@ export function RecordEditor({
           </label>
 
           {showHospitalOptions ? (
-            <div className="absolute inset-x-0 top-[calc(100%+0.35rem)] z-20 max-h-72 overflow-y-auto rounded-3xl bg-white text-slate-700 shadow-[0_22px_50px_rgba(15,118,110,0.18)]">
+            <div className="absolute inset-x-0 top-[calc(100%+0.35rem)] z-20 max-h-72 overflow-y-auto rounded-lg bg-white text-slate-700 shadow-[0_22px_50px_rgba(15,118,110,0.18)]">
               {hospitalMatches.length > 0 ? (
                 hospitalMatches.map((hospital) => (
                   <button
@@ -261,7 +260,7 @@ export function RecordEditor({
                       <p className="truncate text-sm font-semibold text-slate-900">{hospital.name}</p>
                       <p className="mt-1 line-clamp-2 text-xs text-slate-500">{hospital.address}</p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
+                    <span className="shrink-0 rounded-md bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
                       선택
                     </span>
                   </button>
@@ -276,7 +275,7 @@ export function RecordEditor({
         </div>
 
         {selectedHospital ? (
-          <div className="rounded-2xl bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
+          <div className="rounded-lg bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
             <p className="font-medium text-slate-800">{selectedHospital.name}</p>
             <p className="mt-1 text-xs text-slate-500">{selectedHospital.address}</p>
           </div>
@@ -288,7 +287,7 @@ export function RecordEditor({
             type="text"
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             placeholder="예: 식욕 부진, 영양 상담"
           />
         </label>
@@ -299,7 +298,7 @@ export function RecordEditor({
             rows={3}
             value={veterinarianNote}
             onChange={(event) => setVeterinarianNote(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
@@ -310,7 +309,7 @@ export function RecordEditor({
               type="text"
               value={prescription}
               onChange={(event) => setPrescription(event.target.value)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
           </label>
           <label className="block space-y-2">
@@ -323,7 +322,7 @@ export function RecordEditor({
                 const numberOnly = event.target.value.replace(/\D/g, '');
                 setCostText(numberOnly ? Number(numberOnly).toLocaleString('ko-KR') : '');
               }}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
               placeholder="85,000"
             />
           </label>
@@ -335,7 +334,7 @@ export function RecordEditor({
             rows={3}
             value={memo}
             onChange={(event) => setMemo(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
@@ -344,7 +343,7 @@ export function RecordEditor({
             <button
               type="button"
               onClick={handleSaveDraft}
-              className="rounded-2xl border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
+              className="rounded-lg border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
             >
               {draft?.id ? '임시 저장 업데이트' : '임시 저장'}
             </button>
@@ -353,7 +352,7 @@ export function RecordEditor({
           )}
           <button
             type="submit"
-            className="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
+            className="rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
           >
             저장하기
           </button>

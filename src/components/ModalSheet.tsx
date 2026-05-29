@@ -20,8 +20,8 @@ export function ModalSheet({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/30 px-4 pb-4 pt-10 backdrop-blur-sm">
-      <div className="w-full max-w-md overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_80px_rgba(15,23,42,0.24)]">
+    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-slate-900/30 px-4 pb-[calc(6.5rem+env(safe-area-inset-bottom))] pt-16 backdrop-blur-sm">
+      <div className="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-[0_30px_80px_rgba(15,23,42,0.24)]">
         <div className="flex items-start justify-between border-b border-emerald-50 px-5 pb-4 pt-5">
           <div>
             <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
@@ -30,12 +30,12 @@ export function ModalSheet({
           <button
             type="button"
             onClick={onClose}
-            className="min-h-11 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700"
+            className="min-h-11 rounded-md bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700"
           >
             닫기
           </button>
         </div>
-        <div className="max-h-[75vh] overflow-y-auto px-5 py-5">{children}</div>
+        <div className="max-h-[calc(100dvh-18rem)] overflow-y-auto px-5 py-5">{children}</div>
       </div>
     </div>
   );

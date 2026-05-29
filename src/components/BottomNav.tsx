@@ -17,7 +17,7 @@ export function BottomNav() {
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `flex h-full flex-col items-center justify-center gap-1 rounded-2xl px-2 text-xs font-medium text-[#064e3b] transition ${
+              `flex h-full flex-col items-center justify-center gap-1 rounded-lg px-2 text-xs font-medium text-[#064e3b] transition ${
                 isActive ? 'bg-white/45' : ''
               }`
             }
@@ -25,7 +25,7 @@ export function BottomNav() {
             {({ isActive }) => (
               <>
                 <span
-                  className={`rounded-full p-2 ${
+                  className={`rounded-md p-2 ${
                     isActive ? 'bg-white text-[#064e3b] shadow-sm' : 'bg-transparent text-[#064e3b]'
                   }`}
                 >

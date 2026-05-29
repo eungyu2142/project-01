@@ -227,7 +227,7 @@ export function ReviewComposer({
 
     const moderation = validateReviewText([
       { label: '진단 항목', value: diagnosis },
-      { label: '처방 받은 약', value: medicine },
+      { label: '진료 기록', value: medicine },
       { label: '직접 태그', value: customTags.join(' ') },
       { label: '리뷰 본문', value: body },
     ]);
@@ -322,13 +322,13 @@ export function ReviewComposer({
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         {requiredMessage ? (
-          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {requiredMessage}
           </div>
         ) : null}
 
         {moderationMessage ? (
-          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
           </div>
         ) : null}
@@ -340,7 +340,7 @@ export function ReviewComposer({
           <select
             value={petId}
             onChange={(event) => setPetId(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3"
           >
             <option value="">반려동물을 선택해 주세요</option>
             {pets.map((pet) => (
@@ -352,7 +352,7 @@ export function ReviewComposer({
         </label>
 
         {selectedPet ? (
-          <div className="grid grid-cols-2 gap-3 rounded-3xl bg-emerald-50/70 p-4 text-sm text-slate-600">
+          <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50/70 p-4 text-sm text-slate-600">
             <div>
               <p className="text-xs text-slate-400">동물 분류</p>
               <p className="mt-1 font-medium text-slate-800">
@@ -379,7 +379,7 @@ export function ReviewComposer({
           <span className="text-sm font-medium text-slate-700">
             방문한 병원 <span className="text-rose-500">*</span>
           </span>
-          <label className="relative flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white px-4 py-3">
+          <label className="relative flex items-center gap-3 rounded-lg border border-emerald-100 bg-white px-4 py-3">
             <Icon name="search" className="h-5 w-5 text-emerald-600" />
             <input
               type="text"
@@ -402,7 +402,7 @@ export function ReviewComposer({
                   setHospitalId('');
                   setShowHospitalOptions(false);
                 }}
-                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md bg-slate-100 text-slate-500"
                 aria-label="병원 검색어 지우기"
               >
                 <Icon name="x" className="h-4 w-4" />
@@ -411,7 +411,7 @@ export function ReviewComposer({
           </label>
 
           {showHospitalOptions ? (
-            <div className="absolute inset-x-0 top-[calc(100%+0.35rem)] z-20 max-h-[26rem] overflow-y-auto rounded-3xl bg-white text-slate-700 shadow-[0_22px_50px_rgba(15,118,110,0.18)]">
+            <div className="absolute inset-x-0 top-[calc(100%+0.35rem)] z-20 max-h-[26rem] overflow-y-auto rounded-lg bg-white text-slate-700 shadow-[0_22px_50px_rgba(15,118,110,0.18)]">
               {hospitalMatches.length > 0 ? (
                 hospitalMatches.map((hospital) => (
                   <button
@@ -424,21 +424,21 @@ export function ReviewComposer({
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="truncate text-sm font-semibold text-slate-900">{hospital.name}</p>
-                        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
                           {getSupportedAnimalSummary(hospital)}
                         </span>
                       </div>
                       <p className="mt-1 line-clamp-2 text-xs text-slate-500">{hospital.address}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
                           {getHospitalClassificationLabel(hospital.classification)}
                         </span>
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
                           {getHospitalSourceSummary(hospital)}
                         </span>
                       </div>
                     </div>
-                    <span className="shrink-0 rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
+                    <span className="shrink-0 rounded-md bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
                       선택
                     </span>
                   </button>
@@ -453,7 +453,7 @@ export function ReviewComposer({
         </div>
 
         {selectedHospital ? (
-          <div className="rounded-2xl bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
+          <div className="rounded-lg bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
             <p className="font-medium text-slate-800">{selectedHospital.name}</p>
             <p className="mt-1 text-xs text-slate-500">{selectedHospital.address}</p>
           </div>
@@ -468,7 +468,7 @@ export function ReviewComposer({
               type="date"
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
           </label>
           <label className="block space-y-2">
@@ -482,30 +482,30 @@ export function ReviewComposer({
                 const numberOnly = event.target.value.replace(/\D/g, '');
                 setCostText(numberOnly ? Number(numberOnly).toLocaleString('ko-KR') : '');
               }}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
           </label>
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">진단 항목</span>
+          <span className="text-sm font-medium text-slate-700">병명</span>
           <input
             type="text"
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
-            placeholder="예: 식욕 부진, 체중 검사"
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            placeholder="예: 장염, 식욕 부진, 체중 검사"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">처방 받은 약</span>
+          <span className="text-sm font-medium text-slate-700">직접 작성란 (진료 기록)</span>
           <input
             type="text"
             value={medicine}
             onChange={(event) => setMedicine(event.target.value)}
             placeholder="예: 진통제 3일치"
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
@@ -517,7 +517,7 @@ export function ReviewComposer({
                 key={value}
                 type="button"
                 onClick={() => setRating(value)}
-                className={`rounded-full p-2 ${
+                className={`rounded-md p-2 ${
                   value <= rating ? 'bg-amber-100 text-amber-500' : 'bg-slate-100 text-slate-400'
                 }`}
               >
@@ -535,7 +535,7 @@ export function ReviewComposer({
                 key={tag.label}
                 type="button"
                 onClick={() => toggleTag(tag.label)}
-                className={`rounded-full px-3 py-2 text-sm ${
+                className={`rounded-md px-3 py-2 text-sm ${
                   tags.includes(tag.label)
                     ? 'bg-emerald-600 text-white'
                     : 'bg-emerald-50 text-emerald-700'
@@ -555,12 +555,12 @@ export function ReviewComposer({
               value={customTag}
               onChange={(event) => setCustomTag(event.target.value)}
               placeholder="예: 야간진료, 입원 가능"
-              className="flex-1 rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="flex-1 rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
             <button
               type="button"
               onClick={addCustomTag}
-              className="rounded-2xl bg-emerald-600 px-4 py-3 text-white"
+              className="rounded-lg bg-emerald-600 px-4 py-3 text-white"
             >
               추가
             </button>
@@ -571,7 +571,7 @@ export function ReviewComposer({
                 key={tag}
                 type="button"
                 onClick={() => setCustomTags((current) => current.filter((item) => item !== tag))}
-                className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-600"
+                className="rounded-md bg-slate-100 px-3 py-1 text-sm text-slate-600"
               >
                 #{tag}
               </button>
@@ -586,13 +586,13 @@ export function ReviewComposer({
             onChange={(event) => setBody(event.target.value)}
             rows={4}
             placeholder="진료 경험을 자유롭게 적어 주세요."
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
         <div className="space-y-2">
           <span className="text-sm font-medium text-slate-700">사진 첨부</span>
-          <label className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50/60 px-4 py-4 text-sm text-emerald-700">
+          <label className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-emerald-300 bg-emerald-50/60 px-4 py-4 text-sm text-emerald-700">
             <Icon name="camera" className="h-5 w-5" />
             <span>최대 3장 업로드</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImages} />
@@ -600,14 +600,14 @@ export function ReviewComposer({
           {imageUrls.length > 0 ? (
             <div className="grid grid-cols-3 gap-2">
               {imageUrls.map((imageUrl) => (
-                <div key={imageUrl} className="relative overflow-hidden rounded-2xl">
+                <div key={imageUrl} className="relative overflow-hidden rounded-lg">
                   <img src={imageUrl} alt="리뷰 미리보기" className="h-20 w-full object-cover" />
                   <button
                     type="button"
                     onClick={() =>
                       setImageUrls((current) => current.filter((item) => item !== imageUrl))
                     }
-                    className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-1 text-xs"
+                    className="absolute right-2 top-2 rounded-md bg-white/90 px-2 py-1 text-xs"
                   >
                     삭제
                   </button>
@@ -618,11 +618,11 @@ export function ReviewComposer({
         </div>
 
         {existingLinkedRecord ? (
-          <div className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
+          <div className="rounded-lg bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
             이미 같은 진료 기록이 있어요.
           </div>
         ) : (
-          <label className="flex items-center gap-3 rounded-2xl bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
+          <label className="flex items-center gap-3 rounded-lg bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={saveToRecord}
@@ -641,7 +641,7 @@ export function ReviewComposer({
               value={saveToRecordMemo}
               onChange={(event) => setSaveToRecordMemo(event.target.value)}
               placeholder="마이펫 진료 기록에 남길 메모를 적어주세요."
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             />
           </label>
         ) : null}
@@ -651,7 +651,7 @@ export function ReviewComposer({
             <button
               type="button"
               onClick={handleSaveDraft}
-              className="rounded-2xl border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
+              className="rounded-lg border border-emerald-200 bg-white px-4 py-3 font-semibold text-emerald-700"
             >
               {draftId ? '임시 저장 업데이트' : '임시 저장'}
             </button>
@@ -660,7 +660,7 @@ export function ReviewComposer({
           )}
           <button
             type="submit"
-            className="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
+            className="rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.28)]"
           >
             {editingReview ? '리뷰 수정 완료' : '리뷰 등록하기'}
           </button>

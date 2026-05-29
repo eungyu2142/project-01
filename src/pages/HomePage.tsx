@@ -345,7 +345,7 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => setTopCollapsed(false)}
-              className="pointer-events-auto inline-flex h-8 w-12 items-center justify-center rounded-full bg-white/92 text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.18)] backdrop-blur"
+              className="pointer-events-auto inline-flex h-8 w-12 items-center justify-center rounded-md bg-white/92 text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.18)] backdrop-blur"
               aria-label="상단 열기"
             >
               <Icon name="chevron" className="h-4 w-4 rotate-90" />
@@ -358,7 +358,7 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={() => setTopCollapsed(true)}
-                  className="inline-flex h-8 w-14 items-center justify-center rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-[0_8px_22px_rgba(15,118,110,0.08)]"
+                  className="inline-flex h-8 w-14 items-center justify-center rounded-md border border-emerald-100 bg-white/90 text-emerald-700 shadow-[0_8px_22px_rgba(15,118,110,0.08)]"
                   aria-label="상단 접기"
                 >
                   <Icon name="chevron" className="h-4 w-4 -rotate-90" />
@@ -390,7 +390,7 @@ export function HomePage() {
               </div>
 
               {showSuggestions ? (
-                <div className="mx-auto mt-3 max-w-[28.5rem] rounded-[1.5rem] border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
+                <div className="mx-auto mt-3 max-w-[28.5rem] rounded-lg border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
                   {!searchText.trim() ? (
                     <p className="px-3 pb-2 pt-1 text-xs font-semibold text-emerald-700">
                       현재 위치 기준 가까운 병원
@@ -427,10 +427,10 @@ export function HomePage() {
 
       {selectedHospital ? (
         <div className={bottomOverlayClass}>
-          <div className="pointer-events-auto rounded-[1.6rem] border border-white/80 bg-white/95 p-3.5 shadow-[0_20px_40px_rgba(15,118,110,0.16)] backdrop-blur">
+          <div className="pointer-events-auto rounded-lg border border-white/80 bg-white/95 p-3.5 shadow-[0_20px_40px_rgba(15,118,110,0.16)] backdrop-blur">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+                <span className="inline-flex rounded-md bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
                   {animalLabels[selectedAnimal]}
                 </span>
                 <p className="mt-1.5 truncate text-base font-semibold text-slate-900">{selectedHospital.name}</p>
@@ -439,7 +439,7 @@ export function HomePage() {
                   <button
                     type="button"
                     onClick={() => handleCopyAddress(selectedHospital.id, selectedHospital.address)}
-                    className={`shrink-0 min-w-[5.5rem] rounded-full px-3 py-1 text-center text-xs font-semibold transition ${
+                    className={`shrink-0 min-w-[5.5rem] rounded-md px-3 py-1 text-center text-xs font-semibold transition ${
                       copiedAddressHospitalId === selectedHospital.id
                         ? 'bg-emerald-100 text-emerald-700'
                         : 'bg-slate-100 text-slate-500'
@@ -458,7 +458,7 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={() => toggleHospitalLike(selectedHospital.id)}
-                  className={`rounded-full p-3 ${
+                  className={`rounded-md p-3 ${
                     selectedHospital.liked ? 'bg-rose-50 text-rose-500' : 'bg-slate-100 text-slate-400'
                   }`}
                   aria-label="병원 좋아요"
@@ -471,7 +471,7 @@ export function HomePage() {
                     setSelectedHospitalId('');
                     setShowSuggestions(false);
                   }}
-                  className="rounded-full bg-slate-100 p-3 text-slate-500"
+                  className="rounded-md bg-slate-100 p-3 text-slate-500"
                   aria-label="병원 닫기"
                 >
                   <Icon name="x" className="h-5 w-5" />
@@ -480,7 +480,7 @@ export function HomePage() {
             </div>
 
             <div className="mt-3">
-              <div className="rounded-2xl bg-emerald-50/80 px-3 py-2">
+              <div className="rounded-lg bg-emerald-50/80 px-3 py-2">
                 <p className="text-[11px] font-medium text-emerald-700">거리</p>
                 <p className="mt-1 text-sm font-semibold text-slate-800">
                   {formatDistanceKm(
@@ -505,7 +505,7 @@ export function HomePage() {
                     },
                   })
                 }
-                className={`rounded-2xl border px-4 py-2.5 text-sm font-medium ${
+                className={`rounded-lg border px-4 py-2.5 text-sm font-medium ${
                   selectedHospitalReviews.length === 0
                     ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
                     : 'border-emerald-200 bg-white text-emerald-700'
@@ -524,7 +524,7 @@ export function HomePage() {
                     },
                   })
                 }
-                className="rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white"
+                className="rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white"
               >
                 리뷰 작성
               </button>
@@ -533,13 +533,13 @@ export function HomePage() {
         </div>
       ) : datasetStatus === 'loading' ? (
         <div className={bottomOverlayClass}>
-          <div className="rounded-[1.6rem] border border-white/70 bg-white/88 px-4 py-3 text-center shadow-[0_20px_40px_rgba(15,118,110,0.14)] backdrop-blur">
+          <div className="rounded-lg border border-white/70 bg-white/88 px-4 py-3 text-center shadow-[0_20px_40px_rgba(15,118,110,0.14)] backdrop-blur">
             <p className="text-sm font-medium text-slate-600">병원 데이터를 불러오는 중이에요.</p>
           </div>
         </div>
       ) : datasetStatus === 'error' ? (
         <div className={bottomOverlayClass}>
-          <div className="rounded-[1.6rem] border border-rose-100 bg-white/92 px-4 py-3 text-center shadow-[0_20px_40px_rgba(15,118,110,0.14)] backdrop-blur">
+          <div className="rounded-lg border border-rose-100 bg-white/92 px-4 py-3 text-center shadow-[0_20px_40px_rgba(15,118,110,0.14)] backdrop-blur">
             <p className="text-sm font-medium text-rose-500">{datasetError || '병원 데이터를 불러오지 못했어요.'}</p>
           </div>
         </div>

@@ -93,7 +93,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         {moderationMessage ? (
-          <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
           </div>
         ) : null}
@@ -104,7 +104,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             placeholder="예: 파닥이"
           />
         </label>
@@ -115,7 +115,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             type="text"
             value={species}
             onChange={(event) => setSpecies(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             placeholder="예: 레오파드게코"
           />
         </label>
@@ -126,7 +126,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             <select
               value={animalType}
               onChange={(event) => handleAnimalTypeChange(event.target.value as typeof animalType)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             >
               <option value="reptile">파충류</option>
               <option value="rodent">설치류</option>
@@ -138,7 +138,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             <select
               value={gender}
               onChange={(event) => setGender(event.target.value as typeof gender)}
-              className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
             >
               <option value="수컷">수컷</option>
               <option value="암컷">암컷</option>
@@ -153,7 +153,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
           <select
             value={ageLabel}
             onChange={(event) => setAgeLabel(event.target.value)}
-            className="w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3"
+            className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           >
             {ageOptions.map((option) => (
               <option key={option} value={option}>
@@ -165,9 +165,9 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
 
         <div className="space-y-2">
           <span className="text-sm font-medium">프로필 아이콘</span>
-          <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-4">
+          <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 p-4">
             <div className="flex items-center gap-4">
-              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white text-4xl shadow-sm">
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-md bg-white text-4xl shadow-sm">
                 {isImageAvatar(avatar) ? (
                   <img src={avatar} alt="반려동물 사진 미리보기" className="h-full w-full object-cover" />
                 ) : (
@@ -175,7 +175,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
                 )}
               </div>
               <div className="flex-1 space-y-2">
-                <label className="flex cursor-pointer items-center justify-center rounded-2xl border border-dashed border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-dashed border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700">
                   사진 첨부
                   <input
                     type="file"
@@ -188,7 +188,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
                   <button
                     type="button"
                     onClick={() => setAvatar('🐍')}
-                    className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600"
+                    className="w-full rounded-lg bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600"
                   >
                     사진 제거하고 기본 아이콘 사용
                   </button>
@@ -202,7 +202,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
                 key={item}
                 type="button"
                 onClick={() => setAvatar(item)}
-                className={`rounded-2xl px-4 py-3 text-2xl ${
+                className={`rounded-lg px-4 py-3 text-2xl ${
                   avatar === item ? 'bg-emerald-600 text-white' : 'bg-emerald-50'
                 }`}
               >
@@ -214,7 +214,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
 
         <button
           type="submit"
-          className="w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
+          className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
         >
           저장하기
         </button>

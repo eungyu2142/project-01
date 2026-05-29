@@ -25,9 +25,9 @@ export function SearchBar({
 }: SearchBarProps) {
   return (
     <label
-      className={`relative flex items-center gap-3 rounded-[1.6rem] border border-white/90 bg-white/96 px-5 py-4 text-slate-500 shadow-[0_16px_34px_rgba(15,118,110,0.12)] ${className}`}
+      className={`relative flex items-center gap-3 rounded-lg border border-emerald-100 bg-white px-4 py-3.5 text-slate-500 shadow-[0_8px_18px_rgba(15,118,110,0.08)] ${className}`}
     >
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
         <Icon name="search" className="h-5 w-5" />
       </span>
       <input
@@ -42,7 +42,7 @@ export function SearchBar({
           type="button"
           onMouseDown={(event) => event.preventDefault()}
           onClick={onClear}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500"
           aria-label={clearLabel}
         >
           <Icon name="x" className="h-4 w-4" />

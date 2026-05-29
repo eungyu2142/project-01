@@ -58,6 +58,7 @@ function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
+        <Route path="/reviews/:reviewId" element={<ReviewsPage />} />
         <Route path="/mypets" element={<MyPetPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

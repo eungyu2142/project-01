@@ -278,9 +278,9 @@ export function HomeMap({
         <button
           type="button"
           onClick={handleRecenterToCurrentLocation}
-          className="absolute right-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/92 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-[0_14px_30px_rgba(15,118,110,0.18)] backdrop-blur"
+          className="absolute right-4 top-4 z-10 inline-flex items-center gap-2 rounded-md border border-white/80 bg-white/92 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-[0_14px_30px_rgba(15,118,110,0.18)] backdrop-blur"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth="2">
               <circle cx="12" cy="12" r="3" />
               <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
@@ -294,7 +294,7 @@ export function HomeMap({
         <div className="absolute inset-0 flex items-center justify-center bg-white/82 p-6 text-center">
           {phase === 'loading' ? (
             <div className="space-y-3">
-              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-500" />
+              <div className="mx-auto h-10 w-10 animate-spin rounded-md border-4 border-emerald-100 border-t-emerald-500" />
               <p className="text-sm font-medium text-slate-600">네이버 지도를 불러오는 중입니다.</p>
             </div>
           ) : null}

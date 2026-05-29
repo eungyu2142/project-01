@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { ModalSheet } from '../components/ModalSheet';
 import { useAuth } from '../context/AuthContext';
 import { useAppContext } from '../context/AppContext';
 import { formatDate } from '../lib/format';
@@ -71,10 +72,7 @@ export function ProfilePage() {
   const [draftProfileEmoji, setDraftProfileEmoji] = useState(user.profileEmoji);
   const [accountMessage, setAccountMessage] = useState('');
   const [accountDeleteLoading, setAccountDeleteLoading] = useState(false);
-  const likedHospitalsSectionRef = useRef<HTMLElement | null>(null);
-  const likedReviewsSectionRef = useRef<HTMLElement | null>(null);
-  const reviewDraftsSectionRef = useRef<HTMLElement | null>(null);
-  const recordDraftsSectionRef = useRef<HTMLElement | null>(null);
+  const [selectedActivityTarget, setSelectedActivityTarget] = useState<ActivityTarget | null>(null);
 
   const likedHospitals = [...hospitals]
     .filter((hospital) => hospital.liked)
@@ -139,20 +137,6 @@ export function ProfilePage() {
 
     setCurrentRegion(GEOLOCATION_LOADING_MESSAGE);
   }, [user.city]);
-
-  function scrollToActivitySection(target: ActivityTarget) {
-    const targetRef = {
-      likedHospitals: likedHospitalsSectionRef,
-      likedReviews: likedReviewsSectionRef,
-      reviewDrafts: reviewDraftsSectionRef,
-      recordDrafts: recordDraftsSectionRef,
-    }[target];
-
-    targetRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  }
 
   function handleProfilePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -272,10 +256,10 @@ export function ProfilePage() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f6fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[#18b996]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
 
       <div className="relative">
-        <section className="min-h-[12rem] text-white">
+        <section className="min-h-[14rem] pt-7 text-white">
           <p className="text-sm font-medium text-emerald-50/90">내 정보</p>
           <div className="mt-3 flex items-center gap-4">
             <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[2rem] bg-white/18 text-4xl shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur">
@@ -305,7 +289,7 @@ export function ProfilePage() {
                 <button
                   key={card.label}
                   type="button"
-                  onClick={() => scrollToActivitySection(card.target)}
+                  onClick={() => setSelectedActivityTarget(card.target)}
                   className="rounded-[1.6rem] border border-emerald-100 bg-[#f4fbf7] p-4 text-left transition active:scale-[0.98]"
                 >
                   <div className="flex items-center justify-between">
@@ -461,206 +445,96 @@ export function ProfilePage() {
             ) : null}
           </section>
 
-          <section
-            ref={likedHospitalsSectionRef}
-            className="scroll-mt-5 rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)]"
+          <ModalSheet
+            open={Boolean(selectedActivityTarget)}
+            title={activityCards.find((card) => card.target === selectedActivityTarget)?.label ?? '활동 모아보기'}
+            description="선택한 항목을 한 번에 볼 수 있어요."
+            onClose={() => setSelectedActivityTarget(null)}
           >
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">좋아요한 병원</h2>
-              <span className="text-sm text-slate-400">{likedHospitals.length}개</span>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              {likedHospitals.length > 0 ? (
-                likedHospitals.map((hospital) => (
-                  <div
-                    key={hospital.id}
-                    className="flex items-center justify-between rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-slate-900">{hospital.name}</p>
-                      <p className="mt-1 truncate text-sm text-slate-500">{hospital.address}</p>
-                    </div>
-                    <Icon name="heart" className="h-5 w-5 shrink-0 text-rose-500" />
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">
-                  아직 좋아요한 병원이 없어요.
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section
-            ref={likedReviewsSectionRef}
-            className="scroll-mt-5 rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)]"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">좋아요한 리뷰</h2>
-              <span className="text-sm text-slate-400">{likedReviews.length}개</span>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              {likedReviews.length > 0 ? (
-                likedReviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
+            <div className="space-y-3">
+              {selectedActivityTarget === 'likedHospitals' ? (
+                likedHospitals.length > 0 ? (
+                  likedHospitals.map((hospital) => (
+                    <div key={hospital.id} className="flex items-center justify-between rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
                       <div className="min-w-0">
-                        <p className="font-semibold text-slate-900">
-                          {review.petName} 리뷰
-                        </p>
-                        <p className="mt-1 truncate text-sm text-slate-500">
-                          {hospitalNames[review.hospitalId] ?? '이름 없는 병원'}
-                        </p>
-                        <p className="mt-2 line-clamp-2 text-sm text-slate-500">
-                          {review.body || review.diagnosis}
-                        </p>
+                        <p className="truncate font-semibold text-slate-900">{hospital.name}</p>
+                        <p className="mt-1 truncate text-sm text-slate-500">{hospital.address}</p>
                       </div>
-                      <Icon name="star" className="h-5 w-5 shrink-0 text-amber-500" />
+                      <Icon name="heart" className="h-5 w-5 shrink-0 text-rose-500" />
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">
-                  아직 좋아요한 리뷰가 없어요.
-                </div>
-              )}
-            </div>
-          </section>
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 좋아요한 병원이 없어요.</p>
+                )
+              ) : null}
 
-          <section
-            ref={reviewDraftsSectionRef}
-            className="scroll-mt-5 rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)]"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">리뷰 임시 저장</h2>
-              <span className="text-sm text-slate-400">{sortedReviewDrafts.length}개</span>
-            </div>
+              {selectedActivityTarget === 'likedReviews' ? (
+                likedReviews.length > 0 ? (
+                  likedReviews.map((review) => (
+                    <div key={review.id} className="rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-slate-900">{review.petName} 리뷰</p>
+                          <p className="mt-1 truncate text-sm text-slate-500">{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
+                          <p className="mt-2 line-clamp-2 text-sm text-slate-500">{review.body || review.diagnosis}</p>
+                        </div>
+                        <Icon name="star" className="h-5 w-5 shrink-0 text-amber-500" />
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 좋아요한 리뷰가 없어요.</p>
+                )
+              ) : null}
 
-            <div className="mt-4 space-y-3">
-              {sortedReviewDrafts.length > 0 ? (
-                sortedReviewDrafts.map((draft) => (
-                  <div
-                    key={draft.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="truncate font-semibold text-slate-900">
-                          {hospitalNames[draft.hospitalId ?? ''] ?? '병원 미선택'}
-                        </p>
-                        <p className="mt-1 truncate text-sm text-slate-500">
-                          {petNames[draft.petId ?? ''] ?? '반려동물 미선택'}
-                          {draft.diagnosis ? ` · ${draft.diagnosis}` : ''}
-                        </p>
-                        <p className="mt-2 line-clamp-2 text-sm text-slate-500">
-                          {draft.body || draft.medicine || '작성 중인 리뷰 초안'}
-                        </p>
-                        {draft.updatedAt ? (
+              {selectedActivityTarget === 'reviewDrafts' ? (
+                sortedReviewDrafts.length > 0 ? (
+                  sortedReviewDrafts.map((draft) => (
+                    <div key={draft.id} className="rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold text-slate-900">{hospitalNames[draft.hospitalId ?? ''] ?? '병원 미선택'}</p>
+                          <p className="mt-1 truncate text-sm text-slate-500">{petNames[draft.petId ?? ''] ?? '반려동물 미선택'}{draft.diagnosis ? ` · ${draft.diagnosis}` : ''}</p>
+                          <p className="mt-2 line-clamp-2 text-sm text-slate-500">{draft.body || draft.medicine || '작성 중인 리뷰 초안'}</p>
+                          {draft.updatedAt ? <p className="mt-2 text-xs text-slate-400">최근 저장 {formatDate(draft.updatedAt)}</p> : null}
+                        </div>
+                        <div className="flex shrink-0 gap-2">
+                          <button type="button" onClick={() => navigate('/reviews', { state: { openComposer: true, draft } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
+                          <button type="button" onClick={() => deleteReviewDraft(draft.id ?? '')} className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500">삭제</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">저장된 리뷰 초안이 없어요.</p>
+                )
+              ) : null}
+
+              {selectedActivityTarget === 'recordDrafts' ? (
+                sortedRecordDrafts.length > 0 ? (
+                  sortedRecordDrafts.map((draft) => (
+                    <div key={draft.id} className="rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold text-slate-900">{petNames[draft.petId ?? ''] ?? '반려동물 미선택'}</p>
+                          <p className="mt-1 truncate text-sm text-slate-500">{hospitalNames[draft.hospitalId ?? ''] ?? '병원 미선택'}{draft.date ? ` · ${formatDate(draft.date)}` : ''}</p>
+                          <p className="mt-2 line-clamp-2 text-sm text-slate-500">{draft.diagnosis || draft.memo || '작성 중인 진료 기록 초안'}</p>
                           <p className="mt-2 text-xs text-slate-400">최근 저장 {formatDate(draft.updatedAt)}</p>
-                        ) : null}
-                      </div>
-                      <div className="flex shrink-0 gap-2">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            navigate('/reviews', {
-                              state: {
-                                openComposer: true,
-                                draft,
-                              },
-                            })
-                          }
-                          className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700"
-                        >
-                          이어쓰기
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => deleteReviewDraft(draft.id ?? '')}
-                          className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500"
-                        >
-                          삭제
-                        </button>
+                        </div>
+                        <div className="flex shrink-0 gap-2">
+                          <button type="button" onClick={() => navigate('/mypets', { state: { openRecordEditor: true, draftRecord: draft } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
+                          <button type="button" onClick={() => deleteMedicalRecordDraft(draft.id)} className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500">삭제</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">
-                  저장된 리뷰 초안이 없어요.
-                </div>
-              )}
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">저장된 기록 초안이 없어요.</p>
+                )
+              ) : null}
             </div>
-          </section>
+          </ModalSheet>
 
-          <section
-            ref={recordDraftsSectionRef}
-            className="scroll-mt-5 rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)]"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">기록 임시 저장</h2>
-              <span className="text-sm text-slate-400">{sortedRecordDrafts.length}개</span>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              {sortedRecordDrafts.length > 0 ? (
-                sortedRecordDrafts.map((draft) => (
-                  <div
-                    key={draft.id}
-                    className="rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="truncate font-semibold text-slate-900">
-                          {petNames[draft.petId ?? ''] ?? '반려동물 미선택'}
-                        </p>
-                        <p className="mt-1 truncate text-sm text-slate-500">
-                          {hospitalNames[draft.hospitalId ?? ''] ?? '병원 미선택'}
-                          {draft.date ? ` · ${formatDate(draft.date)}` : ''}
-                        </p>
-                        <p className="mt-2 line-clamp-2 text-sm text-slate-500">
-                          {draft.diagnosis || draft.memo || '작성 중인 진료 기록 초안'}
-                        </p>
-                        <p className="mt-2 text-xs text-slate-400">최근 저장 {formatDate(draft.updatedAt)}</p>
-                      </div>
-                      <div className="flex shrink-0 gap-2">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            navigate('/mypets', {
-                              state: {
-                                openRecordEditor: true,
-                                draftRecord: draft,
-                              },
-                            })
-                          }
-                          className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700"
-                        >
-                          이어쓰기
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => deleteMedicalRecordDraft(draft.id)}
-                          className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500"
-                        >
-                          삭제
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">
-                  저장된 기록 초안이 없어요.
-                </div>
-              )}
-            </div>
-          </section>
         </div>
       </div>
     </div>

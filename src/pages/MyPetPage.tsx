@@ -59,7 +59,7 @@ function RecordDetailCard({
   actionSlot,
 }: RecordDetailCardProps) {
   return (
-    <div className="rounded-[2rem] bg-white p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
+    <div className="rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_8px_20px_rgba(15,118,110,0.08)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-slate-400">{formatDate(record.date)}</p>
@@ -69,27 +69,27 @@ function RecordDetailCard({
       </div>
 
       <div className="mt-4 grid gap-3 text-sm text-slate-600">
-        <div className="rounded-2xl bg-emerald-50/70 p-4">
+        <div className="rounded-lg bg-emerald-50/70 p-4">
           <p className="text-xs text-slate-400">병원</p>
           <p className="mt-1 font-medium text-slate-800">{hospitalNames[record.hospitalId]}</p>
         </div>
-        <div className="rounded-2xl bg-emerald-50/70 p-4">
+        <div className="rounded-lg bg-emerald-50/70 p-4">
           <p className="text-xs text-slate-400">수의사 소견</p>
           <p className="mt-1 leading-6 text-slate-800">{record.veterinarianNote}</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-emerald-50/70 p-4">
+          <div className="rounded-lg bg-emerald-50/70 p-4">
             <p className="text-xs text-slate-400">처방</p>
             <p className="mt-1 text-slate-800">{record.prescription || '없음'}</p>
           </div>
-          <div className="rounded-2xl bg-emerald-50/70 p-4">
+          <div className="rounded-lg bg-emerald-50/70 p-4">
             <p className="text-xs text-slate-400">진료 비용</p>
             <p className="mt-1 overflow-hidden whitespace-nowrap text-slate-800" title={formatCurrency(record.cost)}>
               {truncateWithDots(formatCurrency(record.cost))}
             </p>
           </div>
         </div>
-        <div className="rounded-2xl bg-emerald-50/70 p-4">
+        <div className="rounded-lg bg-emerald-50/70 p-4">
           <p className="text-xs text-slate-400">메모</p>
           <p className="mt-1 leading-6 text-slate-800">{record.memo || '아직 메모가 없어요'}</p>
         </div>
@@ -99,7 +99,7 @@ function RecordDetailCard({
         <button
           type="button"
           onClick={onOpenReview}
-          className="mt-5 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
+          className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
         >
           이 경험을 리뷰로 작성하기
         </button>
@@ -115,7 +115,7 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
 
   if (pets.length === 0) {
     return (
-      <div className="mt-4 rounded-[1.8rem] bg-white/90 px-4 py-8 text-center shadow-[0_14px_35px_rgba(15,118,110,0.08)]">
+      <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
         <p className="text-base font-semibold text-slate-800">등록된 반려동물이 없어요.</p>
         <p className="mt-2 text-sm text-slate-500">등록 버튼으로 첫 반려동물을 추가해보세요.</p>
       </div>
@@ -130,12 +130,12 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
             key={pet.id}
             type="button"
             onClick={() => onSelect(pet.id)}
-            className={`flex w-full items-center rounded-[1.8rem] border bg-white px-4 py-4 text-left shadow-[0_14px_35px_rgba(15,118,110,0.08)] ${
+            className={`flex w-full items-center rounded-lg border bg-white px-4 py-4 text-left shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
               pet.id === selectedPetId ? 'border-emerald-400' : 'border-white'
             }`}
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-emerald-100 text-3xl">
+              <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-emerald-100 text-3xl">
                 {isImageAvatar(pet.avatar) ? (
                   <img src={pet.avatar} alt={`${pet.name} 사진`} className="h-full w-full object-cover" />
                 ) : (
@@ -146,7 +146,7 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
                 <p className="text-lg font-semibold text-slate-900">{pet.name}</p>
                 <p className="text-sm text-slate-500">{pet.species}</p>
                 <div className="mt-2 flex gap-2 text-xs text-slate-500">
-                  <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">
+                  <span className="rounded-md bg-emerald-50 px-2 py-1 text-emerald-700">
                     {animalName[pet.animalType]}
                   </span>
                   <span>{pet.gender}</span>
@@ -162,7 +162,7 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
         <button
           type="button"
           onClick={() => setVisibleCount((count) => count + 2)}
-          className="mt-4 w-full rounded-[1.6rem] border border-emerald-200 bg-white/90 px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.08)]"
+          className="mt-4 w-full rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_6px_14px_rgba(15,118,110,0.06)]"
         >
           반려동물 더보기
         </button>
@@ -178,7 +178,7 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
 
   if (records.length === 0) {
     return (
-      <div className="mt-4 rounded-[1.8rem] bg-white/90 px-4 py-8 text-center shadow-[0_14px_35px_rgba(15,118,110,0.08)]">
+      <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
         <p className="text-base font-semibold text-slate-800">아직 진료 기록이 없어요.</p>
         <p className="mt-2 text-sm text-slate-500">기록 추가 버튼으로 첫 진료 이력을 남겨보세요.</p>
       </div>
@@ -193,7 +193,7 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
             key={record.id}
             type="button"
             onClick={() => onSelect(record.id)}
-            className={`w-full rounded-[1.8rem] border px-4 py-4 text-left shadow-[0_14px_35px_rgba(15,118,110,0.08)] ${
+            className={`w-full rounded-lg border px-4 py-4 text-left shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
               activeRecordId === record.id ? 'border-emerald-300 bg-white' : 'border-white bg-white/90'
             }`}
           >
@@ -215,7 +215,7 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
         <button
           type="button"
           onClick={() => setVisibleCount((count) => count + 3)}
-          className="mt-4 w-full rounded-[1.6rem] border border-emerald-200 bg-white/90 px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.08)]"
+          className="mt-4 w-full rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_6px_14px_rgba(15,118,110,0.06)]"
         >
           진료 기록 더보기
         </button>
@@ -354,65 +354,91 @@ export function MyPetPage() {
     }
 
     deleteMedicalRecord(recordId);
+    setExpandedRecordId('');
+  }
+
+  if (expandedRecord && selectedPet) {
+    return (
+      <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
+
+        <div className="relative z-10">
+          <header className="flex min-h-[14rem] items-start pt-7">
+            <button
+              type="button"
+              onClick={() => setExpandedRecordId('')}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 text-emerald-700 shadow-[0_8px_18px_rgba(15,118,110,0.14)]"
+              aria-label="진료 기록 목록으로 돌아가기"
+            >
+              <Icon name="chevron" className="h-5 w-5 rotate-180" />
+            </button>
+          </header>
+
+          <section className="mt-2">
+            <RecordDetailCard
+              record={expandedRecord}
+              hospitalNames={hospitalNames}
+              actionSlot={
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDraftRecord(null);
+                      setEditingRecord(expandedRecord);
+                      setRecordEditorOpen(true);
+                    }}
+                    className="rounded-lg bg-emerald-50 p-2 text-emerald-700"
+                    aria-label="진료 기록 수정"
+                  >
+                    <Icon name="edit" className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteRecord(expandedRecord.id)}
+                    className="rounded-lg bg-rose-50 p-2 text-rose-500"
+                    aria-label="진료 기록 삭제"
+                  >
+                    <Icon name="trash" className="h-4 w-4" />
+                  </button>
+                </>
+              }
+              onOpenReview={
+                expandedRecordHasReview
+                  ? undefined
+                  : () => startRecordToReview(expandedRecord, selectedPet)
+              }
+            />
+          </section>
+
+          <RecordEditor
+            key={`${editingRecord?.id ?? draftRecord?.id ?? 'new'}-${recordEditorOpen ? 'open' : 'closed'}`}
+            open={recordEditorOpen}
+            record={editingRecord}
+            draft={draftRecord}
+            pets={pets}
+            hospitals={hospitals}
+            onClose={() => {
+              setRecordEditorOpen(false);
+              setEditingRecord(null);
+              setDraftRecord(null);
+              if (location.state) {
+                navigate(location.pathname, { replace: true, state: null });
+              }
+            }}
+            onSave={saveMedicalRecord}
+          />
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-[#18b996]" />
-      <div className="relative">
-        <section className="flex min-h-[12rem] flex-col justify-center pb-4 text-white">
-          <h1 className="text-[2.2rem] font-semibold tracking-[-0.03em]">마이 펫</h1>
-          <AnimalTabs
-            className="mt-11"
-            value={selectedAnimal}
-            onChange={(nextAnimal) => {
-              setSelectedAnimal(nextAnimal);
-              setExpandedRecordId('');
-            }}
-            counts={petCounts}
-          />
-        </section>
-
-        <section className="mt-2">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-slate-900">내 반려동물</h2>
-            <div className="flex gap-2">
-              {selectedPet ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingPet(selectedPet);
-                    setPetEditorOpen(true);
-                  }}
-                  className="rounded-full bg-white/85 px-4 py-2 text-sm font-medium text-emerald-700"
-                >
-                  수정
-                </button>
-              ) : null}
-              {selectedPet ? (
-                <button
-                  type="button"
-                  onClick={handleDeleteSelectedPet}
-                  className="rounded-full bg-rose-50 px-4 py-2 text-sm font-medium text-rose-600"
-                >
-                  삭제
-                </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingPet(null);
-                  setPetEditorOpen(true);
-                }}
-                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
-              >
-                + 등록
-              </button>
-            </div>
-          </div>
-
+      <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
+      <div className="relative z-10">
+        <section className="flex min-h-[14rem] flex-col justify-start pb-5 pt-7 text-white">
+          <h1 className="mb-2 text-[2rem] font-semibold">마이 펫</h1>
           <SearchBar
-            className="mt-4"
             value={petSearchText}
             onValueChange={(nextValue) => {
               setPetSearchText(nextValue);
@@ -428,7 +454,54 @@ export function MyPetPage() {
             }}
             clearLabel="반려동물 검색 지우기"
           />
+          <AnimalTabs
+            className="mt-3"
+            value={selectedAnimal}
+            onChange={(nextAnimal) => {
+              setSelectedAnimal(nextAnimal);
+              setExpandedRecordId('');
+            }}
+            counts={petCounts}
+          />
+        </section>
 
+        <section className="mt-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-slate-900">내 반려동물</h2>
+            <div className="flex gap-2">
+              {selectedPet ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingPet(selectedPet);
+                    setPetEditorOpen(true);
+                  }}
+                  className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-emerald-700"
+                >
+                  수정
+                </button>
+              ) : null}
+              {selectedPet ? (
+                <button
+                  type="button"
+                  onClick={handleDeleteSelectedPet}
+                  className="rounded-lg bg-rose-50 px-4 py-2 text-sm font-medium text-rose-600"
+                >
+                  삭제
+                </button>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingPet(null);
+                  setPetEditorOpen(true);
+                }}
+                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
+              >
+                + 등록
+              </button>
+            </div>
+          </div>
           <PetCards
             key={`pets-${selectedAnimal}-${filteredPets.length}`}
             pets={filteredPets}
@@ -455,12 +528,7 @@ export function MyPetPage() {
                 setEditingRecord(null);
                 setRecordEditorOpen(true);
               }}
-              disabled={!selectedPet}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
-                selectedPet
-                  ? 'bg-emerald-600 text-white'
-                  : 'cursor-not-allowed bg-slate-200 text-slate-400'
-              }`}
+              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
             >
               + 기록 추가
             </button>
@@ -475,14 +543,14 @@ export function MyPetPage() {
               onSelect={setExpandedRecordId}
             />
           ) : (
-            <div className="mt-4 rounded-[1.8rem] bg-white/90 px-4 py-8 text-center shadow-[0_14px_35px_rgba(15,118,110,0.08)]">
+            <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
               <p className="text-base font-semibold text-slate-800">반려동물을 선택해주세요.</p>
               <p className="mt-2 text-sm text-slate-500">선택한 반려동물의 진료 기록이 여기에 보여요.</p>
             </div>
           )}
 
           {expandedRecord && selectedPet ? (
-            <div className="mt-5 rounded-[2rem] bg-white p-5 shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
+            <div className="mt-5 rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_8px_20px_rgba(15,118,110,0.08)]">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-sm text-slate-400">{formatDate(expandedRecord.date)}</p>
@@ -498,14 +566,14 @@ export function MyPetPage() {
                       setEditingRecord(expandedRecord);
                       setRecordEditorOpen(true);
                     }}
-                    className="rounded-full bg-emerald-50 p-2 text-emerald-700"
+                    className="rounded-lg bg-emerald-50 p-2 text-emerald-700"
                   >
                     <Icon name="edit" className="h-4 w-4" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDeleteRecord(expandedRecord.id)}
-                    className="rounded-full bg-rose-50 p-2 text-rose-500"
+                    className="rounded-lg bg-rose-50 p-2 text-rose-500"
                   >
                     <Icon name="trash" className="h-4 w-4" />
                   </button>
@@ -513,22 +581,22 @@ export function MyPetPage() {
               </div>
 
               <div className="mt-4 grid gap-3 text-sm text-slate-600">
-                <div className="rounded-2xl bg-emerald-50/70 p-4">
+                <div className="rounded-lg bg-emerald-50/70 p-4">
                   <p className="text-xs text-slate-400">병원</p>
                   <p className="mt-1 font-medium text-slate-800">
                     {hospitalNames[expandedRecord.hospitalId]}
                   </p>
                 </div>
-                <div className="rounded-2xl bg-emerald-50/70 p-4">
+                <div className="rounded-lg bg-emerald-50/70 p-4">
                   <p className="text-xs text-slate-400">수의사 소견</p>
                   <p className="mt-1 leading-6 text-slate-800">{expandedRecord.veterinarianNote}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl bg-emerald-50/70 p-4">
+                  <div className="rounded-lg bg-emerald-50/70 p-4">
                     <p className="text-xs text-slate-400">처방</p>
                     <p className="mt-1 text-slate-800">{expandedRecord.prescription || '없음'}</p>
                   </div>
-                  <div className="rounded-2xl bg-emerald-50/70 p-4">
+                  <div className="rounded-lg bg-emerald-50/70 p-4">
                     <p className="text-xs text-slate-400">진료 비용</p>
                     <p
                       className="mt-1 overflow-hidden whitespace-nowrap text-slate-800"
@@ -538,7 +606,7 @@ export function MyPetPage() {
                     </p>
                   </div>
                 </div>
-                <div className="rounded-2xl bg-emerald-50/70 p-4">
+                <div className="rounded-lg bg-emerald-50/70 p-4">
                   <p className="text-xs text-slate-400">메모</p>
                   <p className="mt-1 leading-6 text-slate-800">
                     {expandedRecord.memo || '아직 메모가 없어요.'}
@@ -547,14 +615,14 @@ export function MyPetPage() {
               </div>
 
               {expandedRecordHasReview ? (
-                <p className="mt-5 rounded-2xl bg-slate-100 px-4 py-3 text-center text-sm font-medium text-slate-600">
+                <p className="mt-5 rounded-lg bg-slate-100 px-4 py-3 text-center text-sm font-medium text-slate-600">
                   이미 이 기록으로 작성한 리뷰가 있어요.
                 </p>
               ) : (
                 <button
                   type="button"
                   onClick={() => startRecordToReview(expandedRecord, selectedPet)}
-                  className="mt-5 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
+                  className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
                 >
                   이 기록으로 리뷰 작성
                 </button>
@@ -587,7 +655,7 @@ export function MyPetPage() {
                     setExpandedRecordId(record.id);
                     setAllRecordsOpen(false);
                   }}
-                  className="w-full rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700"
+                  className="w-full rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700"
                 >
                   이 기록 선택하기
                 </button>
@@ -613,7 +681,6 @@ export function MyPetPage() {
           draft={draftRecord}
           pets={pets}
           hospitals={hospitals}
-          presetPetId={selectedPet?.id}
           onClose={() => {
             setRecordEditorOpen(false);
             setEditingRecord(null);
