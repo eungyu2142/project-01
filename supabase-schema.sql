@@ -94,6 +94,7 @@ create table if not exists medical_records (
   prescription text not null default '',
   cost integer,
   memo text not null default '',
+  image_urls jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now()
 );
 

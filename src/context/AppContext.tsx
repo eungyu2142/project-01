@@ -765,6 +765,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           prescription: input.medicine,
           cost: input.cost,
           memo: input.saveToRecordMemo?.trim() ?? '',
+          imageUrls: input.imageUrls,
         };
 
         setMedicalRecords((current) =>
@@ -869,6 +870,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       prescription: input.prescription,
       cost: input.cost,
       memo: input.memo,
+      imageUrls: input.imageUrls,
     };
 
     setMedicalRecords((current) => {
@@ -899,7 +901,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         tags: input.saveToReviewTags ?? [],
         customTags: [],
         body: input.saveToReviewBody?.trim() || input.memo,
-        imageUrls: [],
+        imageUrls: input.imageUrls,
         rating: input.saveToReviewRating ?? 5,
         likes: 0,
         liked: false,
@@ -936,6 +938,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         input.veterinarianNote?.trim() ||
         input.prescription?.trim() ||
         input.memo?.trim() ||
+        (input.imageUrls && input.imageUrls.length > 0) ||
         (typeof input.cost === 'number' && Number.isFinite(input.cost)),
     );
 

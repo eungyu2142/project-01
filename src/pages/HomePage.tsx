@@ -449,6 +449,7 @@ export function HomePage() {
                     state: {
                       hospitalId: selectedHospital.id,
                       animalType: selectedAnimal,
+                      returnTo: '/',
                     },
                   })
                 }
@@ -468,6 +469,7 @@ export function HomePage() {
                       hospitalId: selectedHospital.id,
                       animalType: selectedAnimal === 'all' ? undefined : selectedAnimal,
                       openComposer: true,
+                      returnTo: '/',
                     },
                   })
                 }

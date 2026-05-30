@@ -35,6 +35,7 @@ interface MedicalRecordRow {
   prescription: string;
   cost: number | null;
   memo: string;
+  image_urls: string[];
 }
 
 interface ReviewRow {
@@ -138,6 +139,7 @@ function toMedicalRecordRow(userId: string, record: MedicalRecord): MedicalRecor
     prescription: record.prescription,
     cost: record.cost,
     memo: record.memo,
+    image_urls: record.imageUrls,
   };
 }
 
@@ -152,6 +154,7 @@ function fromMedicalRecordRow(row: MedicalRecordRow): MedicalRecord {
     prescription: row.prescription,
     cost: row.cost,
     memo: row.memo,
+    imageUrls: row.image_urls ?? [],
   };
 }
 

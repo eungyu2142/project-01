@@ -16,6 +16,7 @@ import type { AnimalFilter, MedicalRecord, MedicalRecordDraft, Pet } from '../ty
 interface MyPetRouteState {
   openRecordEditor?: boolean;
   draftRecord?: MedicalRecordDraft;
+  returnTo?: string;
 }
 
 interface PetCardsProps {
@@ -72,32 +73,43 @@ function RecordDetailCard({
         {actionSlot ? <div className="flex gap-2">{actionSlot}</div> : null}
       </div>
 
-      <div className="mt-4 grid gap-3 text-sm text-slate-600">
-        <div className="rounded-lg bg-emerald-50/70 p-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-600">
+        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
           <p className="text-xs text-slate-400">병원</p>
           <p className="mt-1 font-medium text-slate-800">{hospitalNames[record.hospitalId]}</p>
         </div>
-        <div className="rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">수의사 소견</p>
+        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
+          <p className="text-xs text-slate-400">수의사 의견</p>
           <p className="mt-1 leading-6 text-slate-800">{record.veterinarianNote}</p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-emerald-50/70 p-4">
-            <p className="text-xs text-slate-400">처방</p>
-            <p className="mt-1 text-slate-800">{record.prescription || '없음'}</p>
-          </div>
-          <div className="rounded-lg bg-emerald-50/70 p-4">
-            <p className="text-xs text-slate-400">진료 비용</p>
-            <p className="mt-1 overflow-hidden whitespace-nowrap text-slate-800" title={formatCurrency(record.cost)}>
-              {truncateWithDots(formatCurrency(record.cost))}
-            </p>
-          </div>
+        <div className="min-w-0 rounded-lg bg-emerald-50/70 p-4">
+          <p className="text-xs text-slate-400">처방</p>
+          <p className="mt-1 break-words text-slate-800">{record.prescription || '없음'}</p>
         </div>
-        <div className="rounded-lg bg-emerald-50/70 p-4">
+        <div className="min-w-0 rounded-lg bg-emerald-50/70 p-4">
+          <p className="text-xs text-slate-400">진료 비용</p>
+          <p className="mt-1 overflow-hidden whitespace-nowrap text-slate-800" title={formatCurrency(record.cost)}>
+            {truncateWithDots(formatCurrency(record.cost))}
+          </p>
+        </div>
+        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
           <p className="text-xs text-slate-400">메모</p>
           <p className="mt-1 leading-6 text-slate-800">{record.memo || '아직 메모가 없어요'}</p>
         </div>
       </div>
+
+      {(record.imageUrls ?? []).length > 0 ? (
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {(record.imageUrls ?? []).map((imageUrl) => (
+            <img
+              key={imageUrl}
+              src={imageUrl}
+              alt="진료 기록 이미지"
+              className="h-24 w-full rounded-lg object-cover"
+            />
+          ))}
+        </div>
+      ) : null}
 
       {onOpenReview ? (
         <button
@@ -241,6 +253,7 @@ export function MyPetPage() {
   const [recordEditorOpen, setRecordEditorOpen] = useState(Boolean(routeState?.openRecordEditor));
   const [editingRecord, setEditingRecord] = useState<MedicalRecord | null>(null);
   const [draftRecord, setDraftRecord] = useState<MedicalRecordDraft | null>(routeState?.draftRecord ?? null);
+  const [returnTo] = useState(routeState?.returnTo ?? '');
   const [allRecordsOpen, setAllRecordsOpen] = useState(false);
   const [expandedRecordId, setExpandedRecordId] = useState('');
 
@@ -320,6 +333,7 @@ export function MyPetPage() {
         hospitalId: record.hospitalId,
         animalType: pet.animalType,
         openComposer: true,
+        returnTo: returnTo || '/mypets',
         draft: {
           hospitalId: record.hospitalId,
           petId: record.petId,
@@ -328,6 +342,7 @@ export function MyPetPage() {
           cost: record.cost,
           medicine: record.prescription,
           body: record.memo,
+          imageUrls: record.imageUrls ?? [],
         },
       },
     });
@@ -356,6 +371,21 @@ export function MyPetPage() {
 
     deleteMedicalRecord(recordId);
     setExpandedRecordId('');
+  }
+
+  function closeRecordEditor() {
+    setRecordEditorOpen(false);
+    setEditingRecord(null);
+    setDraftRecord(null);
+
+    if (returnTo) {
+      navigate(returnTo, { replace: true });
+      return;
+    }
+
+    if (location.state) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
   }
 
   if (expandedRecord) {
@@ -419,14 +449,7 @@ export function MyPetPage() {
             draft={draftRecord}
             pets={pets}
             hospitals={hospitals}
-            onClose={() => {
-              setRecordEditorOpen(false);
-              setEditingRecord(null);
-              setDraftRecord(null);
-              if (location.state) {
-                navigate(location.pathname, { replace: true, state: null });
-              }
-            }}
+            onClose={closeRecordEditor}
             onSave={saveMedicalRecord}
           />
         </div>
@@ -509,7 +532,7 @@ export function MyPetPage() {
             pets={filteredPets}
             selectedPetId={selectedPetId}
             onSelect={(petId) => {
-              setSelectedPetId(petId);
+              setSelectedPetId((current) => (current === petId ? '' : petId));
               setExpandedRecordId('');
             }}
           />
@@ -602,14 +625,7 @@ export function MyPetPage() {
           draft={draftRecord}
           pets={pets}
           hospitals={hospitals}
-          onClose={() => {
-            setRecordEditorOpen(false);
-            setEditingRecord(null);
-            setDraftRecord(null);
-            if (location.state) {
-              navigate(location.pathname, { replace: true, state: null });
-            }
-          }}
+          onClose={closeRecordEditor}
           onSave={saveMedicalRecord}
         />
       </div>

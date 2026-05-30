@@ -159,6 +159,24 @@ export function ProfilePage() {
     }
   }
 
+  function openLikedHospitalOnMap(hospitalId: string) {
+    setSelectedActivityTarget(null);
+    navigate('/', {
+      state: {
+        hospitalId,
+      },
+    });
+  }
+
+  function openLikedReviewDetail(reviewId: string) {
+    setSelectedActivityTarget(null);
+    navigate(`/reviews/${encodeURIComponent(reviewId)}`, {
+      state: {
+        returnTo: '/profile',
+      },
+    });
+  }
+
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f6fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
@@ -359,13 +377,18 @@ export function ProfilePage() {
               {selectedActivityTarget === 'likedHospitals' ? (
                 likedHospitals.length > 0 ? (
                   likedHospitals.map((hospital) => (
-                    <div key={hospital.id} className="flex items-center justify-between rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
+                    <button
+                      key={hospital.id}
+                      type="button"
+                      onClick={() => openLikedHospitalOnMap(hospital.id)}
+                      className="flex w-full items-center justify-between rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4 text-left transition active:scale-[0.99]"
+                    >
                       <div className="min-w-0">
                         <p className="truncate font-semibold text-slate-900">{hospital.name}</p>
                         <p className="mt-1 truncate text-sm text-slate-500">{hospital.address}</p>
                       </div>
                       <Icon name="heart" className="h-5 w-5 shrink-0 text-rose-500" />
-                    </div>
+                    </button>
                   ))
                 ) : (
                   <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 좋아요한 병원이 없어요.</p>
@@ -375,16 +398,26 @@ export function ProfilePage() {
               {selectedActivityTarget === 'likedReviews' ? (
                 likedReviews.length > 0 ? (
                   likedReviews.map((review) => (
-                    <div key={review.id} className="rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4">
+                    <button
+                      key={review.id}
+                      type="button"
+                      onClick={() => openLikedReviewDetail(review.id)}
+                      className="w-full rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4 text-left transition active:scale-[0.99]"
+                    >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <p className="font-semibold text-slate-900">{review.petName} 리뷰</p>
                           <p className="mt-1 truncate text-sm text-slate-500">{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
-                          <p className="mt-2 line-clamp-2 text-sm text-slate-500">{review.body || review.diagnosis}</p>
+                          <div className="mt-2 space-y-1.5 text-sm text-slate-700">
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">동물 종</span>{review.species}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병원</span>{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병명</span>{review.diagnosis || '미입력'}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">처방</span>{review.medicine}</p>
+                          </div>
                         </div>
                         <Icon name="star" className="h-5 w-5 shrink-0 text-amber-500" />
                       </div>
-                    </div>
+                    </button>
                   ))
                 ) : (
                   <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 좋아요한 리뷰가 없어요.</p>
@@ -403,7 +436,7 @@ export function ProfilePage() {
                           {draft.updatedAt ? <p className="mt-2 text-xs text-slate-400">최근 저장 {formatDate(draft.updatedAt)}</p> : null}
                         </div>
                         <div className="flex shrink-0 gap-2">
-                          <button type="button" onClick={() => navigate('/reviews', { state: { openComposer: true, draft } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
+                          <button type="button" onClick={() => navigate('/reviews', { state: { openComposer: true, draft, returnTo: '/profile' } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
                           <button type="button" onClick={() => deleteReviewDraft(draft.id ?? '')} className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500">삭제</button>
                         </div>
                       </div>
@@ -426,7 +459,7 @@ export function ProfilePage() {
                           <p className="mt-2 text-xs text-slate-400">최근 저장 {formatDate(draft.updatedAt)}</p>
                         </div>
                         <div className="flex shrink-0 gap-2">
-                          <button type="button" onClick={() => navigate('/mypets', { state: { openRecordEditor: true, draftRecord: draft } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
+                          <button type="button" onClick={() => navigate('/mypets', { state: { openRecordEditor: true, draftRecord: draft, returnTo: '/profile' } })} className="rounded-full bg-white px-3 py-2 text-xs font-medium text-emerald-700">이어쓰기</button>
                           <button type="button" onClick={() => deleteMedicalRecordDraft(draft.id)} className="rounded-full bg-rose-50 px-3 py-2 text-xs font-medium text-rose-500">삭제</button>
                         </div>
                       </div>

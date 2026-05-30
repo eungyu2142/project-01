@@ -198,8 +198,20 @@ export function ReviewComposer({
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!selectedPet || !hospitalId || !date || !diagnosis.trim()) {
-      setRequiredMessage('필수 항목을 입력해 주세요.');
+    if (!selectedPet || !hospitalId || !date) {
+      setRequiredMessage('반려동물, 병원, 날짜를 입력해 주세요.');
+      setModerationMessage('');
+      return;
+    }
+
+    if (!diagnosis.trim()) {
+      setRequiredMessage('병명을 입력해 주세요.');
+      setModerationMessage('');
+      return;
+    }
+
+    if (!medicine.trim()) {
+      setRequiredMessage('처방을 입력해 주세요.');
       setModerationMessage('');
       return;
     }
@@ -207,6 +219,8 @@ export function ReviewComposer({
     setRequiredMessage('');
 
     const moderation = validateReviewText([
+      { label: 'veterinarian note', value: saveToRecord ? saveToRecordVeterinarianNote : '' },
+      { label: 'record memo', value: saveToRecord ? saveToRecordMemo : '' },
       { label: '진단 항목', value: diagnosis },
       { label: '진료 기록', value: medicine },
       { label: '리뷰 본문', value: body },
@@ -230,7 +244,7 @@ export function ReviewComposer({
       medicine,
       tags,
       customTags,
-      body,
+      body: body.trim(),
       imageUrls,
       rating,
       saveToRecord: saveToRecord && !existingLinkedRecord,
@@ -311,43 +325,6 @@ export function ReviewComposer({
         {moderationMessage ? (
           <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
-          </div>
-        ) : null}
-
-        <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">
-            어떤 아이가 진료받았나요? <span className="text-rose-500">*</span>
-          </span>
-          <select
-            value={petId}
-            onChange={(event) => setPetId(event.target.value)}
-            className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3"
-          >
-            <option value="">반려동물을 선택해 주세요</option>
-            {pets.map((pet) => (
-              <option key={pet.id} value={pet.id}>
-                {pet.name} · {pet.species}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {selectedPet ? (
-          <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50/70 p-4 text-sm text-slate-600">
-            <div>
-              <p className="text-xs text-slate-400">동물 분류</p>
-              <p className="mt-1 font-medium text-slate-800">
-                {getAnimalLabel(selectedPet.animalType)}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-400">반려동물 이름</p>
-              <p className="mt-1 font-medium text-slate-800">{selectedPet.name}</p>
-            </div>
-            <div className="col-span-2">
-              <p className="text-xs text-slate-400">종</p>
-              <p className="mt-1 font-medium text-slate-800">{selectedPet.species}</p>
-            </div>
           </div>
         ) : null}
 
@@ -440,6 +417,43 @@ export function ReviewComposer({
           </div>
         ) : null}
 
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-slate-700">
+            반려동물 <span className="text-rose-500">*</span>
+          </span>
+          <select
+            value={petId}
+            onChange={(event) => setPetId(event.target.value)}
+            className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3"
+          >
+            <option value="">반려동물을 선택해 주세요</option>
+            {pets.map((pet) => (
+              <option key={pet.id} value={pet.id}>
+                {pet.name} · {pet.species}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {selectedPet ? (
+          <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50/70 p-4 text-sm text-slate-600">
+            <div>
+              <p className="text-xs text-slate-400">동물 분류</p>
+              <p className="mt-1 font-medium text-slate-800">
+                {getAnimalLabel(selectedPet.animalType)}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-slate-400">반려동물 이름</p>
+              <p className="mt-1 font-medium text-slate-800">{selectedPet.name}</p>
+            </div>
+            <div className="col-span-2">
+              <p className="text-xs text-slate-400">종</p>
+              <p className="mt-1 font-medium text-slate-800">{selectedPet.species}</p>
+            </div>
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-2 gap-3">
           <label className="block space-y-2">
             <span className="text-sm font-medium text-slate-700">
@@ -468,6 +482,33 @@ export function ReviewComposer({
           </label>
         </div>
 
+        <div className="space-y-2">
+          <span className="text-sm font-medium text-slate-700">사진 첨부</span>
+          <label className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-emerald-300 bg-emerald-50/60 px-4 py-4 text-sm text-emerald-700">
+            <Icon name="camera" className="h-5 w-5" />
+            <span>최대 3장 업로드</span>
+            <input type="file" accept="image/*" multiple className="hidden" onChange={handleImages} />
+          </label>
+          {imageUrls.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2">
+              {imageUrls.map((imageUrl) => (
+                <div key={imageUrl} className="relative overflow-hidden rounded-lg">
+                  <img src={imageUrl} alt="리뷰 미리보기" className="h-20 w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setImageUrls((current) => current.filter((item) => item !== imageUrl))
+                    }
+                    className="absolute right-2 top-2 rounded-md bg-white/90 px-2 py-1 text-xs"
+                  >
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
         <label className="block space-y-2">
           <span className="text-sm font-medium text-slate-700">
             병명 <span className="text-rose-500">*</span>
@@ -482,7 +523,9 @@ export function ReviewComposer({
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">처방</span>
+          <span className="text-sm font-medium text-slate-700">
+            처방 <span className="text-rose-500">*</span>
+          </span>
           <input
             type="text"
             value={medicine}
@@ -541,33 +584,6 @@ export function ReviewComposer({
           />
         </label>
 
-        <div className="space-y-2">
-          <span className="text-sm font-medium text-slate-700">사진 첨부</span>
-          <label className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-emerald-300 bg-emerald-50/60 px-4 py-4 text-sm text-emerald-700">
-            <Icon name="camera" className="h-5 w-5" />
-            <span>최대 3장 업로드</span>
-            <input type="file" accept="image/*" multiple className="hidden" onChange={handleImages} />
-          </label>
-          {imageUrls.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2">
-              {imageUrls.map((imageUrl) => (
-                <div key={imageUrl} className="relative overflow-hidden rounded-lg">
-                  <img src={imageUrl} alt="리뷰 미리보기" className="h-20 w-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setImageUrls((current) => current.filter((item) => item !== imageUrl))
-                    }
-                    className="absolute right-2 top-2 rounded-md bg-white/90 px-2 py-1 text-xs"
-                  >
-                    삭제
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
-
         {existingLinkedRecord ? (
           <div className="rounded-lg bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
             이미 같은 진료 기록이 있어요.
@@ -580,14 +596,14 @@ export function ReviewComposer({
               onChange={(event) => setSaveToRecord(event.target.checked)}
               className="h-4 w-4 accent-emerald-600"
             />
-            <span>진료 기록에도 저장하기</span>
+            <span>진료 기록에도 추가하기</span>
           </label>
         )}
 
         {saveToRecord && !existingLinkedRecord ? (
-          <div className="space-y-3 rounded-lg border border-emerald-100 bg-white/80 p-4">
+          <div className="space-y-4 rounded-lg border border-emerald-100 bg-white/80 p-4">
             <label className="block space-y-2">
-              <span className="text-sm font-medium text-slate-700">수의사 소견</span>
+              <span className="text-sm font-medium text-slate-700">수의사의 의견</span>
               <textarea
                 rows={3}
                 value={saveToRecordVeterinarianNote}
@@ -595,10 +611,11 @@ export function ReviewComposer({
                 className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
               />
             </label>
+
             <label className="block space-y-2">
-              <span className="text-sm font-medium text-slate-700">기록 메모</span>
+              <span className="text-sm font-medium text-slate-700">메모</span>
               <textarea
-                rows={3}
+                rows={4}
                 value={saveToRecordMemo}
                 onChange={(event) => setSaveToRecordMemo(event.target.value)}
                 className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"

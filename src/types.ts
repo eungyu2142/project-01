@@ -84,6 +84,7 @@ export interface MedicalRecord {
   prescription: string;
   cost: number | null;
   memo: string;
+  imageUrls: string[];
 }
 
 export interface Review {
@@ -152,6 +153,7 @@ export interface MedicalRecordInput {
   prescription: string;
   cost: number | null;
   memo: string;
+  imageUrls: string[];
   saveToReview?: boolean;
   saveToReviewBody?: string;
   saveToReviewRating?: number;
@@ -185,5 +187,6 @@ export interface MedicalRecordDraft {
   prescription?: string;
   cost?: number | null;
   memo?: string;
+  imageUrls?: string[];
   updatedAt: string;
 }

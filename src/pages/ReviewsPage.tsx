@@ -17,12 +17,17 @@ interface ReviewRouteState {
   animalType?: AnimalFilter;
   openComposer?: boolean;
   draft?: ReviewDraft;
+  returnTo?: string;
 }
 
 type ReviewSort = 'popular' | 'latest';
 
 const compactBadgeClass = 'inline-flex min-h-7 items-center rounded-md px-2 py-1 text-xs font-semibold leading-none';
 const spaciousBadgeClass = 'inline-flex h-8 items-center rounded-md px-3 text-sm font-semibold leading-none';
+const summaryRowClass = 'rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700';
+const summaryLabelClass = 'mr-2 font-semibold text-slate-500';
+const summaryHospitalRowClass = 'rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700';
+const summaryHospitalLabelClass = 'mr-2 font-semibold text-emerald-600';
 
 interface ReviewCardProps {
   review: Review;
@@ -93,7 +98,6 @@ function ReviewPreviewCard({
 }: ReviewPreviewCardProps) {
   const diagnosisLabel = review.diagnosis.trim();
   const treatmentLabel = review.medicine.trim();
-  const hasSummaryDetails = Boolean(diagnosisLabel || treatmentLabel);
   const reviewTags = [...review.tags, ...review.customTags];
 
   return (
@@ -119,51 +123,24 @@ function ReviewPreviewCard({
             <span className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
               {getAnimalLabel(review.animalType)}
             </span>
-            <span className={`${compactBadgeClass} bg-slate-100 text-slate-600`}>
-              {review.species}
-            </span>
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                onOpenHospital();
-              }}
-              className={`${compactBadgeClass} max-w-full truncate bg-sky-50 text-sky-700 underline decoration-sky-300 underline-offset-2`}
-              title={hospitalName}
-            >
-              {hospitalName}
-            </button>
           </div>
 
-          <p className="mt-3 text-sm leading-6 text-slate-700">
-            <span className="font-bold text-emerald-700">{review.species}</span>이(가){' '}
-            {diagnosisLabel ? (
-              <>
-                <span className="font-bold text-rose-600">{diagnosisLabel}</span>(으)로{' '}
-              </>
-            ) : null}
+          <div className="mt-3 space-y-1.5">
             <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation();
                 onOpenHospital();
               }}
-              className="font-bold text-sky-700 underline decoration-sky-300 underline-offset-2"
+              className={`${summaryHospitalRowClass} block w-full truncate text-left underline decoration-emerald-300 underline-offset-2`}
+              title={hospitalName}
             >
-              {hospitalName}
+              <span className={summaryHospitalLabelClass}>병원</span>{hospitalName}
             </button>
-            {treatmentLabel ? (
-              <>
-                을 방문했고, <span className="font-bold text-amber-700">{treatmentLabel}</span>을(를) 받은
-                리뷰입니다.
-              </>
-            ) : (
-              <>을 방문한 리뷰입니다.</>
-            )}
-            {!hasSummaryDetails ? (
-              <span className="ml-1 font-bold text-slate-500">아무 정보 없음</span>
-            ) : null}
-          </p>
+            <p className={summaryRowClass}><span className={summaryLabelClass}>동물 종</span>{review.species}</p>
+            <p className={summaryRowClass}><span className={summaryLabelClass}>병명</span>{diagnosisLabel || '미입력'}</p>
+            <p className={summaryRowClass}><span className={summaryLabelClass}>처방</span>{treatmentLabel}</p>
+          </div>
 
           {reviewTags.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -230,10 +207,14 @@ function ReviewCard({
   onDelete,
   onEdit,
 }: ReviewCardProps) {
+  const diagnosisLabel = review.diagnosis.trim();
+  const treatmentLabel = review.medicine.trim();
+  const reviewTags = [...review.tags, ...review.customTags];
+
   return (
     <article
       className={`rounded-lg border border-emerald-100 bg-white shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
-        spacious ? 'flex max-h-[calc(100dvh-18rem)] flex-col p-6 sm:max-h-[calc(100dvh-20rem)]' : 'p-4'
+        spacious ? 'flex max-h-[calc(100dvh-13rem)] flex-col p-5 sm:max-h-[calc(100dvh-15rem)]' : 'p-4'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -242,18 +223,10 @@ function ReviewCard({
             <span className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-emerald-100 text-emerald-700`}>
               {getAnimalLabel(review.animalType)}
             </span>
-            <span className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-slate-100 text-slate-600`}>{review.species}</span>
-            <span className={`${spacious ? 'inline-flex h-8 items-center text-sm leading-none' : 'inline-flex min-h-7 items-center text-xs leading-none'} text-slate-400`}>{review.petName}</span>
           </div>
 
-          {showHospitalName ? (
-            <h3 className={`${spacious ? 'mt-5 text-2xl leading-8' : 'mt-3 text-base'} font-semibold text-slate-900`} title={hospitalName}>
-              {hospitalName}
-            </h3>
-          ) : null}
-
           <p
-            className={`${showHospitalName ? 'mt-2' : 'mt-3'} ${spacious ? 'text-lg' : 'text-sm'} text-slate-500`}
+            className={`mt-3 ${spacious ? 'text-lg' : 'text-sm'} text-slate-500`}
             title={`${formatDate(review.date)} · ${formatCurrency(review.cost)}`}
           >
             {formatDate(review.date)} · {formatCurrency(review.cost)}
@@ -295,15 +268,33 @@ function ReviewCard({
         </div>
       </div>
 
-      <div className={spacious ? 'min-h-0 overflow-y-auto pr-1' : undefined}>
-        <p className={`mt-6 font-semibold text-slate-800 ${spacious ? 'text-xl leading-8' : 'text-sm'}`} title={review.diagnosis}>
-          {review.diagnosis}
-        </p>
-        <p className={`${spacious ? 'mt-4 text-lg leading-8' : 'mt-2 text-sm leading-6'} text-slate-600`}>{review.body}</p>
+      <div className={spacious ? 'mt-5 min-h-0 overflow-y-auto pr-1' : 'mt-4'}>
+        <div className="space-y-1.5">
+          {showHospitalName ? (
+            <p className={summaryHospitalRowClass}>
+              <span className={summaryHospitalLabelClass}>병원</span>{hospitalName}
+            </p>
+          ) : null}
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>동물 종</span>{review.species}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>병명</span>{diagnosisLabel || '미입력'}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>처방</span>{treatmentLabel || '미입력'}
+          </p>
+        </div>
 
-        {review.tags.length > 0 || review.customTags.length > 0 ? (
+        {review.body.trim() ? (
+          <p className={`${spacious ? 'mt-5 text-base leading-7' : 'mt-4 text-sm leading-6'} whitespace-pre-line text-slate-600`}>
+            {review.body}
+          </p>
+        ) : null}
+
+        {reviewTags.length > 0 ? (
           <div className="mt-4 flex flex-wrap gap-2">
-            {[...review.tags, ...review.customTags].map((tag) => (
+            {reviewTags.map((tag) => (
               <span key={tag} className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-emerald-50 text-emerald-700`}>
                 #{tag}
               </span>
@@ -346,6 +337,7 @@ export function ReviewsPage() {
   const [reviewSort, setReviewSort] = useState<ReviewSort>('latest');
   const [hospitalSearch, setHospitalSearch] = useState('');
   const [composerOpen, setComposerOpen] = useState(Boolean(routeState?.openComposer));
+  const [returnTo] = useState(routeState?.returnTo ?? '');
   const [draft, setDraft] = useState<ReviewDraft | undefined>(() => {
     if (routeState?.draft) {
       return routeState.draft;
@@ -398,30 +390,37 @@ export function ReviewsPage() {
     [reviews, user.id],
   );
 
-  const animalFilteredReviews = useMemo(
+  const countScopedReviews = useMemo(
     () =>
       myReviews
         .filter((review) => (hospitalFilterId ? review.hospitalId === hospitalFilterId : true))
-        .filter((review) => (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal)),
-    [hospitalFilterId, myReviews, selectedAnimal],
+        .filter((review) => {
+          if (!normalizedSearchKeyword) {
+            return true;
+          }
+
+          return matchesReviewSearch(review, hospitalById[review.hospitalId], normalizedSearchKeyword);
+        }),
+    [hospitalById, hospitalFilterId, myReviews, normalizedSearchKeyword],
+  );
+
+  const animalFilteredReviews = useMemo(
+    () =>
+      countScopedReviews.filter((review) =>
+        selectedAnimal === 'all' ? true : review.animalType === selectedAnimal,
+      ),
+    [countScopedReviews, selectedAnimal],
   );
 
   const filteredReviews = useMemo(
     () =>
-      animalFilteredReviews.filter((review) => {
-        if (!normalizedSearchKeyword) {
-          return true;
-        }
-
-        return matchesReviewSearch(review, hospitalById[review.hospitalId], normalizedSearchKeyword);
-      })
-      .sort((left, right) => compareReviews(left, right, reviewSort)),
-    [animalFilteredReviews, hospitalById, normalizedSearchKeyword, reviewSort],
+      animalFilteredReviews.sort((left, right) => compareReviews(left, right, reviewSort)),
+    [animalFilteredReviews, reviewSort],
   );
 
 
   const selectedReview = reviewId ? filteredReviews.find((review) => review.id === reviewId) ?? null : null;
-  const reviewScopeForCounts = myReviews;
+  const reviewScopeForCounts = countScopedReviews;
   const counts = {
     all: reviewScopeForCounts.length,
     reptile: reviewScopeForCounts.filter((review) => review.animalType === 'reptile').length,
@@ -437,14 +436,45 @@ export function ReviewsPage() {
     const exists = filteredReviews.some((review) => review.id === reviewId);
 
     if (!exists) {
-      navigate('/reviews', { replace: true });
+      navigate(returnTo || '/reviews', { replace: true });
     }
-  }, [filteredReviews, navigate, reviewId]);
+  }, [filteredReviews, navigate, returnTo, reviewId]);
 
   function returnToReportList() {
+    if (returnTo) {
+      navigate(returnTo, { replace: true });
+      return;
+    }
+
     setHospitalSearch('');
     setHospitalFilterId('');
     navigate('/reviews');
+  }
+
+  function closeComposer() {
+    setComposerOpen(false);
+    setEditingReview(null);
+    setDraft(undefined);
+
+    if (returnTo) {
+      navigate(returnTo, { replace: true });
+      return;
+    }
+
+    if (location.state) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }
+
+  function openReviewDetail(reviewIdToOpen: string) {
+    const nextPath = `/reviews/${encodeURIComponent(reviewIdToOpen)}`;
+
+    if (returnTo) {
+      navigate(nextPath, { replace: true, state: { returnTo } });
+      return;
+    }
+
+    navigate(nextPath);
   }
 
   function openNewReview() {
@@ -509,14 +539,7 @@ export function ReviewsPage() {
           <ReviewComposer
             key={`${editingReview?.id ?? 'new'}-${draft?.hospitalId ?? 'hospital'}-${draft?.petId ?? 'pet'}-${composerOpen ? 'open' : 'closed'}`}
             open={composerOpen}
-            onClose={() => {
-              setComposerOpen(false);
-              setEditingReview(null);
-              setDraft(undefined);
-              if (location.state) {
-                navigate(location.pathname, { replace: true, state: null });
-              }
-            }}
+            onClose={closeComposer}
             initialDraft={draft}
             editingReview={editingReview}
           />
@@ -602,7 +625,7 @@ export function ReviewsPage() {
                   key={review.id}
                   review={review}
                   hospitalName={hospitalById[review.hospitalId]?.name ?? '이름 없는 병원'}
-                  onOpenReview={() => navigate(`/reviews/${encodeURIComponent(review.id)}`)}
+                  onOpenReview={() => openReviewDetail(review.id)}
                   onOpenHospital={() => openHospitalOnMap(review)}
                   onToggleLike={toggleReviewLike}
                   onEdit={(currentReview) => {
@@ -620,14 +643,7 @@ export function ReviewsPage() {
         <ReviewComposer
           key={`${editingReview?.id ?? 'new'}-${draft?.hospitalId ?? 'hospital'}-${draft?.petId ?? 'pet'}-${composerOpen ? 'open' : 'closed'}`}
           open={composerOpen}
-          onClose={() => {
-            setComposerOpen(false);
-            setEditingReview(null);
-            setDraft(undefined);
-            if (location.state) {
-              navigate(location.pathname, { replace: true, state: null });
-            }
-          }}
+          onClose={closeComposer}
           initialDraft={draft}
           editingReview={editingReview}
         />
