@@ -21,6 +21,9 @@ interface ReviewRouteState {
 
 type ReviewSort = 'popular' | 'latest';
 
+const compactBadgeClass = 'inline-flex min-h-7 items-center rounded-md px-2 py-1 text-xs font-semibold leading-none';
+const spaciousBadgeClass = 'inline-flex h-8 items-center rounded-md px-3 text-sm font-semibold leading-none';
+
 interface ReviewCardProps {
   review: Review;
   hospitalName: string;
@@ -112,11 +115,11 @@ function ReviewPreviewCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap gap-2 text-xs">
-            <span className="rounded-md bg-emerald-50 px-2 py-1 font-semibold text-emerald-700">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
               {getAnimalLabel(review.animalType)}
             </span>
-            <span className="rounded-md bg-slate-100 px-2 py-1 font-semibold text-slate-600">
+            <span className={`${compactBadgeClass} bg-slate-100 text-slate-600`}>
               {review.species}
             </span>
             <button
@@ -125,7 +128,7 @@ function ReviewPreviewCard({
                 event.stopPropagation();
                 onOpenHospital();
               }}
-              className="max-w-full truncate rounded-md bg-sky-50 px-2 py-1 font-semibold text-sky-700 underline decoration-sky-300 underline-offset-2"
+              className={`${compactBadgeClass} max-w-full truncate bg-sky-50 text-sky-700 underline decoration-sky-300 underline-offset-2`}
               title={hospitalName}
             >
               {hospitalName}
@@ -165,7 +168,7 @@ function ReviewPreviewCard({
           {reviewTags.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
               {reviewTags.map((tag) => (
-                <span key={tag} className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
+                <span key={tag} className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
                   #{tag}
                 </span>
               ))}
@@ -230,17 +233,17 @@ function ReviewCard({
   return (
     <article
       className={`rounded-lg border border-emerald-100 bg-white shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
-        spacious ? 'flex min-h-[calc(100dvh-18rem)] flex-col p-6 sm:min-h-[calc(100dvh-20rem)]' : 'p-4'
+        spacious ? 'flex max-h-[calc(100dvh-18rem)] flex-col p-6 sm:max-h-[calc(100dvh-20rem)]' : 'p-4'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className={`flex flex-wrap items-center gap-2 ${spacious ? 'text-sm' : 'text-xs'}`}>
-            <span className={`rounded-md bg-emerald-100 font-semibold text-emerald-700 ${spacious ? 'px-3 py-1.5' : 'px-2 py-1'}`}>
+            <span className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-emerald-100 text-emerald-700`}>
               {getAnimalLabel(review.animalType)}
             </span>
-            <span className={`rounded-md bg-slate-100 text-slate-600 ${spacious ? 'px-3 py-1.5' : 'px-2 py-1'}`}>{review.species}</span>
-            <span className="text-slate-400">{review.petName}</span>
+            <span className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-slate-100 text-slate-600`}>{review.species}</span>
+            <span className={`${spacious ? 'inline-flex h-8 items-center text-sm leading-none' : 'inline-flex min-h-7 items-center text-xs leading-none'} text-slate-400`}>{review.petName}</span>
           </div>
 
           {showHospitalName ? (
@@ -292,33 +295,35 @@ function ReviewCard({
         </div>
       </div>
 
-      <p className={`mt-6 font-semibold text-slate-800 ${spacious ? 'text-xl leading-8' : 'text-sm'}`} title={review.diagnosis}>
-        {review.diagnosis}
-      </p>
-      <p className={`${spacious ? 'mt-4 text-lg leading-8' : 'mt-2 text-sm leading-6'} text-slate-600`}>{review.body}</p>
+      <div className={spacious ? 'min-h-0 overflow-y-auto pr-1' : undefined}>
+        <p className={`mt-6 font-semibold text-slate-800 ${spacious ? 'text-xl leading-8' : 'text-sm'}`} title={review.diagnosis}>
+          {review.diagnosis}
+        </p>
+        <p className={`${spacious ? 'mt-4 text-lg leading-8' : 'mt-2 text-sm leading-6'} text-slate-600`}>{review.body}</p>
 
-      {review.tags.length > 0 || review.customTags.length > 0 ? (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {[...review.tags, ...review.customTags].map((tag) => (
-            <span key={tag} className={`rounded-md bg-emerald-50 text-emerald-700 ${spacious ? 'px-3 py-1.5 text-sm' : 'px-3 py-1 text-xs'}`}>
-              #{tag}
-            </span>
-          ))}
-        </div>
-      ) : null}
+        {review.tags.length > 0 || review.customTags.length > 0 ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {[...review.tags, ...review.customTags].map((tag) => (
+              <span key={tag} className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-emerald-50 text-emerald-700`}>
+                #{tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
 
-      {review.imageUrls.length > 0 ? (
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {review.imageUrls.map((imageUrl) => (
-            <img
-              key={imageUrl}
-              src={imageUrl}
-              alt="리뷰 이미지"
-              className={`${spacious ? 'h-32' : 'h-24'} w-full rounded-lg object-cover`}
-            />
-          ))}
-        </div>
-      ) : null}
+        {review.imageUrls.length > 0 ? (
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {review.imageUrls.map((imageUrl) => (
+              <img
+                key={imageUrl}
+                src={imageUrl}
+                alt="리뷰 이미지"
+                className={`${spacious ? 'h-32' : 'h-24'} w-full rounded-lg object-cover`}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
 
       <div className={`mt-5 flex items-center justify-between gap-3 text-slate-400 ${spacious ? 'text-sm' : 'text-xs'}`}>
         <span className="truncate" title={review.isMine ? currentNickname : review.authorName}>
@@ -337,6 +342,7 @@ export function ReviewsPage() {
   const routeState = location.state as ReviewRouteState | null;
   const { hospitals, reviews, toggleReviewLike, deleteReview, user } = useAppContext();
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>(routeState?.animalType ?? 'all');
+  const [hospitalFilterId, setHospitalFilterId] = useState(routeState?.hospitalId ?? '');
   const [reviewSort, setReviewSort] = useState<ReviewSort>('latest');
   const [hospitalSearch, setHospitalSearch] = useState('');
   const [composerOpen, setComposerOpen] = useState(Boolean(routeState?.openComposer));
@@ -364,14 +370,40 @@ export function ReviewsPage() {
     [hospitals],
   );
 
+  useEffect(() => {
+    if (routeState?.hospitalId) {
+      setHospitalFilterId(routeState.hospitalId);
+      setHospitalSearch(hospitalById[routeState.hospitalId]?.name ?? '');
+    }
+
+    if (routeState?.animalType) {
+      setSelectedAnimal(routeState.animalType);
+    }
+
+    if (routeState?.hospitalId || routeState?.animalType || routeState?.openComposer || routeState?.draft) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [
+    hospitalById,
+    location.pathname,
+    navigate,
+    routeState?.animalType,
+    routeState?.draft,
+    routeState?.hospitalId,
+    routeState?.openComposer,
+  ]);
+
   const myReviews = useMemo(
     () => reviews.filter((review) => review.isMine || review.userId === user.id),
     [reviews, user.id],
   );
 
   const animalFilteredReviews = useMemo(
-    () => myReviews.filter((review) => (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal)),
-    [myReviews, selectedAnimal],
+    () =>
+      myReviews
+        .filter((review) => (hospitalFilterId ? review.hospitalId === hospitalFilterId : true))
+        .filter((review) => (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal)),
+    [hospitalFilterId, myReviews, selectedAnimal],
   );
 
   const filteredReviews = useMemo(
@@ -411,6 +443,7 @@ export function ReviewsPage() {
 
   function returnToReportList() {
     setHospitalSearch('');
+    setHospitalFilterId('');
     navigate('/reviews');
   }
 
@@ -442,10 +475,10 @@ export function ReviewsPage() {
   if (reviewId && selectedReview) {
     return (
       <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[#18b996]" />
 
         <div className="relative z-10">
-          <header className="flex min-h-[14rem] flex-col items-start pt-7">
+          <header className="flex min-h-[7rem] flex-col items-start pt-7">
             <button
               type="button"
               onClick={returnToReportList}
@@ -454,10 +487,9 @@ export function ReviewsPage() {
             >
               <Icon name="chevron" className="h-6 w-6 rotate-180" />
             </button>
-            <h1 className="mt-8 text-[2rem] font-semibold text-white">리뷰</h1>
           </header>
 
-          <section className="mt-6">
+          <section className="mt-2">
             <ReviewCard
               review={selectedReview}
               hospitalName={hospitalById[selectedReview.hospitalId]?.name ?? '이름 없는 병원'}
@@ -508,14 +540,16 @@ export function ReviewsPage() {
               value={hospitalSearch}
               onValueChange={(nextValue) => {
                 setHospitalSearch(nextValue);
+                setHospitalFilterId('');
                 if (reviewId) {
                   navigate('/reviews');
                 }
               }}
-              placeholder="내 리뷰, 종, 태그 검색"
+              placeholder=""
               clearVisible={Boolean(hospitalSearch)}
               onClear={() => {
                 setHospitalSearch('');
+                setHospitalFilterId('');
                 if (reviewId) {
                   navigate('/reviews');
                 }
@@ -524,7 +558,7 @@ export function ReviewsPage() {
             />
           </div>
 
-          <AnimalTabs className="mt-2" value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
+          <AnimalTabs className="mt-3" value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
         </section>
 
         <section className="mt-6">
@@ -580,12 +614,7 @@ export function ReviewsPage() {
                 />
               );
             })
-          ) : (
-            <div className="rounded-lg bg-white/95 px-5 py-10 text-center shadow-[0_18px_50px_rgba(15,118,110,0.10)]">
-              <p className="text-base font-semibold text-slate-800">아직 내가 쓴 리뷰가 없어요</p>
-              <p className="mt-2 text-sm text-slate-500">리뷰를 작성하면 최신순으로 여기에 쌓여요</p>
-            </div>
-          )}
+          ) : null}
         </section>
 
         <ReviewComposer

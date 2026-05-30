@@ -12,6 +12,7 @@ import type {
 } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
+import { reviewTagOptions } from './ReviewComposer';
 
 interface RecordEditorProps {
   open: boolean;
@@ -51,6 +52,10 @@ export function RecordEditor({
         : '',
   );
   const [memo, setMemo] = useState(record?.memo ?? draft?.memo ?? '');
+  const [saveToReview, setSaveToReview] = useState(false);
+  const [reviewBody, setReviewBody] = useState(record?.memo ?? draft?.memo ?? '');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewTags, setReviewTags] = useState<string[]>([]);
   const [moderationMessage, setModerationMessage] = useState('');
   const [requiredMessage, setRequiredMessage] = useState('');
 
@@ -85,11 +90,18 @@ export function RecordEditor({
       return;
     }
 
+    if (saveToReview && !record && !diagnosis.trim()) {
+      setRequiredMessage('리뷰에도 저장하려면 병명을 입력해 주세요.');
+      setModerationMessage('');
+      return;
+    }
+
     const moderation = validateMedicalRecordText([
       { label: '진료 내용', value: diagnosis },
       { label: '수의사 소견', value: veterinarianNote },
       { label: '처방', value: prescription },
       { label: '메모', value: memo },
+      { label: '리뷰 본문', value: saveToReview ? reviewBody : '' },
     ]);
 
     if (!moderation.ok) {
@@ -107,6 +119,10 @@ export function RecordEditor({
       prescription: prescription.trim(),
       cost: costText ? Number(costText.replaceAll(',', '')) : null,
       memo: memo.trim(),
+      saveToReview: saveToReview && !record,
+      saveToReviewBody: reviewBody,
+      saveToReviewRating: reviewRating,
+      saveToReviewTags: reviewTags,
     });
 
     if (draft?.id) {
@@ -158,6 +174,12 @@ export function RecordEditor({
     }
 
     onClose();
+  }
+
+  function toggleReviewTag(tag: string) {
+    setReviewTags((current) =>
+      current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag],
+    );
   }
 
   return (
@@ -225,7 +247,7 @@ export function RecordEditor({
                 setShowHospitalOptions(true);
               }}
               onFocus={() => setShowHospitalOptions(true)}
-              placeholder="병원 이름을 입력해 주세요"
+              placeholder=""
               className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
             />
             {hospitalSearchText ? (
@@ -282,13 +304,15 @@ export function RecordEditor({
         ) : null}
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium">진료 내용</span>
+          <span className="text-sm font-medium">
+            병명 {saveToReview && !record ? <span className="text-rose-500">*</span> : null}
+          </span>
           <input
             type="text"
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-            placeholder="예: 식욕 부진, 영양 상담"
+            placeholder=""
           />
         </label>
 
@@ -323,7 +347,7 @@ export function RecordEditor({
                 setCostText(numberOnly ? Number(numberOnly).toLocaleString('ko-KR') : '');
               }}
               className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-              placeholder="85,000"
+              placeholder=""
             />
           </label>
         </div>
@@ -337,6 +361,68 @@ export function RecordEditor({
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
+
+        {!record ? (
+          <label className="flex items-center gap-3 rounded-lg bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={saveToReview}
+              onChange={(event) => setSaveToReview(event.target.checked)}
+              className="h-4 w-4 accent-emerald-600"
+            />
+            <span>리뷰에도 저장하기</span>
+          </label>
+        ) : null}
+
+        {saveToReview && !record ? (
+          <div className="space-y-4 rounded-lg border border-emerald-100 bg-white/80 p-4">
+            <div className="space-y-2">
+              <span className="text-sm font-medium text-slate-700">리뷰 별점</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setReviewRating(value)}
+                    className={`rounded-md p-2 ${
+                      value <= reviewRating ? 'bg-amber-100 text-amber-500' : 'bg-slate-100 text-slate-400'
+                    }`}
+                  >
+                    <Icon name="star" className="h-5 w-5" />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <span className="text-sm font-medium text-slate-700">리뷰 태그</span>
+              <div className="flex flex-wrap gap-2">
+                {reviewTagOptions.map((tag) => (
+                  <button
+                    key={tag.label}
+                    type="button"
+                    onClick={() => toggleReviewTag(tag.label)}
+                    className={`rounded-md px-3 py-2 text-sm ${
+                      reviewTags.includes(tag.label)
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-emerald-50 text-emerald-700'
+                    }`}
+                  >
+                    <span className="mr-1">{tag.emoji}</span>#{tag.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <label className="block space-y-2">
+              <span className="text-sm font-medium text-slate-700">직접 작성란</span>
+              <textarea
+                rows={4}
+                value={reviewBody}
+                onChange={(event) => setReviewBody(event.target.value)}
+                className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
+              />
+            </label>
+          </div>
+        ) : null}
 
         <div className="grid grid-cols-2 gap-3">
           {!record ? (

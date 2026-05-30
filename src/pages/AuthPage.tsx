@@ -266,7 +266,7 @@ export function AuthPage() {
                     value={nextPassword}
                     onChange={(event) => setNextPassword(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
-                    placeholder="6자 이상"
+                    placeholder=""
                     autoComplete="new-password"
                   />
                   <button
@@ -289,7 +289,7 @@ export function AuthPage() {
                     value={nextPasswordConfirm}
                     onChange={(event) => setNextPasswordConfirm(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
-                    placeholder="비밀번호 다시 입력"
+                    placeholder=""
                     autoComplete="new-password"
                   />
                   <button
@@ -358,7 +358,7 @@ export function AuthPage() {
                       setLoginIdCheckMessage('');
                     }}
                     className="min-w-0 flex-1 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
-                    placeholder="dimi_go"
+                    placeholder=""
                     autoComplete="off"
                     autoCapitalize="none"
                     autoCorrect="off"
@@ -395,7 +395,7 @@ export function AuthPage() {
                   value={nickname}
                   onChange={(event) => setNickname(event.target.value)}
                   className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
-                  placeholder="고디미"
+                  placeholder=""
                   autoComplete="nickname"
                 />
               </label>
@@ -411,7 +411,7 @@ export function AuthPage() {
                 value={identifier}
                 onChange={(event) => setIdentifier(event.target.value)}
                 className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-slate-800"
-                placeholder={mode === 'signin' ? 'dimigo@gmail.com 또는 dimi_go' : 'dimigo@gmail.com'}
+                placeholder=""
                 autoComplete={mode === 'signin' ? 'username' : 'email'}
               />
             </label>
@@ -425,7 +425,7 @@ export function AuthPage() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
-                  placeholder="6자 이상"
+                  placeholder=""
                   autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
                 />
                 <button
@@ -449,7 +449,7 @@ export function AuthPage() {
                     value={passwordConfirm}
                     onChange={(event) => setPasswordConfirm(event.target.value)}
                     className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 pr-12 text-slate-800"
-                    placeholder="비밀번호 다시 입력"
+                    placeholder=""
                     autoComplete="new-password"
                   />
                   <button

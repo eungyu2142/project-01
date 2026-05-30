@@ -276,9 +276,30 @@ export async function loadUserAppData(userId: string) {
   if (medicalRecordsError) throw medicalRecordsError;
   if (reviewsError) throw reviewsError;
 
+  const nextPets = (pets as PetRow[] | null)?.map(fromPetRow) ?? [];
+  const validPetIds = new Set(nextPets.map((pet) => pet.id));
+  const medicalRecordRows = (medicalRecords as MedicalRecordRow[] | null) ?? [];
+  const orphanMedicalRecordIds = medicalRecordRows
+    .filter((record) => !validPetIds.has(record.pet_id))
+    .map((record) => record.id);
+
+  if (orphanMedicalRecordIds.length > 0) {
+    const { error } = await supabase
+      .from('medical_records')
+      .delete()
+      .eq('user_id', userId)
+      .in('id', orphanMedicalRecordIds);
+
+    if (error) throw error;
+  }
+
   return {
-    pets: (pets as PetRow[] | null)?.map(fromPetRow) ?? [],
-    medicalRecords: (medicalRecords as MedicalRecordRow[] | null)?.map(fromMedicalRecordRow) ?? [],
+    pets: nextPets,
+    medicalRecords:
+      medicalRecordRows
+        .filter((record) => validPetIds.has(record.pet_id))
+        .map(fromMedicalRecordRow)
+        .filter((record) => validPetIds.has(record.petId)) ?? [],
     reviews: (reviews as ReviewRow[] | null)?.map(fromReviewRow) ?? [],
   };
 }
@@ -408,6 +429,15 @@ export async function deletePetRemote(petId: string) {
   if (error) throw error;
 }
 
+export async function deleteMedicalRecordsByPetRemote(userId: string, petId: string) {
+  if (!isSupabaseConfigured || !supabase) {
+    return;
+  }
+
+  const { error } = await supabase.from('medical_records').delete().eq('user_id', userId).eq('pet_id', petId);
+  if (error) throw error;
+}
+
 export async function upsertMedicalRecord(userId: string, record: MedicalRecord) {
   if (!isSupabaseConfigured || !supabase) {
     return;
@@ -456,6 +486,15 @@ export async function deleteReviewRemote(reviewId: string) {
   }
 
   const { error } = await supabase.from('reviews').delete().eq('id', reviewId);
+  if (error) throw error;
+}
+
+export async function deleteReviewsByPetRemote(userId: string, petId: string) {
+  if (!isSupabaseConfigured || !supabase) {
+    return;
+  }
+
+  const { error } = await supabase.from('reviews').delete().eq('user_id', userId).eq('pet_id', petId);
   if (error) throw error;
 }
 

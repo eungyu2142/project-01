@@ -107,7 +107,6 @@ export function HomePage() {
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>(routeState?.animalType ?? 'all');
   const [searchText, setSearchText] = useState('');
   const [selectedHospitalId, setSelectedHospitalId] = useState(routeState?.hospitalId ?? '');
-  const [copiedAddressHospitalId, setCopiedAddressHospitalId] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [topCollapsed, setTopCollapsed] = useState(false);
   const currentLocation = user.location;
@@ -159,18 +158,6 @@ export function HomePage() {
       document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, []);
-
-  useEffect(() => {
-    if (!copiedAddressHospitalId) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setCopiedAddressHospitalId((current) => (current === copiedAddressHospitalId ? null : current));
-    }, 1800);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [copiedAddressHospitalId]);
 
   useEffect(() => {
     if (!routeState?.hospitalId) {
@@ -258,28 +245,22 @@ export function HomePage() {
     () => (searchText.trim() ? visibleHospitals.slice(0, 8) : visibleHospitals),
     [searchText, visibleHospitals],
   );
+  const selectedHospital = enrichedDatasetHospitals.find((hospital) => hospital.id === selectedHospitalId);
+  const mapHospitals = useMemo(() => {
+    if (!selectedHospital || visibleHospitals.some((hospital) => hospital.id === selectedHospital.id)) {
+      return visibleHospitals;
+    }
+
+    return [selectedHospital, ...visibleHospitals];
+  }, [selectedHospital, visibleHospitals]);
   const markerReviewCounts = useMemo(
     () =>
-      visibleHospitals.reduce<Record<string, number>>((acc, hospital) => {
+      mapHospitals.reduce<Record<string, number>>((acc, hospital) => {
         acc[hospital.id] = getQualifiedCount(hospitalAnimalCounts[hospital.id], selectedAnimal);
         return acc;
       }, {}),
-    [hospitalAnimalCounts, selectedAnimal, visibleHospitals],
+    [hospitalAnimalCounts, mapHospitals, selectedAnimal],
   );
-
-  useEffect(() => {
-    if (!selectedHospitalId) {
-      return;
-    }
-
-    const exists = visibleHospitals.some((hospital) => hospital.id === selectedHospitalId);
-
-    if (!exists) {
-      setSelectedHospitalId('');
-    }
-  }, [selectedHospitalId, visibleHospitals]);
-
-  const selectedHospital = visibleHospitals.find((hospital) => hospital.id === selectedHospitalId);
   const selectedHospitalReviews = selectedHospital
     ? reviews.filter(
         (review) =>
@@ -302,29 +283,6 @@ export function HomePage() {
     requestCurrentLocation();
   }
 
-  async function handleCopyAddress(hospitalId: string, address: string) {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(address);
-      } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = address;
-        textarea.setAttribute('readonly', '');
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      }
-
-      setCopiedAddressHospitalId(hospitalId);
-    } catch {
-      setCopiedAddressHospitalId(null);
-    }
-  }
-
   const bottomOverlayClass =
     'home-bottom-overlay pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] sm:pb-[calc(env(safe-area-inset-bottom)+8.5rem)]';
 
@@ -332,7 +290,7 @@ export function HomePage() {
     <section className="home-page relative h-full overflow-hidden bg-slate-950">
       <HomeMap
         currentLocation={currentLocation}
-        hospitals={visibleHospitals}
+        hospitals={mapHospitals}
         markerReviewCounts={markerReviewCounts}
         selectedHospitalId={selectedHospitalId}
         onSelectHospital={handleSelectHospital}
@@ -436,17 +394,6 @@ export function HomePage() {
                 <p className="mt-1.5 truncate text-base font-semibold text-slate-900">{selectedHospital.name}</p>
                 <div className="mt-1 flex flex-wrap items-start gap-2">
                   <p className="min-w-0 flex-1 text-sm leading-5 text-slate-600">위치: {selectedHospital.address}</p>
-                  <button
-                    type="button"
-                    onClick={() => handleCopyAddress(selectedHospital.id, selectedHospital.address)}
-                    className={`shrink-0 min-w-[5.5rem] rounded-md px-3 py-1 text-center text-xs font-semibold transition ${
-                      copiedAddressHospitalId === selectedHospital.id
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
-                  >
-                    {copiedAddressHospitalId === selectedHospital.id ? '복사됨' : '주소 복사'}
-                  </button>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">리뷰 {selectedHospitalReviews.length}개</p>
                 <p className="mt-1 text-xs text-slate-500">

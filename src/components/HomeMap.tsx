@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   getNaverMapClientId,
   loadNaverMapSdk,
@@ -105,8 +105,25 @@ export function HomeMap({
   const markersRef = useRef(new Map<string, NaverMarkerInstance>());
   const locationMarkerRef = useRef<NaverMarkerInstance | null>(null);
   const selectedHospitalIdRef = useRef(selectedHospitalId);
+  const currentLocationRef = useRef(currentLocation);
   const followCurrentLocationRef = useRef(true);
   const [phase, setPhase] = useState<MapPhase>(hasClientId ? 'loading' : 'missing-key');
+
+  const centerMapOnCurrentLocation = useCallback(() => {
+    const map = mapRef.current;
+
+    if (!map || !window.naver?.maps) {
+      return;
+    }
+
+    const maps = getNaverMaps();
+    const { lat, lng } = currentLocationRef.current;
+    map.setCenter(new maps.LatLng(lat, lng));
+  }, []);
+
+  useEffect(() => {
+    currentLocationRef.current = currentLocation;
+  }, [currentLocation.lat, currentLocation.lng]);
 
   useEffect(() => {
     selectedHospitalIdRef.current = selectedHospitalId;
@@ -180,6 +197,27 @@ export function HomeMap({
   useEffect(() => {
     const map = mapRef.current;
 
+    if (!map || !window.naver?.maps || phase !== 'ready') {
+      return;
+    }
+
+    const maps = getNaverMaps();
+    const zoomListener = maps.Event.addListener(map, 'zoom_changed', () => {
+      if (selectedHospitalIdRef.current || !followCurrentLocationRef.current) {
+        return;
+      }
+
+      centerMapOnCurrentLocation();
+    });
+
+    return () => {
+      maps.Event.removeListener(zoomListener);
+    };
+  }, [centerMapOnCurrentLocation, phase]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
     if (!map || !window.naver?.maps || phase !== 'ready' || !selectedHospitalId) {
       return;
     }
@@ -201,9 +239,8 @@ export function HomeMap({
       return;
     }
 
-    const maps = getNaverMaps();
-    map.setCenter(new maps.LatLng(currentLocation.lat, currentLocation.lng));
-  }, [currentLocation.lat, currentLocation.lng, phase, selectedHospitalId]);
+    centerMapOnCurrentLocation();
+  }, [centerMapOnCurrentLocation, currentLocation.lat, currentLocation.lng, phase, selectedHospitalId]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -263,8 +300,7 @@ export function HomeMap({
       return;
     }
 
-    const maps = getNaverMaps();
-    map.setCenter(new maps.LatLng(currentLocation.lat, currentLocation.lng));
+    centerMapOnCurrentLocation();
     followCurrentLocationRef.current = true;
     onSelectHospital('');
     onRequestCurrentLocation();
@@ -278,7 +314,7 @@ export function HomeMap({
         <button
           type="button"
           onClick={handleRecenterToCurrentLocation}
-          className="absolute right-4 top-4 z-10 inline-flex items-center gap-2 rounded-md border border-white/80 bg-white/92 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-[0_14px_30px_rgba(15,118,110,0.18)] backdrop-blur"
+          className="absolute bottom-[calc(env(safe-area-inset-bottom)+6.5rem)] left-4 z-10 inline-flex min-h-12 items-center gap-2 rounded-md border border-white/80 bg-white/92 px-5 py-3 text-sm font-semibold text-emerald-700 shadow-[0_14px_30px_rgba(15,118,110,0.18)] backdrop-blur"
         >
           <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth="2">

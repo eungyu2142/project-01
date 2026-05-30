@@ -13,11 +13,10 @@ interface PetEditorProps {
 }
 
 const avatarOptions = ['🐍', '🐹', '🦜', '🦎', '🐢'];
-const ageOptionsByAnimalType = {
-  reptile: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
-  rodent: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
-  bird: ['베이비', '빅베이비', '아성체', '준성체', '성체'],
-} as const;
+
+function getAgeYearsFromLabel(ageLabel: string) {
+  return ageLabel.match(/\d+/)?.[0] ?? '';
+}
 
 export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
   const [name, setName] = useState(pet?.name ?? '');
@@ -26,10 +25,9 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
     pet?.animalType ?? 'reptile',
   );
   const [gender, setGender] = useState<'수컷' | '암컷' | '미상' | '미구분'>(pet?.gender ?? '미상');
-  const [ageLabel, setAgeLabel] = useState(pet?.ageLabel ?? '베이비');
+  const [ageYears, setAgeYears] = useState(() => getAgeYearsFromLabel(pet?.ageLabel ?? ''));
   const [avatar, setAvatar] = useState(pet?.avatar ?? '🐍');
   const [moderationMessage, setModerationMessage] = useState('');
-  const ageOptions = ageOptionsByAnimalType[animalType];
 
   function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -52,7 +50,10 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
 
   function handleAnimalTypeChange(nextAnimalType: AnimalType) {
     setAnimalType(nextAnimalType);
-    setAgeLabel(ageOptionsByAnimalType[nextAnimalType][0]);
+  }
+
+  function handleAgeYearsChange(value: string) {
+    setAgeYears(value.replace(/\D/g, ''));
   }
 
   function handleSubmit(event: FormEvent) {
@@ -77,7 +78,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
       species: species.trim(),
       animalType,
       gender,
-      ageLabel,
+      ageLabel: ageYears ? `${Number(ageYears)}년` : '',
       avatar,
     });
     setModerationMessage('');
@@ -105,7 +106,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             value={name}
             onChange={(event) => setName(event.target.value)}
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-            placeholder="예: 파닥이"
+            placeholder=""
           />
         </label>
 
@@ -116,7 +117,7 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
             value={species}
             onChange={(event) => setSpecies(event.target.value)}
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-            placeholder="예: 레오파드게코"
+            placeholder=""
           />
         </label>
 
@@ -143,24 +144,27 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
               <option value="수컷">수컷</option>
               <option value="암컷">암컷</option>
               <option value="미상">미상</option>
-              <option value="미구분">미구분</option>
             </select>
           </label>
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium">나이 단계</span>
-          <select
-            value={ageLabel}
-            onChange={(event) => setAgeLabel(event.target.value)}
+          <span className="text-sm font-medium">나이(년)</span>
+          <input
+            type="number"
+            inputMode="numeric"
+            min="0"
+            step="1"
+            value={ageYears}
+            onChange={(event) => handleAgeYearsChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (['e', 'E', '+', '-', '.'].includes(event.key)) {
+                event.preventDefault();
+              }
+            }}
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-          >
-            {ageOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            placeholder=""
+          />
         </label>
 
         <div className="space-y-2">

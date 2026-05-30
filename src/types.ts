@@ -128,6 +128,7 @@ export interface ReviewInput {
   imageUrls: string[];
   rating: number;
   saveToRecord: boolean;
+  saveToRecordVeterinarianNote?: string;
   saveToRecordMemo?: string;
 }
 
@@ -151,6 +152,10 @@ export interface MedicalRecordInput {
   prescription: string;
   cost: number | null;
   memo: string;
+  saveToReview?: boolean;
+  saveToReviewBody?: string;
+  saveToReviewRating?: number;
+  saveToReviewTags?: string[];
 }
 
 export interface ReviewDraft {

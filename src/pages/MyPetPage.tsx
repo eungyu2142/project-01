@@ -27,6 +27,7 @@ interface PetCardsProps {
 interface RecordCardsProps {
   records: MedicalRecord[];
   hospitalNames: Record<string, string>;
+  petNames: Record<string, string>;
   activeRecordId: string;
   onSelect: (recordId: string) => void;
 }
@@ -34,6 +35,7 @@ interface RecordCardsProps {
 interface RecordDetailCardProps {
   record: MedicalRecord;
   hospitalNames: Record<string, string>;
+  petNames: Record<string, string>;
   onOpenReview?: () => void;
   actionSlot?: ReactNode;
 }
@@ -55,6 +57,7 @@ function truncateWithDots(value: string, maxLength = 18) {
 function RecordDetailCard({
   record,
   hospitalNames,
+  petNames,
   onOpenReview,
   actionSlot,
 }: RecordDetailCardProps) {
@@ -64,6 +67,7 @@ function RecordDetailCard({
         <div>
           <p className="text-sm text-slate-400">{formatDate(record.date)}</p>
           <h3 className="mt-2 text-xl font-semibold text-slate-900">{record.diagnosis}</h3>
+          <p className="mt-1 text-sm font-medium text-emerald-700">{petNames[record.petId] ?? '반려동물 미선택'}</p>
         </div>
         {actionSlot ? <div className="flex gap-2">{actionSlot}</div> : null}
       </div>
@@ -114,12 +118,7 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
   const hasMore = pets.length > visibleCount;
 
   if (pets.length === 0) {
-    return (
-      <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
-        <p className="text-base font-semibold text-slate-800">등록된 반려동물이 없어요.</p>
-        <p className="mt-2 text-sm text-slate-500">등록 버튼으로 첫 반려동물을 추가해보세요.</p>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -171,18 +170,13 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
   );
 }
 
-function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: RecordCardsProps) {
+function RecordCards({ records, hospitalNames, petNames, activeRecordId, onSelect }: RecordCardsProps) {
   const [visibleCount, setVisibleCount] = useState(3);
   const visibleRecords = records.slice(0, visibleCount);
   const hasMore = records.length > visibleCount;
 
   if (records.length === 0) {
-    return (
-      <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
-        <p className="text-base font-semibold text-slate-800">아직 진료 기록이 없어요.</p>
-        <p className="mt-2 text-sm text-slate-500">기록 추가 버튼으로 첫 진료 이력을 남겨보세요.</p>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -204,6 +198,7 @@ function RecordCards({ records, hospitalNames, activeRecordId, onSelect }: Recor
                   {formatDate(record.date)}
                 </p>
                 <p className="mt-3 text-lg font-semibold text-slate-900">{record.diagnosis}</p>
+                <p className="mt-1 text-sm font-medium text-emerald-700">{petNames[record.petId] ?? '반려동물 미선택'}</p>
                 <p className="mt-1 text-sm text-slate-500">{hospitalNames[record.hospitalId]}</p>
               </div>
             </div>
@@ -276,15 +271,16 @@ export function MyPetPage() {
   }, [petSearchText, pets, selectedAnimal]);
 
   const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? null;
-  const selectedPetRecords = [...medicalRecords]
-    .filter((record) => record.petId === selectedPet?.id)
+  const visibleRecords = [...medicalRecords]
+    .filter((record) => (selectedPet ? record.petId === selectedPet.id : true))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const activeRecordId = selectedPetRecords.some((record) => record.id === expandedRecordId)
+  const activeRecordId = visibleRecords.some((record) => record.id === expandedRecordId)
     ? expandedRecordId
     : '';
   const expandedRecord = activeRecordId
-    ? selectedPetRecords.find((record) => record.id === activeRecordId)
+    ? visibleRecords.find((record) => record.id === activeRecordId)
     : undefined;
+  const expandedRecordPet = expandedRecord ? pets.find((pet) => pet.id === expandedRecord.petId) ?? null : null;
   const expandedRecordHasReview = expandedRecord ? Boolean(findReviewForRecord(reviews, expandedRecord)) : false;
 
   useEffect(() => {
@@ -303,13 +299,18 @@ export function MyPetPage() {
   }, [filteredPets, pets, selectedPetId]);
 
   useEffect(() => {
-    if (expandedRecordId && !selectedPetRecords.some((record) => record.id === expandedRecordId)) {
+    if (expandedRecordId && !visibleRecords.some((record) => record.id === expandedRecordId)) {
       setExpandedRecordId('');
     }
-  }, [expandedRecordId, selectedPetRecords]);
+  }, [expandedRecordId, visibleRecords]);
 
   const hospitalNames = hospitals.reduce<Record<string, string>>((acc, hospital) => {
     acc[hospital.id] = hospital.name;
+    return acc;
+  }, {});
+
+  const petNames = pets.reduce<Record<string, string>>((acc, pet) => {
+    acc[pet.id] = pet.name;
     return acc;
   }, {});
 
@@ -357,20 +358,20 @@ export function MyPetPage() {
     setExpandedRecordId('');
   }
 
-  if (expandedRecord && selectedPet) {
+  if (expandedRecord) {
     return (
       <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[#18b996]" />
 
         <div className="relative z-10">
-          <header className="flex min-h-[14rem] items-start pt-7">
+          <header className="flex min-h-[7rem] flex-col items-start pt-7">
             <button
               type="button"
               onClick={() => setExpandedRecordId('')}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 text-emerald-700 shadow-[0_8px_18px_rgba(15,118,110,0.14)]"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-white/95 text-emerald-700 shadow-[0_8px_18px_rgba(15,118,110,0.14)]"
               aria-label="진료 기록 목록으로 돌아가기"
             >
-              <Icon name="chevron" className="h-5 w-5 rotate-180" />
+              <Icon name="chevron" className="h-6 w-6 rotate-180" />
             </button>
           </header>
 
@@ -378,6 +379,7 @@ export function MyPetPage() {
             <RecordDetailCard
               record={expandedRecord}
               hospitalNames={hospitalNames}
+              petNames={petNames}
               actionSlot={
                 <>
                   <button
@@ -403,9 +405,9 @@ export function MyPetPage() {
                 </>
               }
               onOpenReview={
-                expandedRecordHasReview
+                expandedRecordHasReview || !expandedRecordPet
                   ? undefined
-                  : () => startRecordToReview(expandedRecord, selectedPet)
+                  : () => startRecordToReview(expandedRecord, expandedRecordPet)
               }
             />
           </section>
@@ -445,7 +447,7 @@ export function MyPetPage() {
               setSelectedPetId('');
               setExpandedRecordId('');
             }}
-            placeholder="반려동물 이름, 종 검색"
+            placeholder=""
             clearVisible={Boolean(petSearchText)}
             onClear={() => {
               setPetSearchText('');
@@ -517,9 +519,8 @@ export function MyPetPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">
-                {selectedPet ? `${selectedPet.name}의 진료 기록` : '진료 기록'}
+                {selectedPet ? `${selectedPet.name}의 진료 기록` : '전체 진료 기록'}
               </h2>
-              <p className="mt-1 text-sm text-slate-500">최신순으로 정렬됩니다.</p>
             </div>
             <button
               type="button"
@@ -534,101 +535,14 @@ export function MyPetPage() {
             </button>
           </div>
 
-          {selectedPet ? (
-            <RecordCards
-              key={`records-${selectedPet.id}-${selectedPetRecords.length}`}
-              records={selectedPetRecords}
-              hospitalNames={hospitalNames}
-              activeRecordId={activeRecordId}
-              onSelect={setExpandedRecordId}
-            />
-          ) : (
-            <div className="mt-4 rounded-lg border border-emerald-100 bg-white px-4 py-8 text-center shadow-[0_8px_18px_rgba(15,118,110,0.07)]">
-              <p className="text-base font-semibold text-slate-800">반려동물을 선택해주세요.</p>
-              <p className="mt-2 text-sm text-slate-500">선택한 반려동물의 진료 기록이 여기에 보여요.</p>
-            </div>
-          )}
-
-          {expandedRecord && selectedPet ? (
-            <div className="mt-5 rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_8px_20px_rgba(15,118,110,0.08)]">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm text-slate-400">{formatDate(expandedRecord.date)}</p>
-                  <h3 className="mt-2 text-xl font-semibold text-slate-900">
-                    {expandedRecord.diagnosis}
-                  </h3>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDraftRecord(null);
-                      setEditingRecord(expandedRecord);
-                      setRecordEditorOpen(true);
-                    }}
-                    className="rounded-lg bg-emerald-50 p-2 text-emerald-700"
-                  >
-                    <Icon name="edit" className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteRecord(expandedRecord.id)}
-                    className="rounded-lg bg-rose-50 p-2 text-rose-500"
-                  >
-                    <Icon name="trash" className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-4 grid gap-3 text-sm text-slate-600">
-                <div className="rounded-lg bg-emerald-50/70 p-4">
-                  <p className="text-xs text-slate-400">병원</p>
-                  <p className="mt-1 font-medium text-slate-800">
-                    {hospitalNames[expandedRecord.hospitalId]}
-                  </p>
-                </div>
-                <div className="rounded-lg bg-emerald-50/70 p-4">
-                  <p className="text-xs text-slate-400">수의사 소견</p>
-                  <p className="mt-1 leading-6 text-slate-800">{expandedRecord.veterinarianNote}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg bg-emerald-50/70 p-4">
-                    <p className="text-xs text-slate-400">처방</p>
-                    <p className="mt-1 text-slate-800">{expandedRecord.prescription || '없음'}</p>
-                  </div>
-                  <div className="rounded-lg bg-emerald-50/70 p-4">
-                    <p className="text-xs text-slate-400">진료 비용</p>
-                    <p
-                      className="mt-1 overflow-hidden whitespace-nowrap text-slate-800"
-                      title={formatCurrency(expandedRecord.cost)}
-                    >
-                      {truncateWithDots(formatCurrency(expandedRecord.cost))}
-                    </p>
-                  </div>
-                </div>
-                <div className="rounded-lg bg-emerald-50/70 p-4">
-                  <p className="text-xs text-slate-400">메모</p>
-                  <p className="mt-1 leading-6 text-slate-800">
-                    {expandedRecord.memo || '아직 메모가 없어요.'}
-                  </p>
-                </div>
-              </div>
-
-              {expandedRecordHasReview ? (
-                <p className="mt-5 rounded-lg bg-slate-100 px-4 py-3 text-center text-sm font-medium text-slate-600">
-                  이미 이 기록으로 작성한 리뷰가 있어요.
-                </p>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => startRecordToReview(expandedRecord, selectedPet)}
-                  className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
-                >
-                  이 기록으로 리뷰 작성
-                </button>
-              )}
-            </div>
-          ) : null}
+          <RecordCards
+            key={`records-${selectedPet?.id ?? 'all'}-${visibleRecords.length}`}
+            records={visibleRecords}
+            hospitalNames={hospitalNames}
+            petNames={petNames}
+            activeRecordId={activeRecordId}
+            onSelect={setExpandedRecordId}
+          />
         </section>
 
         <ModalSheet
@@ -638,14 +552,21 @@ export function MyPetPage() {
           onClose={() => setAllRecordsOpen(false)}
         >
           <div className="space-y-4">
-            {selectedPetRecords.map((record) => (
+            {visibleRecords.map((record) => (
               <div key={record.id} className="space-y-3">
                 <RecordDetailCard
                   record={record}
                   hospitalNames={hospitalNames}
+                  petNames={petNames}
                   onOpenReview={
-                    selectedPet && !findReviewForRecord(reviews, record)
-                      ? () => startRecordToReview(record, selectedPet)
+                    pets.find((pet) => pet.id === record.petId) && !findReviewForRecord(reviews, record)
+                      ? () => {
+                          const recordPet = pets.find((pet) => pet.id === record.petId);
+
+                          if (recordPet) {
+                            startRecordToReview(record, recordPet);
+                          }
+                        }
                       : undefined
                   }
                 />

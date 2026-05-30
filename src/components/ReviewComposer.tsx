@@ -13,7 +13,7 @@ import type { Hospital, Review, ReviewDraft } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
 
-const reviewTagOptions = [
+export const reviewTagOptions = [
   { emoji: '🩺', label: '수의사 설명이 친절해요' },
   { emoji: '✨', label: '병원이 위생적이에요' },
   { emoji: '📋', label: '설명이 자세해요' },
@@ -31,6 +31,8 @@ const reviewTagOptions = [
   { emoji: '🌿', label: '병원 분위기가 차분해요' },
   { emoji: '🤝', label: '보호자를 안심시켜줘요' },
 ];
+
+const classificationBadgeClass = 'inline-flex min-h-6 items-center rounded-md px-2 text-[11px] font-medium leading-none';
 
 interface ReviewComposerProps {
   open: boolean;
@@ -125,14 +127,12 @@ export function ReviewComposer({
   const [rating, setRating] = useState(editingReview?.rating ?? initialDraft?.rating ?? 5);
   const [body, setBody] = useState(editingReview?.body ?? initialDraft?.body ?? '');
   const [tags, setTags] = useState<string[]>(editingReview?.tags ?? initialDraft?.tags ?? []);
-  const [customTag, setCustomTag] = useState('');
-  const [customTags, setCustomTags] = useState<string[]>(
-    editingReview?.customTags ?? initialDraft?.customTags ?? [],
-  );
+  const customTags = editingReview?.customTags ?? initialDraft?.customTags ?? [];
   const [imageUrls, setImageUrls] = useState<string[]>(
     editingReview?.imageUrls ?? initialDraft?.imageUrls ?? [],
   );
   const [saveToRecord, setSaveToRecord] = useState(false);
+  const [saveToRecordVeterinarianNote, setSaveToRecordVeterinarianNote] = useState('');
   const [saveToRecordMemo, setSaveToRecordMemo] = useState('');
   const [moderationMessage, setModerationMessage] = useState('');
   const [requiredMessage, setRequiredMessage] = useState('');
@@ -189,25 +189,6 @@ export function ReviewComposer({
     );
   }
 
-  function addCustomTag() {
-    const cleaned = customTag.trim();
-
-    if (!cleaned || customTags.includes(cleaned)) {
-      return;
-    }
-
-    const moderation = validateReviewText([{ label: '직접 태그', value: cleaned }]);
-
-    if (!moderation.ok) {
-      setModerationMessage(moderation.message);
-      return;
-    }
-
-    setCustomTags((current) => [...current, cleaned]);
-    setCustomTag('');
-    setModerationMessage('');
-  }
-
   function handleImages(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
     const nextUrls = files.map((file) => URL.createObjectURL(file));
@@ -217,7 +198,7 @@ export function ReviewComposer({
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!selectedPet || !hospitalId || !date) {
+    if (!selectedPet || !hospitalId || !date || !diagnosis.trim()) {
       setRequiredMessage('필수 항목을 입력해 주세요.');
       setModerationMessage('');
       return;
@@ -228,7 +209,6 @@ export function ReviewComposer({
     const moderation = validateReviewText([
       { label: '진단 항목', value: diagnosis },
       { label: '진료 기록', value: medicine },
-      { label: '직접 태그', value: customTags.join(' ') },
       { label: '리뷰 본문', value: body },
     ]);
 
@@ -254,6 +234,7 @@ export function ReviewComposer({
       imageUrls,
       rating,
       saveToRecord: saveToRecord && !existingLinkedRecord,
+      saveToRecordVeterinarianNote,
       saveToRecordMemo,
     });
 
@@ -390,7 +371,7 @@ export function ReviewComposer({
                 setShowHospitalOptions(true);
               }}
               onFocus={() => setShowHospitalOptions(true)}
-              placeholder="병원 이름을 검색해 선택해 주세요"
+              placeholder=""
               className="w-full bg-transparent pr-8 text-slate-700 placeholder:text-slate-400"
             />
             {hospitalSearchText ? (
@@ -424,21 +405,21 @@ export function ReviewComposer({
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="truncate text-sm font-semibold text-slate-900">{hospital.name}</p>
-                        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                        <span className={`${classificationBadgeClass} bg-emerald-50 text-emerald-700`}>
                           {getSupportedAnimalSummary(hospital)}
                         </span>
                       </div>
                       <p className="mt-1 line-clamp-2 text-xs text-slate-500">{hospital.address}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                        <span className={`${classificationBadgeClass} bg-slate-100 text-slate-600`}>
                           {getHospitalClassificationLabel(hospital.classification)}
                         </span>
-                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                        <span className={`${classificationBadgeClass} bg-slate-100 text-slate-600`}>
                           {getHospitalSourceSummary(hospital)}
                         </span>
                       </div>
                     </div>
-                    <span className="shrink-0 rounded-md bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
+                    <span className="inline-flex h-7 shrink-0 items-center rounded-md bg-slate-50 px-2.5 text-[11px] font-medium leading-none text-emerald-700">
                       선택
                     </span>
                   </button>
@@ -476,7 +457,7 @@ export function ReviewComposer({
             <input
               type="text"
               inputMode="numeric"
-              placeholder="85,000"
+              placeholder=""
               value={costText}
               onChange={(event) => {
                 const numberOnly = event.target.value.replace(/\D/g, '');
@@ -488,23 +469,25 @@ export function ReviewComposer({
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">병명</span>
+          <span className="text-sm font-medium text-slate-700">
+            병명 <span className="text-rose-500">*</span>
+          </span>
           <input
             type="text"
             value={diagnosis}
             onChange={(event) => setDiagnosis(event.target.value)}
-            placeholder="예: 장염, 식욕 부진, 체중 검사"
+            placeholder=""
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">직접 작성란 (진료 기록)</span>
+          <span className="text-sm font-medium text-slate-700">처방</span>
           <input
             type="text"
             value={medicine}
             onChange={(event) => setMedicine(event.target.value)}
-            placeholder="예: 진통제 3일치"
+            placeholder=""
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
@@ -547,45 +530,13 @@ export function ReviewComposer({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <span className="text-sm font-medium text-slate-700">직접 태그 작성</span>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={customTag}
-              onChange={(event) => setCustomTag(event.target.value)}
-              placeholder="예: 야간진료, 입원 가능"
-              className="flex-1 rounded-lg border border-emerald-100 bg-white px-4 py-3"
-            />
-            <button
-              type="button"
-              onClick={addCustomTag}
-              className="rounded-lg bg-emerald-600 px-4 py-3 text-white"
-            >
-              추가
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {customTags.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => setCustomTags((current) => current.filter((item) => item !== tag))}
-                className="rounded-md bg-slate-100 px-3 py-1 text-sm text-slate-600"
-              >
-                #{tag}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-slate-700">리뷰 본문</span>
+          <span className="text-sm font-medium text-slate-700">직접 작성란</span>
           <textarea
             value={body}
             onChange={(event) => setBody(event.target.value)}
             rows={4}
-            placeholder="진료 경험을 자유롭게 적어 주세요."
+            placeholder=""
             className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
           />
         </label>
@@ -629,21 +580,31 @@ export function ReviewComposer({
               onChange={(event) => setSaveToRecord(event.target.checked)}
               className="h-4 w-4 accent-emerald-600"
             />
-            <span>마이펫 기록에도 저장하기</span>
+            <span>진료 기록에도 저장하기</span>
           </label>
         )}
 
         {saveToRecord && !existingLinkedRecord ? (
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">기록 메모</span>
-            <textarea
-              rows={3}
-              value={saveToRecordMemo}
-              onChange={(event) => setSaveToRecordMemo(event.target.value)}
-              placeholder="마이펫 진료 기록에 남길 메모를 적어주세요."
-              className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
-            />
-          </label>
+          <div className="space-y-3 rounded-lg border border-emerald-100 bg-white/80 p-4">
+            <label className="block space-y-2">
+              <span className="text-sm font-medium text-slate-700">수의사 소견</span>
+              <textarea
+                rows={3}
+                value={saveToRecordVeterinarianNote}
+                onChange={(event) => setSaveToRecordVeterinarianNote(event.target.value)}
+                className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
+              />
+            </label>
+            <label className="block space-y-2">
+              <span className="text-sm font-medium text-slate-700">기록 메모</span>
+              <textarea
+                rows={3}
+                value={saveToRecordMemo}
+                onChange={(event) => setSaveToRecordMemo(event.target.value)}
+                className="w-full rounded-lg border border-emerald-100 bg-white px-4 py-3"
+              />
+            </label>
+          </div>
         ) : null}
 
         <div className="grid grid-cols-2 gap-3">

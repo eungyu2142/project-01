@@ -27,6 +27,10 @@ export interface NaverMapInstance {
   setCenter(position: NaverLatLngLike): void;
 }
 
+export interface NaverMapEventListener {
+  remove(): void;
+}
+
 export interface NaverMarkerOptions {
   map: NaverMapInstance;
   position: NaverLatLngLike;
@@ -65,7 +69,12 @@ export interface NaverMapsNamespace {
   Map: new (container: HTMLElement, options: NaverMapOptions) => NaverMapInstance;
   Marker: new (options: NaverMarkerOptions) => NaverMarkerInstance;
   Event: {
-    addListener(target: NaverMarkerInstance, eventName: string, handler: () => void): void;
+    addListener(
+      target: NaverMarkerInstance | NaverMapInstance,
+      eventName: string,
+      handler: () => void,
+    ): NaverMapEventListener;
+    removeListener(listener: NaverMapEventListener): void;
   };
   TransCoord: {
     fromTM128ToLatLng(coord: NaverPointLike): NaverLatLngLike;

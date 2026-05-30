@@ -13,12 +13,14 @@ import {
   normalizeHospitalDatasetItem,
   type HospitalDatasetPayload,
 } from '../lib/hospitalDataset';
-import { findRecordForReview } from '../lib/recordReviewLink';
+import { findRecordForReview, findReviewForRecord } from '../lib/recordReviewLink';
 import { resolveCurrentRegion } from '../lib/currentLocation';
 import {
+  deleteMedicalRecordsByPetRemote,
   deleteMedicalRecordRemote,
   deletePetRemote,
   deleteReviewRemote,
+  deleteReviewsByPetRemote,
   insertReview,
   loadUserAppData,
   loadUserProfile,
@@ -376,34 +378,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         }
 
         if (data) {
-          const hasRemoteAppData =
-            data.pets.length > 0 || data.medicalRecords.length > 0 || data.reviews.length > 0;
-          const hasCachedAppData =
-            cachedPets.length > 0 || cachedMedicalRecords.length > 0 || cachedReviews.length > 0;
-
-          if (!hasRemoteAppData && hasCachedAppData) {
-            setPets(cachedPets);
-            setMedicalRecords(cachedMedicalRecords);
-            setReviews(mapReviewsForViewer(cachedReviews, authUser.id));
-
-            cachedPets.forEach((pet) => {
-              void upsertPet(appUserId, pet).catch((error) => persistError('hydrateRemoteData:restorePet', error));
-            });
-            cachedMedicalRecords.forEach((record) => {
-              void upsertMedicalRecord(appUserId, record).catch((error) =>
-                persistError('hydrateRemoteData:restoreMedicalRecord', error),
-              );
-            });
-            cachedReviews.forEach((review) => {
-              void upsertReview(review.userId || appUserId, review).catch((error) =>
-                persistError('hydrateRemoteData:restoreReview', error),
-              );
-            });
-          } else {
-            setPets(data.pets);
-            setMedicalRecords(data.medicalRecords);
-            setReviews(mapReviewsForViewer(data.reviews, authUser.id));
-          }
+          setPets(data.pets);
+          setMedicalRecords(data.medicalRecords);
+          setReviews(mapReviewsForViewer(data.reviews, authUser.id));
         } else {
           setPets(cachedPets);
           setMedicalRecords(cachedMedicalRecords);
@@ -784,7 +761,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           hospitalId: input.hospitalId,
           date: input.date,
           diagnosis: input.diagnosis || `${pet.name} 진료 기록`,
-          veterinarianNote: input.medicine ? `처방: ${input.medicine}` : '리뷰에서 저장한 진료 기록',
+          veterinarianNote: input.saveToRecordVeterinarianNote?.trim() || '리뷰에서 저장한 진료 기록',
           prescription: input.medicine,
           cost: input.cost,
           memo: input.saveToRecordMemo?.trim() ?? '',
@@ -871,7 +848,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setMedicalRecords((current) => current.filter((record) => record.petId !== petId));
     setReviews((current) => current.filter((review) => review.petId !== petId));
 
-    void deletePetRemote(petId).catch((error) => persistError('deletePet', error));
+    void Promise.all([
+      deleteMedicalRecordsByPetRemote(appUserId, petId),
+      deleteReviewsByPetRemote(appUserId, petId),
+    ])
+      .then(() => deletePetRemote(petId))
+      .catch((error) => persistError('deletePet', error));
   }
 
   function saveMedicalRecord(input: MedicalRecordInput) {
@@ -900,6 +882,40 @@ export function AppProvider({ children }: { children: ReactNode }) {
     void upsertMedicalRecord(appUserId, nextRecord).catch((error) =>
       persistError('saveMedicalRecord', error),
     );
+
+    if (input.saveToReview && pet && !input.id && !findReviewForRecord(reviews, nextRecord)) {
+      const nextReview: Review = {
+        id: makeId('review'),
+        userId: appUserId,
+        hospitalId: input.hospitalId,
+        petId: input.petId,
+        animalType: pet.animalType,
+        species: pet.species,
+        petName: pet.name,
+        diagnosis: normalizedDiagnosis,
+        cost: input.cost,
+        date: input.date,
+        medicine: input.prescription,
+        tags: input.saveToReviewTags ?? [],
+        customTags: [],
+        body: input.saveToReviewBody?.trim() || input.memo,
+        imageUrls: [],
+        rating: input.saveToReviewRating ?? 5,
+        likes: 0,
+        liked: false,
+        likedAt: null,
+        authorName: user.nickname,
+        isMine: true,
+        createdAt: new Date().toISOString(),
+      };
+
+      setReviews((current) =>
+        findReviewForRecord(current, nextRecord) ? current : [nextReview, ...current],
+      );
+      void insertReview(appUserId, nextReview).catch((error) =>
+        persistError('saveMedicalRecord:saveToReview', error),
+      );
+    }
   }
 
   function deleteMedicalRecord(recordId: string) {

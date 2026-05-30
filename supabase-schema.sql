@@ -86,7 +86,7 @@ create table if not exists pets (
 create table if not exists medical_records (
   id text primary key,
   user_id text not null,
-  pet_id text not null,
+  pet_id text not null references pets(id) on delete cascade,
   hospital_id text not null,
   date date not null,
   diagnosis text not null,
@@ -101,7 +101,7 @@ create table if not exists reviews (
   id text primary key,
   user_id text not null,
   hospital_id text not null,
-  pet_id text,
+  pet_id text references pets(id) on delete cascade,
   animal_type text not null,
   species text not null,
   pet_name text not null,

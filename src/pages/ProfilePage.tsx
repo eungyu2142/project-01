@@ -6,49 +6,12 @@ import { ModalSheet } from '../components/ModalSheet';
 import { useAuth } from '../context/AuthContext';
 import { useAppContext } from '../context/AppContext';
 import { formatDate } from '../lib/format';
-import {
-  GEOLOCATION_LOADING_MESSAGE,
-  GEOLOCATION_PERMISSION_MESSAGE,
-} from '../lib/currentLocation';
 import { isImageAvatar } from '../lib/petAvatar';
-import { loadNaverMapSdk } from '../lib/naverMaps';
-import type { NaverGlobal, NaverReverseGeocodeResponse } from '../lib/naverMaps';
 
 type ActivityTarget = 'likedHospitals' | 'likedReviews' | 'reviewDrafts' | 'recordDrafts';
 type AccountAction = 'nickname' | 'photo';
 
 const profileEmojiOptions = ['🐾', '🦎', '🐹', '🦜', '🐢'];
-
-function getCurrentRegionLabel(response: NaverReverseGeocodeResponse) {
-  const region = response.v2?.results?.[0]?.region;
-  const area2 = region?.area2?.name;
-  const area3 = region?.area3?.name;
-
-  return [area2, area3].filter(Boolean).join(' ');
-}
-
-function reverseGeocodeCurrentRegion(naver: NaverGlobal, lat: number, lng: number) {
-  return new Promise<string>((resolve, reject) => {
-    const coords = new naver.maps.LatLng(lat, lng);
-    const orders = [naver.maps.Service.OrderType.ADDR, naver.maps.Service.OrderType.ROAD_ADDR].join(',');
-
-    naver.maps.Service.reverseGeocode({ coords, orders }, (status, response) => {
-      if (status !== naver.maps.Service.Status.OK) {
-        reject(new Error('현재 위치 주소를 찾지 못했어요.'));
-        return;
-      }
-
-      const regionLabel = getCurrentRegionLabel(response);
-
-      if (!regionLabel) {
-        reject(new Error('현재 위치 주소 정보가 비어 있어요.'));
-        return;
-      }
-
-      resolve(regionLabel);
-    });
-  });
-}
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -66,7 +29,6 @@ export function ProfilePage() {
     user,
   } = useAppContext();
   const accountEmail = authUser?.email ?? user.email;
-  const [currentRegion, setCurrentRegion] = useState(user.city || GEOLOCATION_LOADING_MESSAGE);
   const [selectedAccountAction, setSelectedAccountAction] = useState<AccountAction | null>(null);
   const [draftNickname, setDraftNickname] = useState(user.nickname);
   const [draftProfileEmoji, setDraftProfileEmoji] = useState(user.profileEmoji);
@@ -128,15 +90,6 @@ export function ProfilePage() {
     setDraftNickname(user.nickname);
     setDraftProfileEmoji(user.profileEmoji);
   }, [user]);
-
-  useEffect(() => {
-    if (user.city) {
-      setCurrentRegion(user.city);
-      return;
-    }
-
-    setCurrentRegion(GEOLOCATION_LOADING_MESSAGE);
-  }, [user.city]);
 
   function handleProfilePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -206,63 +159,15 @@ export function ProfilePage() {
     }
   }
 
-  useEffect(() => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      if (!user.city) {
-        setCurrentRegion(GEOLOCATION_PERMISSION_MESSAGE);
-      }
-
-      return;
-    }
-
-    let cancelled = false;
-
-    const watchId = navigator.geolocation.watchPosition(
-      async (position) => {
-        try {
-          const naver = await loadNaverMapSdk();
-          const nextRegion = await reverseGeocodeCurrentRegion(
-            naver,
-            position.coords.latitude,
-            position.coords.longitude,
-          );
-
-          if (!cancelled) {
-            setCurrentRegion(nextRegion);
-          }
-        } catch {
-          if (!cancelled && !user.city) {
-            setCurrentRegion('현재 위치를 불러오지 못했어요');
-          }
-        }
-      },
-      () => {
-        if (!cancelled && !user.city) {
-          setCurrentRegion('위치 권한을 허용하면 현재 위치가 보여요');
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 60000,
-        timeout: 10000,
-      },
-    );
-
-    return () => {
-      cancelled = true;
-      navigator.geolocation.clearWatch(watchId);
-    };
-  }, [user.city]);
-
   return (
     <div className="relative min-h-full overflow-hidden bg-[#f6fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
 
       <div className="relative">
-        <section className="min-h-[14rem] pt-7 text-white">
-          <p className="text-sm font-medium text-emerald-50/90">내 정보</p>
-          <div className="mt-3 flex items-center gap-4">
-            <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[2rem] bg-white/18 text-4xl shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur">
+        <section className="min-h-[14rem] pb-6 pt-7 text-white">
+          <h1 className="text-[2rem] font-semibold tracking-[-0.03em]">프로필</h1>
+          <div className="mt-5 flex items-center gap-5">
+            <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[2.25rem] bg-white/18 text-5xl shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur">
               {isImageAvatar(user.profileEmoji) ? (
                 <img src={user.profileEmoji} alt="프로필 사진" className="h-full w-full object-cover" />
               ) : (
@@ -270,12 +175,11 @@ export function ProfilePage() {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="truncate text-[2rem] font-semibold tracking-[-0.03em]">{user.nickname}</h1>
-              <p className="mt-2 flex items-center gap-2 break-all text-sm text-emerald-50/90">
-                <Icon name="mail" className="h-4 w-4" />
+              <h1 className="truncate text-[2.45rem] font-semibold leading-tight tracking-[-0.03em]">{user.nickname}</h1>
+              <p className="mt-2 flex items-center gap-1.5 break-all text-xs font-medium text-emerald-50/80">
+                <Icon name="mail" className="h-3.5 w-3.5" />
                 <span className="min-w-0 flex-1">{accountEmail}</span>
               </p>
-              <p className="mt-1 break-words text-sm text-emerald-50/90">{currentRegion}</p>
             </div>
           </div>
         </section>
@@ -389,7 +293,7 @@ export function ProfilePage() {
                     value={draftNickname}
                     onChange={(event) => setDraftNickname(event.target.value)}
                     className="mt-4 w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-slate-700"
-                    placeholder="닉네임 입력"
+                    placeholder=""
                   />
                 ) : null}
 
