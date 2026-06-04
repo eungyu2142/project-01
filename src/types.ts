@@ -87,6 +87,29 @@ export interface MedicalRecord {
   imageUrls: string[];
 }
 
+export interface SpeechSummaryFields {
+  visitPurpose: string;
+  diagnosis: string;
+  testTreatment: string;
+  prescription: string;
+  precautions: string;
+  followUpPlan: string;
+  otherMemo: string;
+}
+
+export interface SavedSpeechSummary {
+  id: string;
+  scope: 'record' | 'review';
+  petId: string | null;
+  hospitalId: string | null;
+  date: string;
+  title: string;
+  fields: SpeechSummaryFields;
+  transcript: string;
+  warnings: string[];
+  updatedAt: string;
+}
+
 export interface Review {
   id: string;
   userId: string;

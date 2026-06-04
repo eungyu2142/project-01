@@ -24,6 +24,7 @@ interface RecordEditorProps {
   open: boolean;
   record?: MedicalRecord | null;
   draft?: MedicalRecordDraft | null;
+  initialPetId?: string;
   pets: Pet[];
   hospitals: Hospital[];
   onClose: () => void;
@@ -34,13 +35,14 @@ export function RecordEditor({
   open,
   record,
   draft,
+  initialPetId = '',
   pets,
   hospitals,
   onClose,
   onSave,
 }: RecordEditorProps) {
-  const { saveMedicalRecordDraft, deleteMedicalRecordDraft } = useAppContext();
-  const [petId, setPetId] = useState(record?.petId ?? draft?.petId ?? '');
+  const { medicalRecordDrafts, saveMedicalRecordDraft, deleteMedicalRecordDraft } = useAppContext();
+  const [petId, setPetId] = useState(record?.petId ?? draft?.petId ?? initialPetId);
   const [hospitalId, setHospitalId] = useState(record?.hospitalId ?? draft?.hospitalId ?? '');
   const [hospitalSearchText, setHospitalSearchText] = useState('');
   const [showHospitalOptions, setShowHospitalOptions] = useState(false);
@@ -82,11 +84,28 @@ export function RecordEditor({
       return name.includes(keyword) || address.includes(keyword);
     });
   }, [hospitalSearchText, hospitals]);
-
   function selectHospital(hospitalToSelect: Hospital) {
     setHospitalId(hospitalToSelect.id);
     setHospitalSearchText(hospitalToSelect.name);
     setShowHospitalOptions(false);
+  }
+
+  function applyDraftToForm(draftToApply: MedicalRecordDraft) {
+    const draftHospital = hospitals.find((hospital) => hospital.id === draftToApply.hospitalId);
+
+    setPetId(draftToApply.petId ?? '');
+    setHospitalId(draftToApply.hospitalId ?? '');
+    setHospitalSearchText(draftHospital?.name ?? '');
+    setDate(draftToApply.date ?? getTodayDateValue());
+    setDiagnosis(draftToApply.diagnosis ?? '');
+    setVeterinarianNote(draftToApply.veterinarianNote ?? '');
+    setPrescription(draftToApply.prescription ?? '');
+    setCostText(typeof draftToApply.cost === 'number' ? draftToApply.cost.toLocaleString('ko-KR') : '');
+    setMemo(draftToApply.memo ?? '');
+    setImageUrls(draftToApply.imageUrls ?? []);
+    setReviewBody(draftToApply.memo ?? '');
+    setRequiredMessage('');
+    setModerationMessage('');
   }
 
   function getSupportedAnimalSummary(hospital: Hospital) {
@@ -251,6 +270,43 @@ export function RecordEditor({
           <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
           </div>
+        ) : null}
+
+        {!record && medicalRecordDrafts.length > 0 ? (
+          <label className="block space-y-2 rounded-lg border border-emerald-100 bg-white/80 p-4">
+            <span className="text-sm font-semibold text-slate-700">저장된 진료 기록 초안 불러오기</span>
+            <select
+              value=""
+              onChange={(event) => {
+                const selectedDraft = medicalRecordDrafts.find((item) => item.id === event.target.value);
+
+                if (selectedDraft) {
+                  applyDraftToForm(selectedDraft);
+                }
+              }}
+              className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm text-slate-700"
+            >
+              <option value="">초안을 선택해 주세요</option>
+              {medicalRecordDrafts.map((item) => {
+                const draftPet = pets.find((pet) => pet.id === item.petId);
+                const draftHospital = hospitals.find((hospital) => hospital.id === item.hospitalId);
+                const label = [
+                  item.date,
+                  draftPet?.name,
+                  draftHospital?.name,
+                  item.diagnosis || '음성 요약 초안',
+                ]
+                  .filter(Boolean)
+                  .join(' · ');
+
+                return (
+                  <option key={item.id} value={item.id}>
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
         ) : null}
 
         <div

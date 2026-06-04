@@ -18,6 +18,10 @@ type IconName =
   | 'mail'
   | 'paw'
   | 'camera'
+  | 'mic'
+  | 'stop'
+  | 'upload'
+  | 'sparkles'
   | 'check'
   | 'eye'
   | 'eyeOff'
@@ -173,6 +177,37 @@ export function Icon({ name, className = 'h-5 w-5', filled = false }: IconProps)
         <svg {...commonProps}>
           <path d="M4 8h3l2-2h6l2 2h3v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" />
           <circle cx="12" cy="13" r="3.5" />
+        </svg>
+      );
+    case 'mic':
+      return (
+        <svg {...commonProps}>
+          <rect x="9" y="3" width="6" height="11" rx="3" />
+          <path d="M5 11a7 7 0 0 0 14 0" />
+          <path d="M12 18v3" />
+          <path d="M8.5 21h7" />
+        </svg>
+      );
+    case 'stop':
+      return (
+        <svg {...commonProps}>
+          <rect x="6" y="6" width="12" height="12" rx="2" />
+        </svg>
+      );
+    case 'upload':
+      return (
+        <svg {...commonProps}>
+          <path d="M12 16V4" />
+          <path d="m7 9 5-5 5 5" />
+          <path d="M5 20h14" />
+        </svg>
+      );
+    case 'sparkles':
+      return (
+        <svg {...commonProps}>
+          <path d="m12 3 1.6 4.5L18 9l-4.4 1.5L12 15l-1.6-4.5L6 9l4.4-1.5L12 3Z" />
+          <path d="m19 14 .8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14Z" />
+          <path d="m5 14 .8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14Z" />
         </svg>
       );
     case 'check':

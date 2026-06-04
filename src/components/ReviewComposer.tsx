@@ -9,7 +9,7 @@ import {
   isDatasetHospital,
 } from '../lib/hospitalDataset';
 import { findRecordForReview } from '../lib/recordReviewLink';
-import type { Hospital, Review, ReviewDraft } from '../types';
+import type { Hospital, MedicalRecord, Review, ReviewDraft } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
 
@@ -47,6 +47,15 @@ function buildCostText(cost: number | null | undefined) {
   }
 
   return cost.toLocaleString('ko-KR');
+}
+
+function buildReviewBodyFromRecord(record: MedicalRecord) {
+  return [
+    record.memo,
+    record.veterinarianNote ? `수의사 의견\n${record.veterinarianNote}` : '',
+  ]
+    .filter((value) => value.trim())
+    .join('\n\n');
 }
 
 function getSupportedAnimalSummary(hospital: Hospital) {
@@ -131,6 +140,7 @@ export function ReviewComposer({
   const [imageUrls, setImageUrls] = useState<string[]>(
     editingReview?.imageUrls ?? initialDraft?.imageUrls ?? [],
   );
+  const [selectedRecordId, setSelectedRecordId] = useState('');
   const [saveToRecord, setSaveToRecord] = useState(false);
   const [saveToRecordVeterinarianNote, setSaveToRecordVeterinarianNote] = useState('');
   const [saveToRecordMemo, setSaveToRecordMemo] = useState('');
@@ -149,6 +159,14 @@ export function ReviewComposer({
         cost: costText ? Number(costText.replaceAll(',', '')) : null,
       })
     : null;
+  const selectableMedicalRecords = useMemo(
+    () =>
+      [...medicalRecords]
+        .filter((record) => (petId ? record.petId === petId : true))
+        .filter((record) => (hospitalId ? record.hospitalId === hospitalId : true))
+        .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime()),
+    [hospitalId, medicalRecords, petId],
+  );
   const hospitalMatches = useMemo(() => {
     const keyword = hospitalSearchText.trim().toLowerCase();
     const sortedHospitals = [...availableHospitals].sort((left, right) =>
@@ -181,6 +199,50 @@ export function ReviewComposer({
     setHospitalId(hospital.id);
     setHospitalSearchText(hospital.name);
     setShowHospitalOptions(false);
+  }
+
+  function applyMedicalRecordToReview(recordIdToApply: string) {
+    const record = medicalRecords.find((item) => item.id === recordIdToApply);
+    const recordPet = record ? pets.find((pet) => pet.id === record.petId) : null;
+    const recordHospital = record ? availableHospitals.find((hospital) => hospital.id === record.hospitalId) : null;
+
+    if (!record || !recordPet) {
+      return;
+    }
+
+    setSelectedRecordId(record.id);
+    setPetId(record.petId);
+    setHospitalId(record.hospitalId);
+    setHospitalSearchText(recordHospital?.name ?? '');
+    setDate(record.date);
+    setDiagnosis(record.diagnosis);
+    setMedicine(record.prescription);
+    setCostText(buildCostText(record.cost));
+    setBody(buildReviewBodyFromRecord(record));
+    setImageUrls(record.imageUrls ?? []);
+    setSaveToRecord(false);
+    setSaveToRecordVeterinarianNote('');
+    setSaveToRecordMemo('');
+    setRequiredMessage('');
+    setModerationMessage('');
+  }
+
+  function resetImportedReviewFields() {
+    setSelectedRecordId('');
+    setPetId(sourcePet?.id ?? '');
+    setHospitalId(initialDraft?.hospitalId ?? '');
+    setHospitalSearchText('');
+    setDate(initialDraft?.date ?? getTodayDateValue());
+    setDiagnosis(initialDraft?.diagnosis ?? '');
+    setMedicine(initialDraft?.medicine ?? '');
+    setCostText(buildCostText(initialDraft?.cost));
+    setBody(initialDraft?.body ?? '');
+    setImageUrls(initialDraft?.imageUrls ?? []);
+    setSaveToRecord(false);
+    setSaveToRecordVeterinarianNote('');
+    setSaveToRecordMemo('');
+    setRequiredMessage('');
+    setModerationMessage('');
   }
 
   function toggleTag(tag: string) {
@@ -326,6 +388,48 @@ export function ReviewComposer({
           <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
             {moderationMessage}
           </div>
+        ) : null}
+
+        {!editingReview && medicalRecords.length > 0 ? (
+          <label className="block space-y-2 rounded-lg border border-emerald-100 bg-white/80 p-4">
+            <span className="text-sm font-semibold text-slate-700">진료 기록에서 리뷰 채우기</span>
+            <select
+              value={selectedRecordId}
+              onChange={(event) => {
+                if (event.target.value) {
+                  applyMedicalRecordToReview(event.target.value);
+                } else {
+                  resetImportedReviewFields();
+                }
+              }}
+              className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm text-slate-700"
+            >
+              <option value="">기록을 선택해 주세요</option>
+              {selectableMedicalRecords.map((record) => {
+                const recordPet = pets.find((pet) => pet.id === record.petId);
+                const recordHospital = availableHospitals.find((hospital) => hospital.id === record.hospitalId);
+                const label = [
+                  record.date,
+                  recordPet?.name,
+                  recordHospital?.name,
+                  record.diagnosis,
+                ]
+                  .filter(Boolean)
+                  .join(' · ');
+
+                return (
+                  <option key={record.id} value={record.id}>
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+            {selectableMedicalRecords.length === 0 ? (
+              <p className="text-xs leading-5 text-slate-500">
+                현재 선택한 조건에 맞는 진료 기록이 없어요. 반려동물이나 병원 선택을 비우면 전체 기록에서 고를 수 있어요.
+              </p>
+            ) : null}
+          </label>
         ) : null}
 
         <div

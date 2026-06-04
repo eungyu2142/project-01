@@ -11,7 +11,7 @@ const features = [
     body: '필터링 기준: 해당 동물에 대한 리뷰가 0개면 흰색 H마커, 2개 이상이면 민트색 H마커, 4개 이상이면 파란색 H마커가 뜨게 했어요.',
   },
   {
-    title: '리뷰와 마이펫 연결',
+    title: '리뷰와 반려동물 관리 연결',
     body: '리뷰 작성과 진료 기록이 이어져서 한 번 입력한 정보를 다음 화면에서도 바로 이어서 사용할 수 있어요.',
   },
   {
@@ -66,7 +66,7 @@ export function LaunchPage({ mode, onEnter }: LaunchPageProps) {
           <div className="mt-6 rounded-[1.6rem] bg-[#f4fbf7] p-4">
             <p className="text-sm font-medium text-emerald-800">시작 전에 이런 흐름으로 사용해요</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              앱에서 병원을 찾고, 리뷰를 남기고, 마이 펫 기록과 연결해서 진료 이력까지 함께 관리할 수 있어요.
+              앱에서 병원을 찾고, 리뷰를 남기고, 반려동물 관리 기록과 연결해서 진료 이력까지 함께 관리할 수 있어요.
             </p>
           </div>
 

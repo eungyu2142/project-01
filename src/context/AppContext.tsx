@@ -20,6 +20,7 @@ import {
   deleteMedicalRecordRemote,
   deletePetRemote,
   deleteReviewRemote,
+  deleteSpeechSummaryRemote,
   deleteReviewsByPetRemote,
   insertReview,
   loadUserAppData,
@@ -29,6 +30,7 @@ import {
   upsertReview,
   updateReview,
   upsertUserProfile,
+  upsertSpeechSummary,
 } from '../lib/supabaseAppStore';
 import { isSupabaseConfigured } from '../lib/supabase';
 import type {
@@ -41,6 +43,7 @@ import type {
   Review,
   ReviewDraft,
   ReviewInput,
+  SavedSpeechSummary,
   UserProfile,
   UserLocationInput,
   UserProfileInput,
@@ -55,6 +58,7 @@ interface AppContextValue {
   reviews: Review[];
   reviewDrafts: ReviewDraft[];
   medicalRecordDrafts: MedicalRecordDraft[];
+  speechSummaries: SavedSpeechSummary[];
   datasetStatus: 'loading' | 'ready' | 'error';
   datasetError: string;
   markOnboardingComplete: () => void;
@@ -74,6 +78,8 @@ interface AppContextValue {
   deleteMedicalRecord: (recordId: string) => void;
   saveMedicalRecordDraft: (input: MedicalRecordDraft | Omit<MedicalRecordDraft, 'id' | 'updatedAt'> & { id?: string }) => string | null;
   deleteMedicalRecordDraft: (draftId: string) => void;
+  saveSpeechSummary: (input: Omit<SavedSpeechSummary, 'id' | 'updatedAt'> & { id?: string }) => string;
+  deleteSpeechSummary: (summaryId: string) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -86,6 +92,7 @@ const STORAGE_KEYS = {
   reviews: 'exopet-reviews',
   reviewDrafts: 'exopet-review-drafts',
   medicalRecordDrafts: 'exopet-medical-record-drafts',
+  speechSummaries: 'exopet-speech-summaries',
 } as const;
 const ONBOARDING_COMPLETION_KEY = 'exopet-onboarding-completed-users';
 const USER_SCOPED_STORAGE_KEY_NAMES = [
@@ -96,6 +103,7 @@ const USER_SCOPED_STORAGE_KEY_NAMES = [
   'reviews',
   'reviewDrafts',
   'medicalRecordDrafts',
+  'speechSummaries',
 ] as const;
 const APP_REVALIDATION_IDLE_MS = 60_000;
 const LOCATION_SYNC_MIN_DISTANCE_METERS = 30;
@@ -243,6 +251,10 @@ function loadCachedMedicalRecordDrafts(userId: string) {
   return loadStoredValue<MedicalRecordDraft[]>(getScopedStorageKey('medicalRecordDrafts', userId), []);
 }
 
+function loadCachedSpeechSummaries(userId: string) {
+  return loadStoredValue<SavedSpeechSummary[]>(getScopedStorageKey('speechSummaries', userId), []);
+}
+
 function mapReviewsForViewer(reviews: Review[], viewerUserId: string) {
   return reviews.map((review) => ({
     ...review,
@@ -262,6 +274,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [medicalRecordDrafts, setMedicalRecordDrafts] = useState(() =>
     loadCachedMedicalRecordDrafts(appUserId),
   );
+  const [speechSummaries, setSpeechSummaries] = useState(() => loadCachedSpeechSummaries(appUserId));
   const [datasetStatus, setDatasetStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [datasetError, setDatasetError] = useState('');
   const [appReady, setAppReady] = useState(() => !isSupabaseConfigured || !authUser);
@@ -279,6 +292,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setReviews(mapReviewsForViewer(loadCachedReviews(appUserId), appUserId));
     setReviewDrafts(loadCachedReviewDrafts(appUserId));
     setMedicalRecordDrafts(loadCachedMedicalRecordDrafts(appUserId));
+    setSpeechSummaries(loadCachedSpeechSummaries(appUserId));
   }, [appUserId]);
 
   useEffect(() => {
@@ -338,6 +352,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const cachedPets = loadCachedPets(authUser.id);
         const cachedMedicalRecords = loadCachedMedicalRecords(authUser.id);
         const cachedReviews = loadCachedReviews(authUser.id);
+        const cachedSpeechSummaries = loadCachedSpeechSummaries(authUser.id);
 
         if (cancelled) {
           return;
@@ -381,10 +396,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
           setPets(data.pets);
           setMedicalRecords(data.medicalRecords);
           setReviews(mapReviewsForViewer(data.reviews, authUser.id));
+          setSpeechSummaries(data.speechSummaries.length > 0 ? data.speechSummaries : cachedSpeechSummaries);
         } else {
           setPets(cachedPets);
           setMedicalRecords(cachedMedicalRecords);
           setReviews(mapReviewsForViewer(cachedReviews, authUser.id));
+          setSpeechSummaries(cachedSpeechSummaries);
         }
 
         lastHydratedUserIdRef.current = authUser.id;
@@ -531,6 +548,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, [appUserId, medicalRecordDrafts]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(
+      getScopedStorageKey('speechSummaries', appUserId),
+      JSON.stringify(speechSummaries),
+    );
+  }, [appUserId, speechSummaries]);
+
   function saveUserLocation(input: UserLocationInput) {
     setUser((current) => {
       const nextCity = input.city?.trim() ? input.city.trim() : current.city;
@@ -645,6 +673,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setReviews([]);
     setReviewDrafts([]);
     setMedicalRecordDrafts([]);
+    setSpeechSummaries([]);
   }
 
   function toggleHospitalLike(hospitalId: string) {
@@ -848,6 +877,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPets((current) => current.filter((pet) => pet.id !== petId));
     setMedicalRecords((current) => current.filter((record) => record.petId !== petId));
     setReviews((current) => current.filter((review) => review.petId !== petId));
+    setSpeechSummaries((current) => current.filter((summary) => summary.petId !== petId));
 
     void Promise.all([
       deleteMedicalRecordsByPetRemote(appUserId, petId),
@@ -966,6 +996,37 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setMedicalRecordDrafts((current) => current.filter((draft) => draft.id !== draftId));
   }
 
+  function saveSpeechSummary(input: Omit<SavedSpeechSummary, 'id' | 'updatedAt'> & { id?: string }) {
+    const nextSummary: SavedSpeechSummary = {
+      ...input,
+      id: input.id ?? makeId('speech-summary'),
+      title: input.title.trim() || `${input.date} AI 요약`,
+      petId: input.petId || null,
+      hospitalId: input.hospitalId || null,
+      updatedAt: new Date().toISOString(),
+    };
+
+    setSpeechSummaries((current) => {
+      const filtered = current.filter((summary) => summary.id !== nextSummary.id);
+      return [nextSummary, ...filtered].sort(
+        (left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime(),
+      );
+    });
+
+    void upsertSpeechSummary(appUserId, nextSummary).catch((error) =>
+      persistError('saveSpeechSummary', error),
+    );
+
+    return nextSummary.id;
+  }
+
+  function deleteSpeechSummary(summaryId: string) {
+    setSpeechSummaries((current) => current.filter((summary) => summary.id !== summaryId));
+    void deleteSpeechSummaryRemote(summaryId).catch((error) =>
+      persistError('deleteSpeechSummary', error),
+    );
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -981,6 +1042,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         reviews,
         reviewDrafts,
         medicalRecordDrafts,
+        speechSummaries,
         datasetStatus,
         datasetError,
         toggleHospitalLike,
@@ -996,6 +1058,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         deleteMedicalRecord,
         saveMedicalRecordDraft,
         deleteMedicalRecordDraft,
+        saveSpeechSummary,
+        deleteSpeechSummary,
       }}
     >
       {children}

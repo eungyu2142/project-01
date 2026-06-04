@@ -8,7 +8,7 @@ import { useAppContext } from '../context/AppContext';
 import { formatDate } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
 
-type ActivityTarget = 'likedHospitals' | 'likedReviews' | 'reviewDrafts' | 'recordDrafts';
+type ActivityTarget = 'likedHospitals' | 'likedReviews' | 'writtenReviews' | 'reviewDrafts' | 'recordDrafts';
 type AccountAction = 'nickname' | 'photo';
 
 const profileEmojiOptions = ['🐾', '🦎', '🐹', '🦜', '🐢'];
@@ -42,6 +42,9 @@ export function ProfilePage() {
   const likedReviews = [...reviews]
     .filter((review) => review.liked)
     .sort((a, b) => new Date(b.likedAt ?? 0).getTime() - new Date(a.likedAt ?? 0).getTime());
+  const writtenReviews = [...reviews]
+    .filter((review) => review.isMine || review.userId === user.id)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   const sortedReviewDrafts = [...reviewDrafts].sort(
     (a, b) => new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime(),
   );
@@ -73,6 +76,12 @@ export function ProfilePage() {
       value: sortedRecordDrafts.length,
       icon: 'calendar' as const,
       target: 'recordDrafts' as const,
+    },
+    {
+      label: '내가 쓴 리뷰',
+      value: writtenReviews.length,
+      icon: 'reviews' as const,
+      target: 'writtenReviews' as const,
     },
   ];
 
@@ -131,7 +140,7 @@ export function ProfilePage() {
 
   async function handleDeleteAccount() {
     const shouldDelete = window.confirm(
-      '계정을 삭제하면 프로필, 리뷰, 마이펫, 진료기록이 모두 삭제되고 복구할 수 없어요. 계속할까요?',
+      '계정을 삭제하면 프로필, 리뷰, 반려동물 관리 데이터, 진료기록이 모두 삭제되고 복구할 수 없어요. 계속할까요?',
     );
 
     if (!shouldDelete) {
@@ -168,7 +177,7 @@ export function ProfilePage() {
     });
   }
 
-  function openLikedReviewDetail(reviewId: string) {
+  function openReviewDetail(reviewId: string) {
     setSelectedActivityTarget(null);
     navigate(`/reviews/${encodeURIComponent(reviewId)}`, {
       state: {
@@ -212,9 +221,11 @@ export function ProfilePage() {
                   key={card.label}
                   type="button"
                   onClick={() => setSelectedActivityTarget(card.target)}
-                  className="rounded-[1.6rem] border border-emerald-100 bg-[#f4fbf7] p-4 text-left transition active:scale-[0.98]"
+                  className={`rounded-[1.6rem] border border-emerald-100 bg-[#f4fbf7] p-4 text-left transition active:scale-[0.98] ${
+                    card.target === 'writtenReviews' ? 'col-span-2' : ''
+                  }`}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm">
                       <Icon name={card.icon} className="h-5 w-5" />
                     </span>
@@ -401,7 +412,7 @@ export function ProfilePage() {
                     <button
                       key={review.id}
                       type="button"
-                      onClick={() => openLikedReviewDetail(review.id)}
+                      onClick={() => openReviewDetail(review.id)}
                       className="w-full rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4 text-left transition active:scale-[0.99]"
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -421,6 +432,36 @@ export function ProfilePage() {
                   ))
                 ) : (
                   <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 좋아요한 리뷰가 없어요.</p>
+                )
+              ) : null}
+
+              {selectedActivityTarget === 'writtenReviews' ? (
+                writtenReviews.length > 0 ? (
+                  writtenReviews.map((review) => (
+                    <button
+                      key={review.id}
+                      type="button"
+                      onClick={() => openReviewDetail(review.id)}
+                      className="w-full rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4 text-left transition active:scale-[0.99]"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-slate-900">{review.petName} 리뷰</p>
+                          <p className="mt-1 truncate text-sm text-slate-500">{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
+                          <div className="mt-2 space-y-1.5 text-sm text-slate-700">
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">동물 종</span>{review.species}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병원</span>{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병명</span>{review.diagnosis || '미입력'}</p>
+                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">처방</span>{review.medicine || '미입력'}</p>
+                          </div>
+                          <p className="mt-2 text-xs text-slate-400">작성일 {formatDate(review.createdAt)}</p>
+                        </div>
+                        <Icon name="reviews" className="h-5 w-5 shrink-0 text-emerald-600" />
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-dashed border-emerald-100 bg-emerald-50/50 px-4 py-6 text-sm text-slate-500">아직 작성한 리뷰가 없어요.</p>
                 )
               ) : null}
 

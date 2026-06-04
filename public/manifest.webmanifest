@@ -1,7 +1,7 @@
 {
   "name": "엑조펫",
   "short_name": "엑조펫",
-  "description": "특수동물 병원 검색, 리뷰, 마이펫 기록을 한 번에 관리하는 앱",
+  "description": "특수동물 병원 검색, 리뷰, 반려동물 관리 기록을 한 번에 관리하는 앱",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#effcf5",

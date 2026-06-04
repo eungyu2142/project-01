@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimalTabs } from '../components/AnimalTabs';
 import { Icon } from '../components/Icon';
@@ -7,10 +7,13 @@ import { ModalSheet } from '../components/ModalSheet';
 import { PetEditor } from '../components/PetEditor';
 import { RecordEditor } from '../components/RecordEditor';
 import { SearchBar } from '../components/SearchBar';
+import { SpeechSummaryPanel } from '../components/SpeechSummaryPanel';
 import { useAppContext } from '../context/AppContext';
 import { formatCurrency, formatDate } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
 import { findReviewForRecord } from '../lib/recordReviewLink';
+import { getTodayDateValue } from '../lib/date';
+import { summarizeSpeechAudio, type SpeechSummaryResult } from '../lib/speechSummary';
 import type { AnimalFilter, MedicalRecord, MedicalRecordDraft, Pet } from '../types';
 
 interface MyPetRouteState {
@@ -46,6 +49,19 @@ const animalName = {
   rodent: '설치류',
   bird: '조류',
 } as const;
+const missingSpeechValue = '언급 없음';
+
+function isMentioned(value: string | undefined) {
+  return Boolean(value?.trim() && value.trim() !== missingSpeechValue);
+}
+
+function getMentionedValue(value: string | undefined) {
+  return isMentioned(value) ? value?.trim() ?? '' : '';
+}
+
+function makeRecordDraftId() {
+  return `record-draft-${crypto.randomUUID()}`;
+}
 
 function truncateWithDots(value: string, maxLength = 18) {
   if (value.length <= maxLength) {
@@ -256,6 +272,16 @@ export function MyPetPage() {
   const [returnTo] = useState(routeState?.returnTo ?? '');
   const [allRecordsOpen, setAllRecordsOpen] = useState(false);
   const [expandedRecordId, setExpandedRecordId] = useState('');
+  const [speechModalOpen, setSpeechModalOpen] = useState(false);
+  const [speechAudioFile, setSpeechAudioFile] = useState<File | null>(null);
+  const [speechSummary, setSpeechSummary] = useState<SpeechSummaryResult | null>(null);
+  const [speechMessage, setSpeechMessage] = useState('');
+  const [speechStatusMessage, setSpeechStatusMessage] = useState('');
+  const [speechIsRecording, setSpeechIsRecording] = useState(false);
+  const [speechIsSummarizing, setSpeechIsSummarizing] = useState(false);
+  const speechUploadInputRef = useRef<HTMLInputElement | null>(null);
+  const speechRecorderRef = useRef<MediaRecorder | null>(null);
+  const speechChunksRef = useRef<Blob[]>([]);
 
   const petCounts = useMemo(
     () => ({
@@ -284,8 +310,41 @@ export function MyPetPage() {
   }, [petSearchText, pets, selectedAnimal]);
 
   const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? null;
+  const petsById = useMemo(
+    () =>
+      pets.reduce<Record<string, Pet>>((acc, pet) => {
+        acc[pet.id] = pet;
+        return acc;
+      }, {}),
+    [pets],
+  );
+  const recordEditorPets = useMemo(() => {
+    if (editingRecord) {
+      return pets;
+    }
+
+    if (selectedPet) {
+      return [selectedPet];
+    }
+
+    if (selectedAnimal === 'all') {
+      return pets;
+    }
+
+    return pets.filter((pet) => pet.animalType === selectedAnimal);
+  }, [editingRecord, pets, selectedAnimal, selectedPet]);
   const visibleRecords = [...medicalRecords]
-    .filter((record) => (selectedPet ? record.petId === selectedPet.id : true))
+    .filter((record) => {
+      if (selectedPet) {
+        return record.petId === selectedPet.id;
+      }
+
+      if (selectedAnimal === 'all') {
+        return true;
+      }
+
+      return petsById[record.petId]?.animalType === selectedAnimal;
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   const activeRecordId = visibleRecords.some((record) => record.id === expandedRecordId)
     ? expandedRecordId
@@ -326,6 +385,173 @@ export function MyPetPage() {
     acc[pet.id] = pet.name;
     return acc;
   }, {});
+
+  function resetSpeechFlow() {
+    setSpeechAudioFile(null);
+    setSpeechSummary(null);
+    setSpeechMessage('');
+    setSpeechStatusMessage('');
+  }
+
+  function openSpeechModal() {
+    resetSpeechFlow();
+    setSpeechModalOpen(true);
+  }
+
+  function openDirectRecordEditor() {
+    setDraftRecord(null);
+    setEditingRecord(null);
+    setRecordEditorOpen(true);
+  }
+
+  function openSpeechUploadPicker() {
+    resetSpeechFlow();
+    setSpeechModalOpen(true);
+    window.setTimeout(() => speechUploadInputRef.current?.click(), 0);
+  }
+
+  function setSpeechFile(file: File) {
+    setSpeechAudioFile(file);
+    setSpeechSummary(null);
+    setSpeechMessage('');
+    setSpeechStatusMessage('음성 파일이 준비됐어요. 요약을 시작할 수 있어요.');
+  }
+
+  function handleSpeechAudioFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    if (file.size > 25 * 1024 * 1024) {
+      setSpeechMessage('음성 파일은 최대 25MB까지 사용할 수 있어요.');
+      return;
+    }
+
+    setSpeechFile(file);
+  }
+
+  async function startSpeechRecording() {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+      setSpeechMessage('이 브라우저에서는 녹음 기능을 사용할 수 없어요. 파일 업로드를 사용해 주세요.');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+
+      speechChunksRef.current = [];
+      speechRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          speechChunksRef.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(speechChunksRef.current, {
+          type: recorder.mimeType || 'audio/webm',
+        });
+        const file = new File([blob], `medical-recording-${Date.now()}.webm`, {
+          type: blob.type || 'audio/webm',
+        });
+
+        stream.getTracks().forEach((track) => track.stop());
+        speechRecorderRef.current = null;
+        speechChunksRef.current = [];
+        setSpeechIsRecording(false);
+
+        if (file.size === 0) {
+          setSpeechMessage('녹음된 음성이 비어 있어요. 다시 시도해 주세요.');
+          return;
+        }
+
+        setSpeechFile(file);
+      };
+
+      recorder.start();
+      setSpeechIsRecording(true);
+      setSpeechMessage('');
+      setSpeechStatusMessage('녹음 중이에요. 진료 대화가 끝나면 녹음 중지를 눌러 주세요.');
+    } catch {
+      setSpeechMessage('마이크 권한을 가져오지 못했어요. 브라우저 권한을 확인해 주세요.');
+    }
+  }
+
+  function stopSpeechRecording() {
+    const recorder = speechRecorderRef.current;
+
+    if (!recorder || recorder.state === 'inactive') {
+      return;
+    }
+
+    recorder.stop();
+  }
+
+  async function handleSummarizeSpeech() {
+    if (!speechAudioFile) {
+      setSpeechMessage('먼저 녹음하거나 음성 파일을 올려 주세요.');
+      return;
+    }
+
+    setSpeechIsSummarizing(true);
+    setSpeechMessage('');
+    setSpeechStatusMessage('음성을 텍스트로 바꾸고 진료 기록 초안으로 정리하는 중이에요.');
+
+    try {
+      const summary = await summarizeSpeechAudio('record', speechAudioFile);
+      setSpeechSummary(summary);
+      setSpeechStatusMessage('요약이 준비됐어요. 진료 기록으로 열어 확인해 주세요.');
+    } catch (error) {
+      setSpeechMessage(error instanceof Error ? error.message : '음성 요약을 처리하지 못했어요.');
+      setSpeechStatusMessage('');
+    } finally {
+      setSpeechIsSummarizing(false);
+    }
+  }
+
+  function openSpeechSummaryAsRecordDraft() {
+    if (!speechSummary) {
+      setSpeechMessage('먼저 음성을 요약해 주세요.');
+      return;
+    }
+
+    const { fields } = speechSummary;
+    const veterinarianNoteParts = [
+      ['방문 목적', fields.visitPurpose],
+      ['검사/치료 내용', fields.testTreatment],
+      ['주의사항', fields.precautions],
+      ['방문 계획', fields.followUpPlan],
+      ['기타 메모', fields.otherMemo],
+    ]
+      .map(([label, value]) => {
+        const mentionedValue = getMentionedValue(value);
+        return mentionedValue ? `${label}: ${mentionedValue}` : '';
+      })
+      .filter(Boolean);
+    const nextDraft: MedicalRecordDraft = {
+      id: makeRecordDraftId(),
+      petId: selectedPet?.id ?? '',
+      hospitalId: '',
+      date: getTodayDateValue(),
+      diagnosis: getMentionedValue(fields.diagnosis),
+      veterinarianNote: veterinarianNoteParts.join('\n') || missingSpeechValue,
+      prescription: getMentionedValue(fields.prescription),
+      cost: null,
+      memo: speechSummary.transcript ? `전사문:\n${speechSummary.transcript}` : '',
+      imageUrls: [],
+      updatedAt: new Date().toISOString(),
+    };
+
+    setDraftRecord(nextDraft);
+    setEditingRecord(null);
+    setRecordEditorOpen(true);
+    setSpeechModalOpen(false);
+  }
 
   function startRecordToReview(record: MedicalRecord, pet: Pet) {
     navigate('/reviews', {
@@ -447,6 +673,7 @@ export function MyPetPage() {
             open={recordEditorOpen}
             record={editingRecord}
             draft={draftRecord}
+            initialPetId={selectedPet?.id}
             pets={pets}
             hospitals={hospitals}
             onClose={closeRecordEditor}
@@ -462,7 +689,7 @@ export function MyPetPage() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-60 bg-[#18b996]" />
       <div className="relative z-10">
         <section className="flex min-h-[14rem] flex-col justify-start pb-5 pt-7 text-white">
-          <h1 className="mb-2 text-[2rem] font-semibold">마이 펫</h1>
+          <h1 className="mb-2 text-[2rem] font-semibold">반려동물 관리</h1>
           <SearchBar
             value={petSearchText}
             onValueChange={(nextValue) => {
@@ -542,19 +769,45 @@ export function MyPetPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">
-                {selectedPet ? `${selectedPet.name}의 진료 기록` : '전체 진료 기록'}
+                {selectedPet
+                  ? `${selectedPet.name}의 진료 기록`
+                  : selectedAnimal === 'all'
+                    ? '전체 진료 기록'
+                    : `${animalName[selectedAnimal]} 진료 기록`}
               </h2>
             </div>
+          </div>
+          <input
+            ref={speechUploadInputRef}
+            type="file"
+            accept=".mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm"
+            className="hidden"
+            onChange={handleSpeechAudioFileChange}
+          />
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={openDirectRecordEditor}
+              className="rounded-lg bg-emerald-600 px-3 py-3 text-sm font-semibold text-white"
+            >
+              직접 작성하기
+            </button>
             <button
               type="button"
               onClick={() => {
-                setDraftRecord(null);
-                setEditingRecord(null);
-                setRecordEditorOpen(true);
+                openSpeechModal();
+                void startSpeechRecording();
               }}
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
+              className="rounded-lg border border-emerald-200 bg-white px-3 py-3 text-sm font-semibold text-emerald-700"
             >
-              + 기록 추가
+              녹음 시작
+            </button>
+            <button
+              type="button"
+              onClick={openSpeechUploadPicker}
+              className="rounded-lg border border-emerald-200 bg-white px-3 py-3 text-sm font-semibold text-emerald-700"
+            >
+              녹음 파일 업로드
             </button>
           </div>
 
@@ -608,6 +861,31 @@ export function MyPetPage() {
           </div>
         </ModalSheet>
 
+        <ModalSheet
+          open={speechModalOpen}
+          title="음성 인식 요약으로 작성하기"
+          description="녹음하거나 음성 파일을 올린 뒤 진료 기록 초안으로 열 수 있어요."
+          onClose={() => setSpeechModalOpen(false)}
+        >
+          <SpeechSummaryPanel
+            scope="record"
+            applyLabel="진료 기록으로 열기"
+            audioMessage={speechMessage}
+            canRequestSummary={Boolean(speechAudioFile)}
+            isRecording={speechIsRecording}
+            isSummarizing={speechIsSummarizing}
+            selectedAudioLabel={speechAudioFile?.name ?? ''}
+            statusMessage={speechStatusMessage}
+            summary={speechSummary}
+            unavailableReason=""
+            onApplySummary={speechSummary ? openSpeechSummaryAsRecordDraft : undefined}
+            onAudioFileChange={handleSpeechAudioFileChange}
+            onStartRecording={startSpeechRecording}
+            onStopRecording={stopSpeechRecording}
+            onSummarize={handleSummarizeSpeech}
+          />
+        </ModalSheet>
+
         <PetEditor
           key={`pet-editor-${editingPet?.id ?? 'new'}-${petEditorOpen ? 'open' : 'closed'}`}
           open={petEditorOpen}
@@ -623,7 +901,8 @@ export function MyPetPage() {
           open={recordEditorOpen}
           record={editingRecord}
           draft={draftRecord}
-          pets={pets}
+          initialPetId={selectedPet?.id}
+          pets={recordEditorPets}
           hospitals={hospitals}
           onClose={closeRecordEditor}
           onSave={saveMedicalRecord}
