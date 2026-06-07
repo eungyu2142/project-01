@@ -97,19 +97,6 @@ export interface SpeechSummaryFields {
   otherMemo: string;
 }
 
-export interface SavedSpeechSummary {
-  id: string;
-  scope: 'record' | 'review';
-  petId: string | null;
-  hospitalId: string | null;
-  date: string;
-  title: string;
-  fields: SpeechSummaryFields;
-  transcript: string;
-  warnings: string[];
-  updatedAt: string;
-}
-
 export interface Review {
   id: string;
   userId: string;

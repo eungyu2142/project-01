@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { BottomNav } from './components/BottomNav';
 import { useAuth } from './context/AuthContext';
 import { useAppContext } from './context/AppContext';
 import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
-import { LaunchPage } from './pages/LaunchPage';
 import { MyPetPage } from './pages/MyPetPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ReviewsPage } from './pages/ReviewsPage';
@@ -37,22 +36,6 @@ function AppLayout() {
 }
 
 function AppRoutes() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const didResetInitialRouteRef = useRef(false);
-
-  useEffect(() => {
-    if (didResetInitialRouteRef.current) {
-      return;
-    }
-
-    didResetInitialRouteRef.current = true;
-
-    if (location.pathname !== '/' || location.search || location.hash) {
-      navigate('/', { replace: true });
-    }
-  }, [location.hash, location.pathname, location.search, navigate]);
-
   return (
     <Routes>
       <Route element={<AppLayout />}>
@@ -69,13 +52,11 @@ function AppRoutes() {
 
 export default function App() {
   const { authReady, loginIdRecoveryResult, passwordRecovery, session } = useAuth();
-  const { appReady, markOnboardingComplete, user } = useAppContext();
-  const [phase, setPhase] = useState<'splash' | 'welcome' | 'app'>('splash');
+  const { appReady, user } = useAppContext();
   const [forceAuthView, setForceAuthView] = useState(() => {
     return getForceAuthView();
   });
   const isUserHydrated = !session || (appReady && user.id === session.user.id);
-  const previousSessionUserIdRef = useRef<string | null>(session?.user.id ?? null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -96,81 +77,6 @@ export default function App() {
     setForceAuthView(getForceAuthView());
   }, [session]);
 
-  useEffect(() => {
-    const currentSessionUserId = session?.user.id ?? null;
-    const previousSessionUserId = previousSessionUserIdRef.current;
-
-    if (!currentSessionUserId) {
-      previousSessionUserIdRef.current = null;
-      return;
-    }
-
-    if (forceAuthView || passwordRecovery || loginIdRecoveryResult) {
-      previousSessionUserIdRef.current = currentSessionUserId;
-      return;
-    }
-
-    if (previousSessionUserId !== currentSessionUserId) {
-      setPhase('splash');
-    }
-
-    previousSessionUserIdRef.current = currentSessionUserId;
-  }, [forceAuthView, loginIdRecoveryResult, passwordRecovery, session]);
-
-  useEffect(() => {
-    if (
-      phase !== 'splash' ||
-      !authReady ||
-      !appReady ||
-      !session ||
-      forceAuthView ||
-      passwordRecovery ||
-      loginIdRecoveryResult
-    ) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setPhase(user.onboardingCompletedAt ? 'app' : 'welcome');
-    }, 1600);
-
-    return () => window.clearTimeout(timer);
-  }, [appReady, authReady, forceAuthView, loginIdRecoveryResult, passwordRecovery, phase, session, user.onboardingCompletedAt]);
-
-  useEffect(() => {
-    if (
-      phase === 'splash' ||
-      !authReady ||
-      !appReady ||
-      !session ||
-      forceAuthView ||
-      passwordRecovery ||
-      loginIdRecoveryResult
-    ) {
-      return;
-    }
-
-    const nextPhase = user.onboardingCompletedAt ? 'app' : 'welcome';
-
-    if (phase !== nextPhase) {
-      setPhase(nextPhase);
-    }
-  }, [
-    appReady,
-    authReady,
-    forceAuthView,
-    loginIdRecoveryResult,
-    passwordRecovery,
-    phase,
-    session,
-    user.onboardingCompletedAt,
-  ]);
-
-  function handleEnterApp() {
-    markOnboardingComplete();
-    setPhase('app');
-  }
-
   if (!authReady || !isUserHydrated) {
     return (
       <div className="flex min-h-[100dvh] items-center justify-center bg-emerald-50 text-sm font-semibold text-emerald-700">
@@ -189,14 +95,6 @@ export default function App() {
 
   if (passwordRecovery) {
     return <AuthPage />;
-  }
-
-  if (phase === 'splash') {
-    return <LaunchPage mode="splash" onEnter={handleEnterApp} />;
-  }
-
-  if (phase === 'welcome') {
-    return <LaunchPage mode="welcome" onEnter={handleEnterApp} />;
   }
 
   return <AppRoutes />;

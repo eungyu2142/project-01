@@ -44,7 +44,6 @@ interface ReviewPreviewCardProps {
   review: Review;
   hospitalName: string;
   onOpenReview?: () => void;
-  onOpenHospital: () => void;
   onToggleLike: (reviewId: string) => void;
   onEdit: (review: Review) => void;
   onDelete: (reviewId: string) => void;
@@ -91,7 +90,6 @@ function ReviewPreviewCard({
   review,
   hospitalName,
   onOpenReview,
-  onOpenHospital,
   onToggleLike,
   onEdit,
   onDelete,
@@ -101,24 +99,16 @@ function ReviewPreviewCard({
   const reviewTags = [...review.tags, ...review.customTags];
 
   return (
-    <article
-      role={onOpenReview ? 'button' : undefined}
-      tabIndex={onOpenReview ? 0 : undefined}
-      onClick={onOpenReview}
-      onKeyDown={(event) => {
-        if (!onOpenReview || (event.key !== 'Enter' && event.key !== ' ')) {
-          return;
-        }
+    <article className="relative block w-full rounded-lg border border-emerald-100 bg-white p-4 text-left shadow-[0_8px_20px_rgba(15,118,110,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(15,118,110,0.12)]">
+      <button
+        type="button"
+        onClick={onOpenReview}
+        className="absolute inset-0 z-0 rounded-lg"
+        aria-label={`${hospitalName} 리뷰 상세보기`}
+      />
 
-        event.preventDefault();
-        onOpenReview();
-      }}
-      className={`block w-full rounded-lg border border-emerald-100 bg-white p-4 text-left shadow-[0_8px_20px_rgba(15,118,110,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(15,118,110,0.12)] ${
-        onOpenReview ? 'cursor-pointer' : ''
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
+      <div className="relative z-10 flex items-start justify-between gap-3 pointer-events-none">
+        <div className="min-w-0 flex-1 text-left">
           <div className="flex flex-wrap items-center gap-2">
             <span className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
               {getAnimalLabel(review.animalType)}
@@ -126,17 +116,9 @@ function ReviewPreviewCard({
           </div>
 
           <div className="mt-3 space-y-1.5">
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                onOpenHospital();
-              }}
-              className={`${summaryHospitalRowClass} block w-full truncate text-left underline decoration-emerald-300 underline-offset-2`}
-              title={hospitalName}
-            >
+            <p className={`${summaryHospitalRowClass} block w-full truncate text-left`} title={hospitalName}>
               <span className={summaryHospitalLabelClass}>병원</span>{hospitalName}
-            </button>
+            </p>
             <p className={summaryRowClass}><span className={summaryLabelClass}>동물 종</span>{review.species}</p>
             <p className={summaryRowClass}><span className={summaryLabelClass}>병명</span>{diagnosisLabel || '미입력'}</p>
             <p className={summaryRowClass}><span className={summaryLabelClass}>처방</span>{treatmentLabel}</p>
@@ -144,22 +126,22 @@ function ReviewPreviewCard({
 
           {reviewTags.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
-              {reviewTags.map((tag) => (
+              {reviewTags.slice(0, 3).map((tag) => (
                 <span key={tag} className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
                   #{tag}
                 </span>
               ))}
+              {reviewTags.length > 3 ? (
+                <span className={`${compactBadgeClass} bg-slate-100 text-slate-500`}>...</span>
+              ) : null}
             </div>
           ) : null}
         </div>
 
         <button
           type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onToggleLike(review.id);
-          }}
-          className={`mt-1 inline-flex h-9 shrink-0 items-center gap-1 rounded-lg px-3 text-sm font-semibold ${
+          onClick={() => onToggleLike(review.id)}
+          className={`pointer-events-auto mt-1 inline-flex h-9 shrink-0 items-center gap-1 rounded-lg px-3 text-sm font-semibold ${
             review.liked ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
           }`}
           aria-label="리뷰 좋아요"
@@ -170,24 +152,18 @@ function ReviewPreviewCard({
       </div>
 
       {review.isMine ? (
-        <div className="mt-3 flex justify-end gap-2 border-t border-slate-100 pt-3 text-xs">
+        <div className="relative z-10 mt-3 flex justify-end gap-2 border-t border-slate-100 pt-3 text-xs pointer-events-none">
           <button
             type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              onEdit(review);
-            }}
-            className="rounded-lg bg-emerald-50 px-3 py-2 font-semibold text-emerald-700"
+            onClick={() => onEdit(review)}
+            className="pointer-events-auto rounded-lg bg-emerald-50 px-3 py-2 font-semibold text-emerald-700"
           >
             수정
           </button>
           <button
             type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelete(review.id);
-            }}
-            className="rounded-lg bg-rose-50 px-3 py-2 font-semibold text-rose-500"
+            onClick={() => onDelete(review.id)}
+            className="pointer-events-auto rounded-lg bg-rose-50 px-3 py-2 font-semibold text-rose-500"
           >
             삭제
           </button>
@@ -279,6 +255,9 @@ function ReviewCard({
             <span className={summaryLabelClass}>동물 종</span>{review.species}
           </p>
           <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>반려동물</span>{review.petName || '미입력'}
+          </p>
+          <p className={summaryRowClass}>
             <span className={summaryLabelClass}>병명</span>{diagnosisLabel || '미입력'}
           </p>
           <p className={summaryRowClass}>
@@ -286,19 +265,31 @@ function ReviewCard({
           </p>
         </div>
 
-        {review.body.trim() ? (
-          <p className={`${spacious ? 'mt-5 text-base leading-7' : 'mt-4 text-sm leading-6'} whitespace-pre-line text-slate-600`}>
+        {spacious ? (
+          <section className="mt-5 border-t border-slate-100 pt-5">
+            <h2 className="text-base font-semibold text-slate-900">상세 후기</h2>
+            <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-600">
+              {review.body.trim() || '작성된 상세 후기가 없습니다.'}
+            </p>
+          </section>
+        ) : review.body.trim() ? (
+          <p className="mt-4 whitespace-pre-line text-sm leading-6 text-slate-600">
             {review.body}
           </p>
         ) : null}
 
         {reviewTags.length > 0 ? (
           <div className="mt-4 flex flex-wrap gap-2">
-            {reviewTags.map((tag) => (
+            {reviewTags.slice(0, 3).map((tag) => (
               <span key={tag} className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-emerald-50 text-emerald-700`}>
                 #{tag}
               </span>
             ))}
+            {reviewTags.length > 3 ? (
+              <span className={`${spacious ? spaciousBadgeClass : compactBadgeClass} bg-slate-100 text-slate-500`}>
+                ...
+              </span>
+            ) : null}
           </div>
         ) : null}
 
@@ -419,7 +410,7 @@ export function ReviewsPage() {
   );
 
 
-  const selectedReview = reviewId ? filteredReviews.find((review) => review.id === reviewId) ?? null : null;
+  const selectedReview = reviewId ? reviews.find((review) => review.id === reviewId) ?? null : null;
   const reviewScopeForCounts = countScopedReviews;
   const counts = {
     all: reviewScopeForCounts.length,
@@ -433,12 +424,12 @@ export function ReviewsPage() {
       return;
     }
 
-    const exists = filteredReviews.some((review) => review.id === reviewId);
+    const exists = reviews.some((review) => review.id === reviewId);
 
     if (!exists) {
       navigate(returnTo || '/reviews', { replace: true });
     }
-  }, [filteredReviews, navigate, returnTo, reviewId]);
+  }, [navigate, returnTo, reviewId, reviews]);
 
   function returnToReportList() {
     if (returnTo) {
@@ -493,15 +484,6 @@ export function ReviewsPage() {
     deleteReview(reviewId);
   }
 
-  function openHospitalOnMap(review: Review) {
-    navigate('/', {
-      state: {
-        hospitalId: review.hospitalId,
-        animalType: review.animalType,
-      },
-    });
-  }
-
   if (reviewId && selectedReview) {
     return (
       <div className="relative min-h-full overflow-hidden bg-[#f4fffb] px-5 pb-28 pt-[max(1rem,env(safe-area-inset-top))]">
@@ -517,6 +499,7 @@ export function ReviewsPage() {
             >
               <Icon name="chevron" className="h-6 w-6 rotate-180" />
             </button>
+            <h1 className="mt-4 text-2xl font-semibold text-white">리뷰 상세</h1>
           </header>
 
           <section className="mt-2">
@@ -626,7 +609,6 @@ export function ReviewsPage() {
                   review={review}
                   hospitalName={hospitalById[review.hospitalId]?.name ?? '이름 없는 병원'}
                   onOpenReview={() => openReviewDetail(review.id)}
-                  onOpenHospital={() => openHospitalOnMap(review)}
                   onToggleLike={toggleReviewLike}
                   onEdit={(currentReview) => {
                     setDraft(undefined);

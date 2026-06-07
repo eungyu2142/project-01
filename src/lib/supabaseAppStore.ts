@@ -1,6 +1,5 @@
 ﻿import type { MedicalRecord, Pet, Review, UserProfile } from '../types';
 import { isSupabaseConfigured, supabase } from './supabase';
-import type { SavedSpeechSummary, SpeechSummaryFields } from '../types';
 
 interface PetRow {
   id: string;
@@ -62,20 +61,6 @@ interface ReviewRow {
   author_name: string;
   is_mine: boolean;
   created_at: string;
-}
-
-interface SpeechSummaryRow {
-  id: string;
-  user_id: string;
-  scope: SavedSpeechSummary['scope'];
-  pet_id: string | null;
-  hospital_id: string | null;
-  date: string;
-  title: string;
-  fields: SpeechSummaryFields;
-  transcript: string;
-  warnings: string[];
-  updated_at: string;
 }
 
 const LEGACY_REVIEW_OPTIONAL_COLUMNS = [
@@ -226,37 +211,6 @@ function fromReviewRow(row: ReviewRow): Review {
   };
 }
 
-function toSpeechSummaryRow(userId: string, summary: SavedSpeechSummary): SpeechSummaryRow {
-  return {
-    id: summary.id,
-    user_id: userId,
-    scope: summary.scope,
-    pet_id: summary.petId,
-    hospital_id: summary.hospitalId,
-    date: summary.date,
-    title: summary.title,
-    fields: summary.fields,
-    transcript: summary.transcript,
-    warnings: summary.warnings,
-    updated_at: summary.updatedAt,
-  };
-}
-
-function fromSpeechSummaryRow(row: SpeechSummaryRow): SavedSpeechSummary {
-  return {
-    id: row.id,
-    scope: row.scope,
-    petId: row.pet_id,
-    hospitalId: row.hospital_id,
-    date: row.date,
-    title: row.title,
-    fields: row.fields,
-    transcript: row.transcript,
-    warnings: row.warnings ?? [],
-    updatedAt: row.updated_at,
-  };
-}
-
 function getMissingReviewColumn(error: { message?: string } | null | undefined) {
   const message = error?.message ?? '';
   const directMatch = message.match(/column ["']?([a-z_]+)["']? .* does not exist/i);
@@ -324,16 +278,6 @@ export async function loadUserAppData(userId: string) {
   if (medicalRecordsError) throw medicalRecordsError;
   if (reviewsError) throw reviewsError;
 
-  const { data: speechSummaries, error: speechSummariesError } = await supabase
-    .from('speech_summaries')
-    .select('*')
-    .eq('user_id', userId)
-    .order('updated_at', { ascending: false });
-
-  if (speechSummariesError && !speechSummariesError.message.toLowerCase().includes('speech_summaries')) {
-    throw speechSummariesError;
-  }
-
   const nextPets = (pets as PetRow[] | null)?.map(fromPetRow) ?? [];
   const validPetIds = new Set(nextPets.map((pet) => pet.id));
   const medicalRecordRows = (medicalRecords as MedicalRecordRow[] | null) ?? [];
@@ -359,9 +303,6 @@ export async function loadUserAppData(userId: string) {
         .map(fromMedicalRecordRow)
         .filter((record) => validPetIds.has(record.petId)) ?? [],
     reviews: (reviews as ReviewRow[] | null)?.map(fromReviewRow) ?? [],
-    speechSummaries: speechSummariesError
-      ? []
-      : (speechSummaries as SpeechSummaryRow[] | null)?.map(fromSpeechSummaryRow) ?? [],
   };
 }
 
@@ -514,24 +455,6 @@ export async function deleteMedicalRecordRemote(recordId: string) {
   }
 
   const { error } = await supabase.from('medical_records').delete().eq('id', recordId);
-  if (error) throw error;
-}
-
-export async function upsertSpeechSummary(userId: string, summary: SavedSpeechSummary) {
-  if (!isSupabaseConfigured || !supabase) {
-    return;
-  }
-
-  const { error } = await supabase.from('speech_summaries').upsert(toSpeechSummaryRow(userId, summary));
-  if (error) throw error;
-}
-
-export async function deleteSpeechSummaryRemote(summaryId: string) {
-  if (!isSupabaseConfigured || !supabase) {
-    return;
-  }
-
-  const { error } = await supabase.from('speech_summaries').delete().eq('id', summaryId);
   if (error) throw error;
 }
 

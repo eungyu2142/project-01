@@ -33,6 +33,8 @@ interface RecordCardsProps {
   hospitalNames: Record<string, string>;
   petNames: Record<string, string>;
   activeRecordId: string;
+  onDelete: (recordId: string) => void;
+  onEdit: (record: MedicalRecord) => void;
   onSelect: (recordId: string) => void;
 }
 
@@ -61,6 +63,24 @@ function getMentionedValue(value: string | undefined) {
 
 function makeRecordDraftId() {
   return `record-draft-${crypto.randomUUID()}`;
+}
+
+function getRecordingFileExtension(mimeType: string) {
+  const normalizedType = mimeType.toLowerCase();
+
+  if (normalizedType.includes('mp4') || normalizedType.includes('m4a')) {
+    return 'mp4';
+  }
+
+  if (normalizedType.includes('mpeg') || normalizedType.includes('mp3')) {
+    return 'mp3';
+  }
+
+  if (normalizedType.includes('wav')) {
+    return 'wav';
+  }
+
+  return 'webm';
 }
 
 function truncateWithDots(value: string, maxLength = 18) {
@@ -198,7 +218,15 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
   );
 }
 
-function RecordCards({ records, hospitalNames, petNames, activeRecordId, onSelect }: RecordCardsProps) {
+function RecordCards({
+  records,
+  hospitalNames,
+  petNames,
+  activeRecordId,
+  onDelete,
+  onEdit,
+  onSelect,
+}: RecordCardsProps) {
   const [visibleCount, setVisibleCount] = useState(3);
   const visibleRecords = records.slice(0, visibleCount);
   const hasMore = records.length > visibleCount;
@@ -211,16 +239,14 @@ function RecordCards({ records, hospitalNames, petNames, activeRecordId, onSelec
     <>
       <div className="mt-4 space-y-3">
         {visibleRecords.map((record) => (
-          <button
+          <article
             key={record.id}
-            type="button"
-            onClick={() => onSelect(record.id)}
             className={`w-full rounded-lg border px-4 py-4 text-left shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
               activeRecordId === record.id ? 'border-emerald-300 bg-white' : 'border-white bg-white/90'
             }`}
           >
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <button type="button" onClick={() => onSelect(record.id)} className="min-w-0 flex-1 text-left">
                 <p className="flex items-center gap-2 text-sm text-slate-400">
                   <Icon name="calendar" className="h-4 w-4" />
                   {formatDate(record.date)}
@@ -228,9 +254,27 @@ function RecordCards({ records, hospitalNames, petNames, activeRecordId, onSelec
                 <p className="mt-3 text-lg font-semibold text-slate-900">{record.diagnosis}</p>
                 <p className="mt-1 text-sm font-medium text-emerald-700">{petNames[record.petId] ?? '반려동물 미선택'}</p>
                 <p className="mt-1 text-sm text-slate-500">{hospitalNames[record.hospitalId]}</p>
+              </button>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() => onEdit(record)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700"
+                  aria-label="진료 기록 수정"
+                >
+                  <Icon name="edit" className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDelete(record.id)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-500"
+                  aria-label="진료 기록 삭제"
+                >
+                  <Icon name="trash" className="h-4 w-4" />
+                </button>
               </div>
             </div>
-          </button>
+          </article>
         ))}
       </div>
 
@@ -276,10 +320,8 @@ export function MyPetPage() {
   const [speechAudioFile, setSpeechAudioFile] = useState<File | null>(null);
   const [speechSummary, setSpeechSummary] = useState<SpeechSummaryResult | null>(null);
   const [speechMessage, setSpeechMessage] = useState('');
-  const [speechStatusMessage, setSpeechStatusMessage] = useState('');
   const [speechIsRecording, setSpeechIsRecording] = useState(false);
   const [speechIsSummarizing, setSpeechIsSummarizing] = useState(false);
-  const speechUploadInputRef = useRef<HTMLInputElement | null>(null);
   const speechRecorderRef = useRef<MediaRecorder | null>(null);
   const speechChunksRef = useRef<Blob[]>([]);
 
@@ -390,7 +432,6 @@ export function MyPetPage() {
     setSpeechAudioFile(null);
     setSpeechSummary(null);
     setSpeechMessage('');
-    setSpeechStatusMessage('');
   }
 
   function openSpeechModal() {
@@ -404,17 +445,10 @@ export function MyPetPage() {
     setRecordEditorOpen(true);
   }
 
-  function openSpeechUploadPicker() {
-    resetSpeechFlow();
-    setSpeechModalOpen(true);
-    window.setTimeout(() => speechUploadInputRef.current?.click(), 0);
-  }
-
   function setSpeechFile(file: File) {
     setSpeechAudioFile(file);
     setSpeechSummary(null);
     setSpeechMessage('');
-    setSpeechStatusMessage('음성 파일이 준비됐어요. 요약을 시작할 수 있어요.');
   }
 
   function handleSpeechAudioFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -453,11 +487,13 @@ export function MyPetPage() {
       };
 
       recorder.onstop = () => {
+        const recordingMimeType = recorder.mimeType || 'audio/webm';
+        const recordingExtension = getRecordingFileExtension(recordingMimeType);
         const blob = new Blob(speechChunksRef.current, {
-          type: recorder.mimeType || 'audio/webm',
+          type: recordingMimeType,
         });
-        const file = new File([blob], `medical-recording-${Date.now()}.webm`, {
-          type: blob.type || 'audio/webm',
+        const file = new File([blob], `medical-recording-${Date.now()}.${recordingExtension}`, {
+          type: blob.type || recordingMimeType,
         });
 
         stream.getTracks().forEach((track) => track.stop());
@@ -476,7 +512,6 @@ export function MyPetPage() {
       recorder.start();
       setSpeechIsRecording(true);
       setSpeechMessage('');
-      setSpeechStatusMessage('녹음 중이에요. 진료 대화가 끝나면 녹음 중지를 눌러 주세요.');
     } catch {
       setSpeechMessage('마이크 권한을 가져오지 못했어요. 브라우저 권한을 확인해 주세요.');
     }
@@ -500,15 +535,12 @@ export function MyPetPage() {
 
     setSpeechIsSummarizing(true);
     setSpeechMessage('');
-    setSpeechStatusMessage('음성을 텍스트로 바꾸고 진료 기록 초안으로 정리하는 중이에요.');
 
     try {
       const summary = await summarizeSpeechAudio('record', speechAudioFile);
       setSpeechSummary(summary);
-      setSpeechStatusMessage('요약이 준비됐어요. 진료 기록으로 열어 확인해 주세요.');
     } catch (error) {
       setSpeechMessage(error instanceof Error ? error.message : '음성 요약을 처리하지 못했어요.');
-      setSpeechStatusMessage('');
     } finally {
       setSpeechIsSummarizing(false);
     }
@@ -777,37 +809,20 @@ export function MyPetPage() {
               </h2>
             </div>
           </div>
-          <input
-            ref={speechUploadInputRef}
-            type="file"
-            accept=".mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm"
-            className="hidden"
-            onChange={handleSpeechAudioFileChange}
-          />
-          <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={openDirectRecordEditor}
-              className="rounded-lg bg-emerald-600 px-3 py-3 text-sm font-semibold text-white"
+              className="flex min-h-16 items-center justify-center rounded-lg bg-emerald-600 px-3 py-3 text-center text-sm font-semibold leading-5 text-white"
             >
-              직접 작성하기
+              직접 작성
             </button>
             <button
               type="button"
-              onClick={() => {
-                openSpeechModal();
-                void startSpeechRecording();
-              }}
-              className="rounded-lg border border-emerald-200 bg-white px-3 py-3 text-sm font-semibold text-emerald-700"
+              onClick={openSpeechModal}
+              className="flex min-h-16 items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-3 text-center text-sm font-semibold leading-5 text-emerald-700"
             >
-              녹음 시작
-            </button>
-            <button
-              type="button"
-              onClick={openSpeechUploadPicker}
-              className="rounded-lg border border-emerald-200 bg-white px-3 py-3 text-sm font-semibold text-emerald-700"
-            >
-              녹음 파일 업로드
+              음성 요약
             </button>
           </div>
 
@@ -817,6 +832,12 @@ export function MyPetPage() {
             hospitalNames={hospitalNames}
             petNames={petNames}
             activeRecordId={activeRecordId}
+            onEdit={(record) => {
+              setDraftRecord(null);
+              setEditingRecord(record);
+              setRecordEditorOpen(true);
+            }}
+            onDelete={handleDeleteRecord}
             onSelect={setExpandedRecordId}
           />
         </section>
@@ -863,25 +884,21 @@ export function MyPetPage() {
 
         <ModalSheet
           open={speechModalOpen}
-          title="음성 인식 요약으로 작성하기"
-          description="녹음하거나 음성 파일을 올린 뒤 진료 기록 초안으로 열 수 있어요."
+          title="음성 인식 수의사 의견 요약"
           onClose={() => setSpeechModalOpen(false)}
         >
           <SpeechSummaryPanel
-            scope="record"
             applyLabel="진료 기록으로 열기"
             audioMessage={speechMessage}
             canRequestSummary={Boolean(speechAudioFile)}
             isRecording={speechIsRecording}
             isSummarizing={speechIsSummarizing}
-            selectedAudioLabel={speechAudioFile?.name ?? ''}
-            statusMessage={speechStatusMessage}
             summary={speechSummary}
-            unavailableReason=""
             onApplySummary={speechSummary ? openSpeechSummaryAsRecordDraft : undefined}
             onAudioFileChange={handleSpeechAudioFileChange}
             onStartRecording={startSpeechRecording}
             onStopRecording={stopSpeechRecording}
+            onSummaryChange={setSpeechSummary}
             onSummarize={handleSummarizeSpeech}
           />
         </ModalSheet>

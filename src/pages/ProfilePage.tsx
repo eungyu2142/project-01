@@ -100,6 +100,13 @@ export function ProfilePage() {
     setDraftProfileEmoji(user.profileEmoji);
   }, [user]);
 
+  function openAccountAction(action: AccountAction) {
+    setDraftNickname(user.nickname);
+    setDraftProfileEmoji(user.profileEmoji);
+    setAccountMessage('');
+    setSelectedAccountAction(action);
+  }
+
   function handleProfilePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
@@ -245,7 +252,7 @@ export function ProfilePage() {
             <div className="mt-4 divide-y divide-slate-100">
               <button
                 type="button"
-                onClick={() => setSelectedAccountAction('nickname')}
+                onClick={() => openAccountAction('nickname')}
                 className="flex w-full items-center justify-between py-4 text-left"
               >
                 <span className="font-medium text-slate-700">닉네임 수정</span>
@@ -255,7 +262,7 @@ export function ProfilePage() {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedAccountAction('photo')}
+                onClick={() => openAccountAction('photo')}
                 className="flex w-full items-center justify-between py-4 text-left"
               >
                 <span className="font-medium text-slate-700">프로필 사진 수정</span>
@@ -294,89 +301,84 @@ export function ProfilePage() {
               </p>
             ) : null}
 
-            {selectedAccountAction ? (
-              <div className="mt-4 rounded-[1.5rem] border border-emerald-100 bg-[#f7fcf9] p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-semibold text-slate-900">
-                      {selectedAccountAction === 'nickname' && '닉네임 수정'}
-                      {selectedAccountAction === 'photo' && '프로필 사진 수정'}
-                    </h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-500">
-                      저장하면 프로필 화면과 리뷰 작성자 이름에 바로 반영됩니다.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedAccountAction(null)}
-                    className="rounded-full bg-white p-3 text-slate-500 shadow-sm"
-                    aria-label="계정 관리 닫기"
-                  >
-                    <Icon name="x" className="h-5 w-5" />
-                  </button>
-                </div>
+          </section>
 
-                {selectedAccountAction === 'nickname' ? (
+          <ModalSheet
+            open={Boolean(selectedAccountAction)}
+            title={
+              selectedAccountAction === 'nickname'
+                ? '닉네임 수정'
+                : selectedAccountAction === 'photo'
+                  ? '프로필 사진 수정'
+                  : '프로필 수정'
+            }
+            description="저장하면 프로필 화면과 리뷰 작성자 이름에 바로 반영됩니다."
+            onClose={() => setSelectedAccountAction(null)}
+          >
+            <div className="space-y-4">
+              {selectedAccountAction === 'nickname' ? (
+                <label className="block">
+                  <span className="text-sm font-semibold text-slate-700">닉네임</span>
                   <input
                     type="text"
                     value={draftNickname}
                     onChange={(event) => setDraftNickname(event.target.value)}
-                    className="mt-4 w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-slate-700"
-                    placeholder=""
+                    className="mt-2 w-full rounded-lg border border-emerald-100 bg-white px-4 py-3 text-slate-700 outline-none focus:border-emerald-300"
+                    autoFocus
                   />
-                ) : null}
+                </label>
+              ) : null}
 
-                {selectedAccountAction === 'photo' ? (
-                  <div className="mt-4 space-y-3">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-[1.6rem] bg-white text-4xl shadow-sm">
-                        {isImageAvatar(draftProfileEmoji) ? (
-                          <img
-                            src={draftProfileEmoji}
-                            alt="프로필 사진 미리보기"
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          draftProfileEmoji
-                        )}
-                      </div>
-                      <label className="flex cursor-pointer items-center justify-center rounded-2xl border border-dashed border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700">
-                        사진 업로드
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleProfilePhotoChange}
+              {selectedAccountAction === 'photo' ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-lg bg-emerald-50 text-4xl shadow-sm">
+                      {isImageAvatar(draftProfileEmoji) ? (
+                        <img
+                          src={draftProfileEmoji}
+                          alt="프로필 사진 미리보기"
+                          className="h-full w-full object-cover"
                         />
-                      </label>
+                      ) : (
+                        draftProfileEmoji
+                      )}
                     </div>
-                    <div className="flex gap-2">
-                      {profileEmojiOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => setDraftProfileEmoji(option)}
-                          className={`rounded-2xl px-4 py-3 text-2xl ${
-                            draftProfileEmoji === option ? 'bg-emerald-600 text-white' : 'bg-white'
-                          }`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
+                    <label className="flex cursor-pointer items-center justify-center rounded-lg border border-dashed border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700">
+                      사진 업로드
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleProfilePhotoChange}
+                      />
+                    </label>
                   </div>
-                ) : null}
+                  <div className="flex flex-wrap gap-2">
+                    {profileEmojiOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => setDraftProfileEmoji(option)}
+                        className={`h-12 w-12 rounded-lg text-2xl ${
+                          draftProfileEmoji === option ? 'bg-emerald-600 text-white' : 'bg-emerald-50'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
-                <button
-                  type="button"
-                  onClick={handleSaveSelectedAction}
-                  className="mt-4 w-full rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white"
-                >
-                  저장하기
-                </button>
-              </div>
-            ) : null}
-          </section>
+              <button
+                type="button"
+                onClick={handleSaveSelectedAction}
+                className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
+              >
+                저장하기
+              </button>
+            </div>
+          </ModalSheet>
 
           <ModalSheet
             open={Boolean(selectedActivityTarget)}
