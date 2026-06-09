@@ -8,7 +8,7 @@ import {
   getHospitalClassificationLabel,
   isDatasetHospital,
 } from '../lib/hospitalDataset';
-import { findRecordForReview } from '../lib/recordReviewLink';
+import { findRecordForReview, findReviewForRecord } from '../lib/recordReviewLink';
 import type { Hospital, MedicalRecord, Review, ReviewDraft } from '../types';
 import { Icon } from './Icon';
 import { ModalSheet } from './ModalSheet';
@@ -50,11 +50,16 @@ function buildCostText(cost: number | null | undefined) {
 }
 
 function buildReviewBodyFromRecord(record: MedicalRecord) {
+  const veterinarianNote = record.veterinarianNote.trim();
+  const memo = record.memo.trim();
+
   return [
-    record.memo,
-    record.veterinarianNote ? `수의사 의견\n${record.veterinarianNote}` : '',
+    veterinarianNote && veterinarianNote !== '리뷰에서 저장한 진료 기록'
+      ? `수의사 의견: ${veterinarianNote}`
+      : '',
+    memo ? `메모: ${memo}` : '',
   ]
-    .filter((value) => value.trim())
+    .filter(Boolean)
     .join('\n\n');
 }
 
@@ -111,6 +116,7 @@ export function ReviewComposer({
     hospitals,
     medicalRecords,
     pets,
+    reviews,
     saveReview,
     saveReviewDraft,
     deleteReviewDraft,
@@ -162,10 +168,16 @@ export function ReviewComposer({
   const selectableMedicalRecords = useMemo(
     () =>
       [...medicalRecords]
-        .filter((record) => (petId ? record.petId === petId : true))
-        .filter((record) => (hospitalId ? record.hospitalId === hospitalId : true))
+        .filter(
+          (record) =>
+            !reviews.some((review) => review.sourceRecordId === record.id) &&
+            !findReviewForRecord(
+              reviews.filter((review) => !review.sourceRecordId),
+              record,
+            ),
+        )
         .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime()),
-    [hospitalId, medicalRecords, petId],
+    [medicalRecords, reviews],
   );
   const hospitalMatches = useMemo(() => {
     const keyword = hospitalSearchText.trim().toLowerCase();
@@ -295,6 +307,7 @@ export function ReviewComposer({
 
     saveReview({
       id: editingReview?.id,
+      sourceRecordId: selectedRecordId || editingReview?.sourceRecordId || null,
       hospitalId,
       petId: selectedPet.id,
       animalType: selectedPet.animalType,
@@ -391,8 +404,7 @@ export function ReviewComposer({
         ) : null}
 
         {!editingReview && medicalRecords.length > 0 ? (
-          <label className="block space-y-2 rounded-lg border border-emerald-100 bg-white/80 p-4">
-            <span className="text-sm font-semibold text-slate-700">진료 기록에서 리뷰 채우기</span>
+          <label className="block rounded-lg border border-emerald-100 bg-white/80 p-4">
             <select
               value={selectedRecordId}
               onChange={(event) => {
@@ -404,7 +416,7 @@ export function ReviewComposer({
               }}
               className="w-full rounded-lg border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm text-slate-700"
             >
-              <option value="">기록을 선택해 주세요</option>
+              <option value="">진료 기록을 선택해 주세요</option>
               {selectableMedicalRecords.map((record) => {
                 const recordPet = pets.find((pet) => pet.id === record.petId);
                 const recordHospital = availableHospitals.find((hospital) => hospital.id === record.hospitalId);
@@ -424,11 +436,6 @@ export function ReviewComposer({
                 );
               })}
             </select>
-            {selectableMedicalRecords.length === 0 ? (
-              <p className="text-xs leading-5 text-slate-500">
-                현재 선택한 조건에 맞는 진료 기록이 없어요. 반려동물이나 병원 선택을 비우면 전체 기록에서 고를 수 있어요.
-              </p>
-            ) : null}
           </label>
         ) : null}
 
@@ -688,11 +695,7 @@ export function ReviewComposer({
           />
         </label>
 
-        {existingLinkedRecord ? (
-          <div className="rounded-lg bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
-            이미 같은 진료 기록이 있어요.
-          </div>
-        ) : (
+        {!existingLinkedRecord && !selectedRecordId ? (
           <label className="flex items-center gap-3 rounded-lg bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
             <input
               type="checkbox"
@@ -702,9 +705,9 @@ export function ReviewComposer({
             />
             <span>진료 기록에도 추가하기</span>
           </label>
-        )}
+        ) : null}
 
-        {saveToRecord && !existingLinkedRecord ? (
+        {saveToRecord && !existingLinkedRecord && !selectedRecordId ? (
           <div className="space-y-4 rounded-lg border border-emerald-100 bg-white/80 p-4">
             <label className="block space-y-2">
               <span className="text-sm font-medium text-slate-700">수의사의 의견</span>

@@ -11,7 +11,6 @@ import { SpeechSummaryPanel } from '../components/SpeechSummaryPanel';
 import { useAppContext } from '../context/AppContext';
 import { formatCurrency, formatDate } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
-import { findReviewForRecord } from '../lib/recordReviewLink';
 import { getTodayDateValue } from '../lib/date';
 import { summarizeSpeechAudio, type SpeechSummaryResult } from '../lib/speechSummary';
 import type { AnimalFilter, MedicalRecord, MedicalRecordDraft, Pet } from '../types';
@@ -42,7 +41,6 @@ interface RecordDetailCardProps {
   record: MedicalRecord;
   hospitalNames: Record<string, string>;
   petNames: Record<string, string>;
-  onOpenReview?: () => void;
   actionSlot?: ReactNode;
 }
 
@@ -95,7 +93,6 @@ function RecordDetailCard({
   record,
   hospitalNames,
   petNames,
-  onOpenReview,
   actionSlot,
 }: RecordDetailCardProps) {
   return (
@@ -147,15 +144,6 @@ function RecordDetailCard({
         </div>
       ) : null}
 
-      {onOpenReview ? (
-        <button
-          type="button"
-          onClick={onOpenReview}
-          className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-3 font-semibold text-white"
-        >
-          이 경험을 리뷰로 작성하기
-        </button>
-      ) : null}
     </div>
   );
 }
@@ -299,7 +287,6 @@ export function MyPetPage() {
     hospitals,
     medicalRecords,
     pets,
-    reviews,
     saveMedicalRecord,
     deleteMedicalRecord,
     savePet,
@@ -394,8 +381,6 @@ export function MyPetPage() {
   const expandedRecord = activeRecordId
     ? visibleRecords.find((record) => record.id === activeRecordId)
     : undefined;
-  const expandedRecordPet = expandedRecord ? pets.find((pet) => pet.id === expandedRecord.petId) ?? null : null;
-  const expandedRecordHasReview = expandedRecord ? Boolean(findReviewForRecord(reviews, expandedRecord)) : false;
 
   useEffect(() => {
     if (!selectedPetId) {
@@ -585,27 +570,6 @@ export function MyPetPage() {
     setSpeechModalOpen(false);
   }
 
-  function startRecordToReview(record: MedicalRecord, pet: Pet) {
-    navigate('/reviews', {
-      state: {
-        hospitalId: record.hospitalId,
-        animalType: pet.animalType,
-        openComposer: true,
-        returnTo: returnTo || '/mypets',
-        draft: {
-          hospitalId: record.hospitalId,
-          petId: record.petId,
-          date: record.date,
-          diagnosis: record.diagnosis,
-          cost: record.cost,
-          medicine: record.prescription,
-          body: record.memo,
-          imageUrls: record.imageUrls ?? [],
-        },
-      },
-    });
-  }
-
   function handleDeleteSelectedPet() {
     if (!selectedPet) {
       return;
@@ -691,11 +655,6 @@ export function MyPetPage() {
                     <Icon name="trash" className="h-4 w-4" />
                   </button>
                 </>
-              }
-              onOpenReview={
-                expandedRecordHasReview || !expandedRecordPet
-                  ? undefined
-                  : () => startRecordToReview(expandedRecord, expandedRecordPet)
               }
             />
           </section>
@@ -855,17 +814,6 @@ export function MyPetPage() {
                   record={record}
                   hospitalNames={hospitalNames}
                   petNames={petNames}
-                  onOpenReview={
-                    pets.find((pet) => pet.id === record.petId) && !findReviewForRecord(reviews, record)
-                      ? () => {
-                          const recordPet = pets.find((pet) => pet.id === record.petId);
-
-                          if (recordPet) {
-                            startRecordToReview(record, recordPet);
-                          }
-                        }
-                      : undefined
-                  }
                 />
                 <button
                   type="button"

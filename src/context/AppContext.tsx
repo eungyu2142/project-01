@@ -13,7 +13,7 @@ import {
   normalizeHospitalDatasetItem,
   type HospitalDatasetPayload,
 } from '../lib/hospitalDataset';
-import { findRecordForReview, findReviewForRecord } from '../lib/recordReviewLink';
+import { findRecordForReview } from '../lib/recordReviewLink';
 import { resolveCurrentRegion } from '../lib/currentLocation';
 import {
   deleteMedicalRecordsByPetRemote,
@@ -712,6 +712,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const nextReview: Review = {
       id: input.id ?? makeId('review'),
       userId: appUserId,
+      sourceRecordId: input.sourceRecordId ?? previousReview?.sourceRecordId ?? null,
       hospitalId: input.hospitalId,
       petId: input.petId,
       animalType: input.animalType,
@@ -761,7 +762,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           hospitalId: input.hospitalId,
           date: input.date,
           diagnosis: input.diagnosis || `${pet.name} 진료 기록`,
-          veterinarianNote: input.saveToRecordVeterinarianNote?.trim() || '리뷰에서 저장한 진료 기록',
+          veterinarianNote: input.saveToRecordVeterinarianNote?.trim() ?? '',
           prescription: input.medicine,
           cost: input.cost,
           memo: input.saveToRecordMemo?.trim() ?? '',
@@ -885,39 +886,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       persistError('saveMedicalRecord', error),
     );
 
-    if (input.saveToReview && pet && !input.id && !findReviewForRecord(reviews, nextRecord)) {
-      const nextReview: Review = {
-        id: makeId('review'),
-        userId: appUserId,
-        hospitalId: input.hospitalId,
-        petId: input.petId,
-        animalType: pet.animalType,
-        species: pet.species,
-        petName: pet.name,
-        diagnosis: normalizedDiagnosis,
-        cost: input.cost,
-        date: input.date,
-        medicine: input.prescription,
-        tags: input.saveToReviewTags ?? [],
-        customTags: [],
-        body: input.saveToReviewBody?.trim() || input.memo,
-        imageUrls: input.imageUrls,
-        rating: input.saveToReviewRating ?? 5,
-        likes: 0,
-        liked: false,
-        likedAt: null,
-        authorName: user.nickname,
-        isMine: true,
-        createdAt: new Date().toISOString(),
-      };
-
-      setReviews((current) =>
-        findReviewForRecord(current, nextRecord) ? current : [nextReview, ...current],
-      );
-      void insertReview(appUserId, nextReview).catch((error) =>
-        persistError('saveMedicalRecord:saveToReview', error),
-      );
-    }
   }
 
   function deleteMedicalRecord(recordId: string) {

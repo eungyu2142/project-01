@@ -14,7 +14,7 @@ import {
 } from '../lib/format';
 import { isDatasetHospital } from '../lib/hospitalDataset';
 import { resolveCurrentRegion } from '../lib/currentLocation';
-import type { AnimalFilter, Hospital, Review } from '../types';
+import type { AnimalFilter, Hospital, HospitalAnimalFilter, Review } from '../types';
 
 interface HomeRouteState {
   hospitalId?: string;
@@ -26,6 +26,7 @@ const animalLabels: Record<string, string> = {
   reptile: '파충류',
   rodent: '설치류',
   bird: '조류',
+  unclear: '불분명',
 };
 
 const CHOSEONG = [
@@ -78,12 +79,12 @@ function matchesSearchKeyword(hospital: Hospital, keyword: string) {
   );
 }
 
-function getRecentReviewedSpecies(hospitalId: string, reviews: Review[], animalType: AnimalFilter) {
+function getRecentReviewedSpecies(hospitalId: string, reviews: Review[], animalType: HospitalAnimalFilter) {
   const seen = new Set<string>();
 
   return reviews
     .filter((review) => review.hospitalId === hospitalId)
-    .filter((review) => (animalType === 'all' ? true : review.animalType === animalType))
+    .filter((review) => (animalType === 'all' || animalType === 'unclear' ? true : review.animalType === animalType))
     .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
     .map((review) => review.species.trim())
     .filter(Boolean)
@@ -104,7 +105,7 @@ export function HomePage() {
   const routeState = location.state as HomeRouteState | null;
   const { datasetError, datasetStatus, hospitals, reviews, saveUserLocation, toggleHospitalLike, user } =
     useAppContext();
-  const [selectedAnimal, setSelectedAnimal] = useState<AnimalFilter>(routeState?.animalType ?? 'all');
+  const [selectedAnimal, setSelectedAnimal] = useState<HospitalAnimalFilter>(routeState?.animalType ?? 'all');
   const [searchText, setSearchText] = useState('');
   const [selectedHospitalId, setSelectedHospitalId] = useState(routeState?.hospitalId ?? '');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -213,6 +214,9 @@ export function HomePage() {
       bird: enrichedDatasetHospitals.filter((hospital) =>
         hospitalMatchesAnimalFilter(hospital.supportedAnimals, hospitalAnimalCounts[hospital.id], 'bird'),
       ).length,
+      unclear: enrichedDatasetHospitals.filter((hospital) =>
+        hospitalMatchesAnimalFilter(hospital.supportedAnimals, hospitalAnimalCounts[hospital.id], 'unclear'),
+      ).length,
     }),
     [enrichedDatasetHospitals, hospitalAnimalCounts],
   );
@@ -265,7 +269,7 @@ export function HomePage() {
     ? reviews.filter(
         (review) =>
           review.hospitalId === selectedHospital.id &&
-          (selectedAnimal === 'all' ? true : review.animalType === selectedAnimal),
+          (selectedAnimal === 'all' || selectedAnimal === 'unclear' ? true : review.animalType === selectedAnimal),
       )
     : [];
   const recentSpecies = selectedHospital
@@ -310,7 +314,7 @@ export function HomePage() {
             </button>
           </div>
         ) : (
-          <div className="home-search-shell mx-auto max-w-[32rem] px-4 transition-transform duration-300 translate-y-0">
+          <div className="home-search-shell mx-auto w-full max-w-[36rem] px-2 transition-transform duration-300 translate-y-0 sm:px-3">
             <div className="home-search-panel pointer-events-auto rounded-b-[2.25rem] border-x border-b border-white/65 bg-white/95 px-4 pb-4 pt-3 shadow-[0_24px_50px_rgba(15,118,110,0.18)] backdrop-blur">
               <div className="mb-3 flex justify-center">
                 <button
@@ -323,7 +327,7 @@ export function HomePage() {
                 </button>
               </div>
 
-              <div className="home-search-inner mx-auto max-w-[28.5rem]">
+              <div className="home-search-inner mx-auto max-w-[34rem]">
                 <SearchBar
                   value={searchText}
                   onValueChange={(nextValue) => {
@@ -344,11 +348,18 @@ export function HomePage() {
                     setSelectedHospitalId('');
                   }}
                 />
-                <AnimalTabs className="mt-3" value={selectedAnimal} onChange={setSelectedAnimal} counts={counts} />
+                <AnimalTabs
+                  className="mt-3"
+                  value={selectedAnimal}
+                  onChange={setSelectedAnimal}
+                  counts={counts}
+                  includeUnclear
+                  fitAll
+                />
               </div>
 
               {showSuggestions ? (
-                <div className="mx-auto mt-3 max-w-[28.5rem] rounded-lg border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
+                <div className="mx-auto mt-3 max-w-[34rem] rounded-lg border border-emerald-100 bg-white p-2 shadow-[0_16px_36px_rgba(15,118,110,0.12)]">
                   {!searchText.trim() ? (
                     <p className="px-3 pb-2 pt-1 text-xs font-semibold text-emerald-700">
                       현재 위치 기준 가까운 병원
@@ -448,7 +459,8 @@ export function HomePage() {
                   navigate('/reviews', {
                     state: {
                       hospitalId: selectedHospital.id,
-                      animalType: selectedAnimal,
+                      animalType:
+                        selectedAnimal === 'all' || selectedAnimal === 'unclear' ? undefined : selectedAnimal,
                       returnTo: '/',
                     },
                   })
@@ -467,7 +479,8 @@ export function HomePage() {
                   navigate('/reviews', {
                     state: {
                       hospitalId: selectedHospital.id,
-                      animalType: selectedAnimal === 'all' ? undefined : selectedAnimal,
+                      animalType:
+                        selectedAnimal === 'all' || selectedAnimal === 'unclear' ? undefined : selectedAnimal,
                       openComposer: true,
                       returnTo: '/',
                     },

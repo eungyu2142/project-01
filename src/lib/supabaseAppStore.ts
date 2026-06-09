@@ -41,6 +41,7 @@ interface MedicalRecordRow {
 interface ReviewRow {
   id: string;
   user_id: string;
+  source_record_id?: string | null;
   hospital_id: string;
   pet_id: string | null;
   animal_type: Review['animalType'];
@@ -70,6 +71,7 @@ const LEGACY_REVIEW_OPTIONAL_COLUMNS = [
   'image_urls',
   'custom_tags',
   'pet_name',
+  'source_record_id',
 ] as const;
 function toPetRow(userId: string, pet: Pet): PetRow {
   return {
@@ -161,6 +163,7 @@ function toReviewRow(userId: string, review: Review): ReviewRow {
   return {
     id: review.id,
     user_id: userId,
+    source_record_id: review.sourceRecordId ?? null,
     hospital_id: review.hospitalId,
     pet_id: review.petId,
     animal_type: review.animalType,
@@ -188,6 +191,7 @@ function fromReviewRow(row: ReviewRow): Review {
   return {
     id: row.id,
     userId: row.user_id,
+    sourceRecordId: row.source_record_id ?? null,
     hospitalId: row.hospital_id,
     petId: row.pet_id,
     animalType: row.animal_type,

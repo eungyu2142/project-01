@@ -1,5 +1,6 @@
 export type AnimalType = 'reptile' | 'rodent' | 'bird';
 export type AnimalFilter = 'all' | AnimalType;
+export type HospitalAnimalFilter = AnimalFilter | 'unclear';
 export type HospitalSource = 'mock' | 'naver-search' | 'dataset';
 export type HospitalClassification = 'candidate' | 'confirmed';
 export type HospitalProviderSource = 'naver' | 'public' | 'manual';
@@ -100,6 +101,7 @@ export interface SpeechSummaryFields {
 export interface Review {
   id: string;
   userId: string;
+  sourceRecordId?: string | null;
   hospitalId: string;
   petId: string | null;
   animalType: AnimalType;
@@ -124,6 +126,7 @@ export interface Review {
 
 export interface ReviewInput {
   id?: string;
+  sourceRecordId?: string | null;
   hospitalId: string;
   petId: string;
   animalType: AnimalType;
@@ -164,10 +167,6 @@ export interface MedicalRecordInput {
   cost: number | null;
   memo: string;
   imageUrls: string[];
-  saveToReview?: boolean;
-  saveToReviewBody?: string;
-  saveToReviewRating?: number;
-  saveToReviewTags?: string[];
 }
 
 export interface ReviewDraft {

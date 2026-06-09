@@ -101,6 +101,7 @@ create table if not exists medical_records (
 create table if not exists reviews (
   id text primary key,
   user_id text not null,
+  source_record_id text references medical_records(id) on delete set null,
   hospital_id text not null,
   pet_id text references pets(id) on delete cascade,
   animal_type text not null,
@@ -122,6 +123,11 @@ create table if not exists reviews (
   is_mine boolean not null default true,
   created_at timestamptz not null default now()
 );
+
+alter table reviews add column if not exists source_record_id text references medical_records(id) on delete set null;
+create unique index if not exists reviews_source_record_id_key
+on reviews (source_record_id)
+where source_record_id is not null;
 
 create table if not exists speech_summary_jobs (
   id uuid primary key default gen_random_uuid(),

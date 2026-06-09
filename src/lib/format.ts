@@ -1,10 +1,11 @@
-import type { AnimalFilter, AnimalType, Review } from '../types';
+import type { AnimalType, HospitalAnimalFilter, Review } from '../types';
 
-const animalLabels: Record<AnimalFilter, string> = {
+const animalLabels: Record<HospitalAnimalFilter, string> = {
   all: '전체',
   reptile: '파충류',
   rodent: '설치류',
   bird: '조류',
+  unclear: '불분명',
 };
 
 export function formatCurrency(value: number | null) {
@@ -39,7 +40,7 @@ export function formatDistanceKm(lat1: number, lng1: number, lat2: number, lng2:
   return `${distance.toFixed(1)}km`;
 }
 
-export function getAnimalLabel(type: AnimalFilter | AnimalType) {
+export function getAnimalLabel(type: HospitalAnimalFilter | AnimalType) {
   return animalLabels[type];
 }
 
@@ -61,9 +62,9 @@ export function getHospitalAnimalCounts(reviews: Review[]) {
 
 export function getQualifiedCount(
   counts: Record<AnimalType, number> | undefined,
-  animalType: AnimalFilter,
+  animalType: HospitalAnimalFilter,
 ) {
-  if (!counts) {
+  if (!counts || animalType === 'unclear') {
     return 0;
   }
 
@@ -76,9 +77,9 @@ export function getQualifiedCount(
 
 export function isQualifiedHospital(
   counts: Record<AnimalType, number> | undefined,
-  animalType: AnimalFilter,
+  animalType: HospitalAnimalFilter,
 ) {
-  if (!counts) {
+  if (!counts || animalType === 'unclear') {
     return false;
   }
 
@@ -111,11 +112,17 @@ export function mergeHospitalSupportedAnimals(
 export function hospitalMatchesAnimalFilter(
   supportedAnimals: AnimalType[] | undefined,
   counts: Record<AnimalType, number> | undefined,
-  animalType: AnimalFilter,
+  animalType: HospitalAnimalFilter,
 ) {
   if (animalType === 'all') {
     return true;
   }
 
-  return mergeHospitalSupportedAnimals(supportedAnimals, counts).includes(animalType);
+  const mergedAnimals = mergeHospitalSupportedAnimals(supportedAnimals, counts);
+
+  if (animalType === 'unclear') {
+    return mergedAnimals.length === 0;
+  }
+
+  return mergedAnimals.includes(animalType);
 }
