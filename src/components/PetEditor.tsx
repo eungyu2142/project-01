@@ -169,9 +169,9 @@ export function PetEditor({ open, pet, onClose, onSave }: PetEditorProps) {
 
         <div className="space-y-2">
           <span className="text-sm font-medium">프로필 아이콘</span>
-          <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 p-4">
+          <div className="border-y border-slate-100 py-4">
             <div className="flex items-center gap-4">
-              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-md bg-white text-4xl shadow-sm">
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-md bg-slate-50 text-4xl">
                 {isImageAvatar(avatar) ? (
                   <img src={avatar} alt="반려동물 사진 미리보기" className="h-full w-full object-cover" />
                 ) : (

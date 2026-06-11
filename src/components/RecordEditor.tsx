@@ -256,7 +256,7 @@ export function RecordEditor({
         ) : null}
 
         {!record && medicalRecordDrafts.length > 0 ? (
-          <label className="block space-y-2 rounded-lg border border-emerald-100 bg-white/80 p-4">
+          <label className="block space-y-2 border-y border-slate-100 py-4">
             <span className="text-sm font-semibold text-slate-700">저장된 진료 기록 초안 불러오기</span>
             <select
               value=""
@@ -375,7 +375,7 @@ export function RecordEditor({
         </div>
 
         {selectedHospital ? (
-          <div className="rounded-lg bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
+          <div className="border-l-2 border-emerald-400 py-1 pl-3 text-sm text-slate-600">
             <p className="font-medium text-slate-800">{selectedHospital.name}</p>
             <p className="mt-1 text-xs text-slate-500">{selectedHospital.address}</p>
           </div>
@@ -400,7 +400,7 @@ export function RecordEditor({
         </label>
 
         {selectedPet ? (
-          <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50/70 p-4 text-sm text-slate-600">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4 border-y border-slate-100 py-4 text-sm text-slate-600">
             <div>
               <p className="text-xs text-slate-400">동물 분류</p>
               <p className="mt-1 font-medium text-slate-800">

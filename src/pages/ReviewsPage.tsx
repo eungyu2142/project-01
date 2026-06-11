@@ -1,15 +1,20 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AnimalTabs } from '../components/AnimalTabs';
 import { Icon } from '../components/Icon';
+import { ModalSheet } from '../components/ModalSheet';
 import { ReviewComposer } from '../components/ReviewComposer';
 import { SearchBar } from '../components/SearchBar';
+import { SpeechSummaryPanel } from '../components/SpeechSummaryPanel';
 import { useAppContext } from '../context/AppContext';
+import { getTodayDateValue } from '../lib/date';
 import {
   formatCurrency,
   formatDate,
   getAnimalLabel,
 } from '../lib/format';
+import { summarizeSpeechAudio, type SpeechSummaryResult } from '../lib/speechSummary';
 import type { AnimalFilter, Hospital, Review, ReviewDraft } from '../types';
 
 interface ReviewRouteState {
@@ -21,12 +26,37 @@ interface ReviewRouteState {
 }
 
 type ReviewSort = 'popular' | 'latest';
+type ReviewWriteMode = 'direct' | 'speech' | null;
+
+const missingSpeechValue = '언급 없음';
+
+function getMentionedValue(value: string | undefined) {
+  return value?.trim() && value.trim() !== missingSpeechValue ? value.trim() : '';
+}
+
+function getRecordingFileExtension(mimeType: string) {
+  const normalizedType = mimeType.toLowerCase();
+
+  if (normalizedType.includes('mp4') || normalizedType.includes('m4a')) {
+    return 'mp4';
+  }
+
+  if (normalizedType.includes('mpeg') || normalizedType.includes('mp3')) {
+    return 'mp3';
+  }
+
+  if (normalizedType.includes('wav')) {
+    return 'wav';
+  }
+
+  return 'webm';
+}
 
 const compactBadgeClass = 'inline-flex min-h-7 items-center rounded-md px-2 py-1 text-xs font-semibold leading-none';
 const spaciousBadgeClass = 'inline-flex h-8 items-center rounded-md px-3 text-sm font-semibold leading-none';
-const summaryRowClass = 'rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700';
+const summaryRowClass = 'border-b border-slate-100 py-2.5 text-sm text-slate-700 last:border-b-0';
 const summaryLabelClass = 'mr-2 font-semibold text-slate-500';
-const summaryHospitalRowClass = 'rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700';
+const summaryHospitalRowClass = 'border-b border-slate-100 py-2.5 text-sm text-emerald-700';
 const summaryHospitalLabelClass = 'mr-2 font-semibold text-emerald-600';
 
 interface ReviewCardProps {
@@ -94,10 +124,6 @@ function ReviewPreviewCard({
   onEdit,
   onDelete,
 }: ReviewPreviewCardProps) {
-  const diagnosisLabel = review.diagnosis.trim();
-  const treatmentLabel = review.medicine.trim();
-  const reviewTags = [...review.tags, ...review.customTags];
-
   return (
     <article className="relative block w-full rounded-lg border border-emerald-100 bg-white p-4 text-left shadow-[0_8px_20px_rgba(15,118,110,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(15,118,110,0.12)]">
       <button
@@ -115,60 +141,49 @@ function ReviewPreviewCard({
             </span>
           </div>
 
-          <div className="mt-3 space-y-1.5">
+          <div className="mt-3 border-y border-slate-100">
             <p className={`${summaryHospitalRowClass} block w-full truncate text-left`} title={hospitalName}>
-              <span className={summaryHospitalLabelClass}>병원</span>{hospitalName}
+              <span className={summaryHospitalLabelClass}>동물 병원</span>{hospitalName}
             </p>
             <p className={summaryRowClass}><span className={summaryLabelClass}>동물 종</span>{review.species}</p>
-            <p className={summaryRowClass}><span className={summaryLabelClass}>병명</span>{diagnosisLabel || '미입력'}</p>
-            <p className={summaryRowClass}><span className={summaryLabelClass}>처방</span>{treatmentLabel}</p>
           </div>
+        </div>
 
-          {reviewTags.length > 0 ? (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {reviewTags.slice(0, 3).map((tag) => (
-                <span key={tag} className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
-                  #{tag}
-                </span>
-              ))}
-              {reviewTags.length > 3 ? (
-                <span className={`${compactBadgeClass} bg-slate-100 text-slate-500`}>...</span>
-              ) : null}
+        <div className="pointer-events-auto mt-1 flex shrink-0 flex-col items-end gap-2">
+          <button
+            type="button"
+            onClick={() => onToggleLike(review.id)}
+            className={`inline-flex h-9 items-center gap-1 rounded-lg px-3 text-sm font-semibold ${
+              review.liked ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
+            }`}
+            aria-label="리뷰 좋아요"
+          >
+            <Icon name="star" className="h-4 w-4" />
+            <span>{review.likes}</span>
+          </button>
+
+          {review.isMine ? (
+            <div className="flex gap-1.5">
+              <button
+                type="button"
+                onClick={() => onEdit(review)}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-50 text-emerald-700"
+                aria-label="리뷰 수정"
+              >
+                <Icon name="edit" className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onDelete(review.id)}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-rose-50 text-rose-500"
+                aria-label="리뷰 삭제"
+              >
+                <Icon name="trash" className="h-4 w-4" />
+              </button>
             </div>
           ) : null}
         </div>
-
-        <button
-          type="button"
-          onClick={() => onToggleLike(review.id)}
-          className={`pointer-events-auto mt-1 inline-flex h-9 shrink-0 items-center gap-1 rounded-lg px-3 text-sm font-semibold ${
-            review.liked ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
-          }`}
-          aria-label="리뷰 좋아요"
-        >
-          <Icon name="star" className="h-4 w-4" />
-          <span>{review.likes}</span>
-        </button>
       </div>
-
-      {review.isMine ? (
-        <div className="relative z-10 mt-3 flex justify-end gap-2 border-t border-slate-100 pt-3 text-xs pointer-events-none">
-          <button
-            type="button"
-            onClick={() => onEdit(review)}
-            className="pointer-events-auto rounded-lg bg-emerald-50 px-3 py-2 font-semibold text-emerald-700"
-          >
-            수정
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(review.id)}
-            className="pointer-events-auto rounded-lg bg-rose-50 px-3 py-2 font-semibold text-rose-500"
-          >
-            삭제
-          </button>
-        </div>
-      ) : null}
     </article>
   );
 }
@@ -245,7 +260,7 @@ function ReviewCard({
       </div>
 
       <div className={spacious ? 'mt-5 min-h-0 overflow-y-auto pr-1' : 'mt-4'}>
-        <div className="space-y-1.5">
+        <div className="border-y border-slate-100">
           {showHospitalName ? (
             <p className={summaryHospitalRowClass}>
               <span className={summaryHospitalLabelClass}>병원</span>{hospitalName}
@@ -341,6 +356,14 @@ export function ReviewsPage() {
     return undefined;
   });
   const [editingReview, setEditingReview] = useState<Review | null>(null);
+  const [writeMode, setWriteMode] = useState<ReviewWriteMode>(null);
+  const [speechAudioFile, setSpeechAudioFile] = useState<File | null>(null);
+  const [speechSummary, setSpeechSummary] = useState<SpeechSummaryResult | null>(null);
+  const [speechMessage, setSpeechMessage] = useState('');
+  const [speechIsRecording, setSpeechIsRecording] = useState(false);
+  const [speechIsSummarizing, setSpeechIsSummarizing] = useState(false);
+  const speechRecorderRef = useRef<MediaRecorder | null>(null);
+  const speechChunksRef = useRef<Blob[]>([]);
   const deferredSearch = useDeferredValue(hospitalSearch);
   const normalizedSearchKeyword = deferredSearch.trim().toLowerCase();
 
@@ -468,9 +491,140 @@ export function ReviewsPage() {
     navigate(nextPath);
   }
 
-  function openNewReview() {
+  function openDirectReview() {
+    setWriteMode(null);
     setEditingReview(null);
     setDraft(routeState?.hospitalId ? { hospitalId: routeState.hospitalId } : undefined);
+    setComposerOpen(true);
+  }
+
+  function openNewReview() {
+    setWriteMode('direct');
+  }
+
+  function openSpeechReview() {
+    setSpeechAudioFile(null);
+    setSpeechSummary(null);
+    setSpeechMessage('');
+    setWriteMode('speech');
+  }
+
+  function handleSpeechAudioFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    if (file.size > 25 * 1024 * 1024) {
+      setSpeechMessage('음성 파일은 최대 25MB까지 사용할 수 있어요.');
+      return;
+    }
+
+    setSpeechAudioFile(file);
+    setSpeechSummary(null);
+    setSpeechMessage('');
+  }
+
+  async function startSpeechRecording() {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+      setSpeechMessage('이 브라우저에서는 녹음 기능을 사용할 수 없어요. 파일 업로드를 사용해 주세요.');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+
+      speechChunksRef.current = [];
+      speechRecorderRef.current = recorder;
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          speechChunksRef.current.push(event.data);
+        }
+      };
+      recorder.onstop = () => {
+        const recordingMimeType = recorder.mimeType || 'audio/webm';
+        const blob = new Blob(speechChunksRef.current, { type: recordingMimeType });
+        const file = new File(
+          [blob],
+          `review-recording-${Date.now()}.${getRecordingFileExtension(recordingMimeType)}`,
+          { type: recordingMimeType },
+        );
+
+        stream.getTracks().forEach((track) => track.stop());
+        speechRecorderRef.current = null;
+        speechChunksRef.current = [];
+        setSpeechIsRecording(false);
+
+        if (file.size === 0) {
+          setSpeechMessage('녹음된 음성이 비어 있어요. 다시 시도해 주세요.');
+          return;
+        }
+
+        setSpeechAudioFile(file);
+        setSpeechSummary(null);
+        setSpeechMessage('');
+      };
+      recorder.start();
+      setSpeechIsRecording(true);
+      setSpeechMessage('');
+    } catch {
+      setSpeechMessage('마이크 권한을 가져오지 못했어요. 브라우저 권한을 확인해 주세요.');
+    }
+  }
+
+  function stopSpeechRecording() {
+    const recorder = speechRecorderRef.current;
+
+    if (recorder && recorder.state !== 'inactive') {
+      recorder.stop();
+    }
+  }
+
+  async function handleSummarizeSpeech() {
+    if (!speechAudioFile) {
+      setSpeechMessage('먼저 녹음하거나 음성 파일을 올려 주세요.');
+      return;
+    }
+
+    setSpeechIsSummarizing(true);
+    setSpeechMessage('');
+
+    try {
+      setSpeechSummary(await summarizeSpeechAudio('review', speechAudioFile));
+    } catch (error) {
+      setSpeechMessage(error instanceof Error ? error.message : '음성 요약을 처리하지 못했어요.');
+    } finally {
+      setSpeechIsSummarizing(false);
+    }
+  }
+
+  function openSpeechSummaryAsReviewDraft() {
+    if (!speechSummary) {
+      return;
+    }
+
+    const fields = speechSummary.fields;
+    const bodyParts = [
+      getMentionedValue(fields.visitPurpose),
+      getMentionedValue(fields.testTreatment),
+      getMentionedValue(fields.precautions),
+      getMentionedValue(fields.followUpPlan),
+      getMentionedValue(fields.otherMemo),
+      speechSummary.transcript,
+    ].filter(Boolean);
+
+    setDraft({
+      hospitalId: routeState?.hospitalId,
+      date: getTodayDateValue(),
+      diagnosis: getMentionedValue(fields.diagnosis),
+      medicine: getMentionedValue(fields.prescription),
+      body: bodyParts.join('\n\n'),
+    });
+    setEditingReview(null);
+    setWriteMode(null);
     setComposerOpen(true);
   }
 
@@ -629,6 +783,50 @@ export function ReviewsPage() {
           initialDraft={draft}
           editingReview={editingReview}
         />
+        <ModalSheet
+          open={writeMode === 'direct'}
+          title="리뷰 작성 방법"
+          onClose={() => setWriteMode(null)}
+        >
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={openDirectReview}
+              className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-4 text-sm font-semibold text-white"
+            >
+              <Icon name="edit" className="h-5 w-5" />
+              직접 작성
+            </button>
+            <button
+              type="button"
+              onClick={openSpeechReview}
+              className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border border-emerald-200 px-4 py-4 text-sm font-semibold text-emerald-700"
+            >
+              <Icon name="mic" className="h-5 w-5" />
+              음성 인식
+            </button>
+          </div>
+        </ModalSheet>
+        <ModalSheet
+          open={writeMode === 'speech'}
+          title="음성으로 리뷰 작성"
+          onClose={() => setWriteMode(null)}
+        >
+          <SpeechSummaryPanel
+            applyLabel="리뷰 작성창으로 열기"
+            audioMessage={speechMessage}
+            canRequestSummary={Boolean(speechAudioFile)}
+            isRecording={speechIsRecording}
+            isSummarizing={speechIsSummarizing}
+            summary={speechSummary}
+            onApplySummary={speechSummary ? openSpeechSummaryAsReviewDraft : undefined}
+            onAudioFileChange={handleSpeechAudioFileChange}
+            onStartRecording={startSpeechRecording}
+            onStopRecording={stopSpeechRecording}
+            onSummaryChange={setSpeechSummary}
+            onSummarize={handleSummarizeSpeech}
+          />
+        </ModalSheet>
       </div>
     </div>
   );

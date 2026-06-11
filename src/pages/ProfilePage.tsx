@@ -218,27 +218,27 @@ export function ProfilePage() {
           </div>
         </section>
 
-        <div className="space-y-4">
-          <section className="rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)] backdrop-blur">
+        <div className="space-y-10 pt-10">
+          <section>
             <h2 className="text-xl font-semibold tracking-[-0.02em] text-slate-900">내 활동</h2>
 
-            <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="mt-4 grid grid-cols-2 border-y border-slate-200">
               {activityCards.map((card) => (
                 <button
                   key={card.label}
                   type="button"
                   onClick={() => setSelectedActivityTarget(card.target)}
-                  className={`rounded-[1.6rem] border border-emerald-100 bg-[#f4fbf7] p-4 text-left transition active:scale-[0.98] ${
-                    card.target === 'writtenReviews' ? 'col-span-2' : ''
+                  className={`min-h-[8.5rem] border-b border-slate-200 px-3 py-5 text-left transition active:bg-emerald-50/50 ${
+                    card.target === 'writtenReviews'
+                      ? 'col-span-2 border-b-0'
+                      : 'odd:border-r'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                       <Icon name={card.icon} className="h-5 w-5" />
                     </span>
-                    <span className="text-3xl font-semibold tracking-[-0.03em] text-slate-900">
-                      {card.value}
-                    </span>
+                    <span className="text-3xl font-semibold text-slate-900">{card.value}</span>
                   </div>
                   <p className="mt-4 text-sm font-medium text-slate-600">{card.label}</p>
                 </button>
@@ -246,19 +246,17 @@ export function ProfilePage() {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_rgba(15,118,110,0.08)]">
+          <section>
             <h2 className="text-lg font-semibold text-slate-900">계정 관리</h2>
 
-            <div className="mt-4 divide-y divide-slate-100">
+            <div className="mt-3 divide-y divide-slate-200 border-y border-slate-200">
               <button
                 type="button"
                 onClick={() => openAccountAction('nickname')}
                 className="flex w-full items-center justify-between py-4 text-left"
               >
                 <span className="font-medium text-slate-700">닉네임 수정</span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                  <Icon name="chevron" className="h-5 w-5" />
-                </span>
+                <Icon name="chevron" className="h-5 w-5 text-slate-300" />
               </button>
               <button
                 type="button"
@@ -266,9 +264,7 @@ export function ProfilePage() {
                 className="flex w-full items-center justify-between py-4 text-left"
               >
                 <span className="font-medium text-slate-700">프로필 사진 수정</span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                  <Icon name="chevron" className="h-5 w-5" />
-                </span>
+                <Icon name="chevron" className="h-5 w-5 text-slate-300" />
               </button>
               <button
                 type="button"
@@ -276,9 +272,7 @@ export function ProfilePage() {
                 className="flex w-full items-center justify-between py-4 text-left"
               >
                 <span className="font-medium text-rose-500">로그아웃</span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-400">
-                  <Icon name="x" className="h-5 w-5" />
-                </span>
+                <Icon name="x" className="h-5 w-5 text-rose-400" />
               </button>
               <button
                 type="button"
@@ -289,9 +283,7 @@ export function ProfilePage() {
                 <span className="font-medium text-rose-600">
                   {accountDeleteLoading ? '계정 삭제 중...' : '계정 삭제'}
                 </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-400">
-                  <Icon name="trash" className="h-5 w-5" />
-                </span>
+                <Icon name="trash" className="h-5 w-5 text-rose-400" />
               </button>
             </div>
 
@@ -418,15 +410,15 @@ export function ProfilePage() {
                       className="w-full rounded-lg border border-emerald-100 bg-[#f7fcf9] p-4 text-left transition active:scale-[0.99]"
                     >
                       <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="font-semibold text-slate-900">{review.petName} 리뷰</p>
-                          <p className="mt-1 truncate text-sm text-slate-500">{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
-                          <div className="mt-2 space-y-1.5 text-sm text-slate-700">
-                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">동물 종</span>{review.species}</p>
-                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병원</span>{hospitalNames[review.hospitalId] ?? '이름 없는 병원'}</p>
-                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">병명</span>{review.diagnosis || '미입력'}</p>
-                            <p className="rounded-md bg-slate-50 px-3 py-2"><span className="mr-2 font-semibold text-slate-500">처방</span>{review.medicine}</p>
-                          </div>
+                        <div className="min-w-0 flex-1 space-y-2 text-sm text-slate-700">
+                          <p className="rounded-md bg-slate-50 px-3 py-2">
+                            <span className="mr-2 font-semibold text-slate-500">동물 병원</span>
+                            {hospitalNames[review.hospitalId] ?? '이름 없는 병원'}
+                          </p>
+                          <p className="rounded-md bg-slate-50 px-3 py-2">
+                            <span className="mr-2 font-semibold text-slate-500">동물 종</span>
+                            {review.species}
+                          </p>
                         </div>
                         <Icon name="star" className="h-5 w-5 shrink-0 text-amber-500" />
                       </div>

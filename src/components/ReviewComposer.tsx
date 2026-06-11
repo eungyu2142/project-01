@@ -404,7 +404,7 @@ export function ReviewComposer({
         ) : null}
 
         {!editingReview && medicalRecords.length > 0 ? (
-          <label className="block rounded-lg border border-emerald-100 bg-white/80 p-4">
+          <label className="block border-y border-slate-100 py-4">
             <select
               value={selectedRecordId}
               onChange={(event) => {
@@ -522,7 +522,7 @@ export function ReviewComposer({
         </div>
 
         {selectedHospital ? (
-          <div className="rounded-lg bg-emerald-50/70 px-4 py-3 text-sm text-slate-600">
+          <div className="border-l-2 border-emerald-400 py-1 pl-3 text-sm text-slate-600">
             <p className="font-medium text-slate-800">{selectedHospital.name}</p>
             <p className="mt-1 text-xs text-slate-500">{selectedHospital.address}</p>
           </div>
@@ -547,7 +547,7 @@ export function ReviewComposer({
         </label>
 
         {selectedPet ? (
-          <div className="grid grid-cols-2 gap-3 rounded-lg bg-emerald-50/70 p-4 text-sm text-slate-600">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4 border-y border-slate-100 py-4 text-sm text-slate-600">
             <div>
               <p className="text-xs text-slate-400">동물 분류</p>
               <p className="mt-1 font-medium text-slate-800">
@@ -696,7 +696,7 @@ export function ReviewComposer({
         </label>
 
         {!existingLinkedRecord && !selectedRecordId ? (
-          <label className="flex items-center gap-3 rounded-lg bg-emerald-50/80 px-4 py-3 text-sm text-slate-700">
+          <label className="flex items-center gap-3 border-y border-slate-100 py-3 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={saveToRecord}
@@ -708,7 +708,7 @@ export function ReviewComposer({
         ) : null}
 
         {saveToRecord && !existingLinkedRecord && !selectedRecordId ? (
-          <div className="space-y-4 rounded-lg border border-emerald-100 bg-white/80 p-4">
+          <div className="space-y-4 border-l-2 border-emerald-200 pl-4">
             <label className="block space-y-2">
               <span className="text-sm font-medium text-slate-700">수의사의 의견</span>
               <textarea
