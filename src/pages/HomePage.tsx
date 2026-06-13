@@ -14,7 +14,7 @@ import {
 } from '../lib/format';
 import { isDatasetHospital } from '../lib/hospitalDataset';
 import { resolveCurrentRegion } from '../lib/currentLocation';
-import type { AnimalFilter, Hospital, HospitalAnimalFilter, Review } from '../types';
+import type { AnimalFilter, Hospital, HospitalAnimalFilter, Pet, Review } from '../types';
 
 interface HomeRouteState {
   hospitalId?: string;
@@ -79,14 +79,21 @@ function matchesSearchKeyword(hospital: Hospital, keyword: string) {
   );
 }
 
-function getRecentReviewedSpecies(hospitalId: string, reviews: Review[], animalType: HospitalAnimalFilter) {
+function getRecentReviewedSpecies(
+  hospitalId: string,
+  reviews: Review[],
+  pets: Pet[],
+  animalType: HospitalAnimalFilter,
+) {
   const seen = new Set<string>();
+  const petsById = new Map(pets.map((pet) => [pet.id, pet]));
 
   return reviews
     .filter((review) => review.hospitalId === hospitalId)
     .filter((review) => (animalType === 'all' || animalType === 'unclear' ? true : review.animalType === animalType))
     .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
-    .map((review) => review.species.trim())
+    .map((review) => (review.petId ? petsById.get(review.petId)?.species : null) ?? review.species)
+    .map((species) => species.trim())
     .filter(Boolean)
     .filter((species) => {
       if (seen.has(species)) {
@@ -103,7 +110,7 @@ export function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const routeState = location.state as HomeRouteState | null;
-  const { datasetError, datasetStatus, hospitals, reviews, saveUserLocation, toggleHospitalLike, user } =
+  const { datasetError, datasetStatus, hospitals, pets, reviews, saveUserLocation, toggleHospitalLike, user } =
     useAppContext();
   const [selectedAnimal, setSelectedAnimal] = useState<HospitalAnimalFilter>(routeState?.animalType ?? 'all');
   const [searchText, setSearchText] = useState('');
@@ -273,7 +280,7 @@ export function HomePage() {
       )
     : [];
   const recentSpecies = selectedHospital
-    ? getRecentReviewedSpecies(selectedHospital.id, reviews, selectedAnimal)
+    ? getRecentReviewedSpecies(selectedHospital.id, reviews, pets, selectedAnimal)
     : [];
 
   function handleSelectHospital(hospitalId: string) {

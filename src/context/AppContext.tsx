@@ -27,6 +27,7 @@ import {
   upsertMedicalRecord,
   upsertPet,
   upsertReview,
+  updateReviewsForPetRemote,
   updateReview,
   upsertUserProfile,
 } from '../lib/supabaseAppStore';
@@ -843,6 +844,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     });
 
     void upsertPet(appUserId, nextPet).catch((error) => persistError('savePet', error));
+
+    if (input.id) {
+      setReviews((current) =>
+        current.map((review) =>
+          review.petId === input.id
+            ? {
+                ...review,
+                animalType: nextPet.animalType,
+                species: nextPet.species,
+                petName: nextPet.name,
+              }
+            : review,
+        ),
+      );
+      void updateReviewsForPetRemote(appUserId, nextPet).catch((error) =>
+        persistError('savePet:syncReviews', error),
+      );
+    }
   }
 
   function deletePet(petId: string) {

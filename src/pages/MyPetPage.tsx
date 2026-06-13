@@ -8,7 +8,7 @@ import { PetEditor } from '../components/PetEditor';
 import { RecordEditor } from '../components/RecordEditor';
 import { SearchBar } from '../components/SearchBar';
 import { useAppContext } from '../context/AppContext';
-import { formatCurrency, formatDate } from '../lib/format';
+import { formatCurrency, formatDate, getAnimalLabel } from '../lib/format';
 import { isImageAvatar } from '../lib/petAvatar';
 import type { AnimalFilter, MedicalRecord, MedicalRecordDraft, Pet } from '../types';
 
@@ -27,8 +27,7 @@ interface PetCardsProps {
 interface RecordCardsProps {
   records: MedicalRecord[];
   hospitalNames: Record<string, string>;
-  petNames: Record<string, string>;
-  activeRecordId: string;
+  petsById: Record<string, Pet>;
   onDelete: (recordId: string) => void;
   onEdit: (record: MedicalRecord) => void;
   onSelect: (recordId: string) => void;
@@ -37,79 +36,100 @@ interface RecordCardsProps {
 interface RecordDetailCardProps {
   record: MedicalRecord;
   hospitalNames: Record<string, string>;
-  petNames: Record<string, string>;
+  petsById: Record<string, Pet>;
   actionSlot?: ReactNode;
 }
+
+const compactBadgeClass = 'inline-flex min-h-7 items-center rounded-md px-2 py-1 text-xs font-semibold leading-none';
+const spaciousBadgeClass = 'inline-flex h-8 items-center rounded-md px-3 text-sm font-semibold leading-none';
+const summaryRowClass = 'border-b border-slate-100 py-2.5 text-sm text-slate-700 last:border-b-0';
+const summaryLabelClass = 'mr-2 font-semibold text-slate-500';
+const summaryHospitalRowClass = 'border-b border-slate-100 py-2.5 text-sm text-emerald-700';
+const summaryHospitalLabelClass = 'mr-2 font-semibold text-emerald-600';
 
 const animalName = {
   reptile: '파충류',
   rodent: '설치류',
   bird: '조류',
 } as const;
-function truncateWithDots(value: string, maxLength = 18) {
-  if (value.length <= maxLength) {
-    return value;
-  }
-
-  return `${value.slice(0, maxLength)}.......`;
-}
 
 function RecordDetailCard({
   record,
   hospitalNames,
-  petNames,
+  petsById,
   actionSlot,
 }: RecordDetailCardProps) {
+  const pet = petsById[record.petId];
+
   return (
-    <div className="rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_8px_20px_rgba(15,118,110,0.08)]">
+    <article className="flex max-h-[calc(100dvh-13rem)] flex-col rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_8px_18px_rgba(15,118,110,0.07)] sm:max-h-[calc(100dvh-15rem)]">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm text-slate-400">{formatDate(record.date)}</p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-900">{record.diagnosis}</h3>
-          <p className="mt-1 text-sm font-medium text-emerald-700">{petNames[record.petId] ?? '반려동물 미선택'}</p>
+        <div className="min-w-0 flex-1">
+          <span className={`${spaciousBadgeClass} bg-emerald-100 text-emerald-700`}>
+            {pet ? getAnimalLabel(pet.animalType) : '동물 미선택'}
+          </span>
+          <p
+            className="mt-3 text-lg text-slate-500"
+            title={`${formatDate(record.date)} · ${formatCurrency(record.cost)}`}
+          >
+            {formatDate(record.date)} · {formatCurrency(record.cost)}
+          </p>
         </div>
         {actionSlot ? <div className="flex gap-2">{actionSlot}</div> : null}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-600">
-        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">병원</p>
-          <p className="mt-1 font-medium text-slate-800">{hospitalNames[record.hospitalId]}</p>
-        </div>
-        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">수의사 의견</p>
-          <p className="mt-1 leading-6 text-slate-800">{record.veterinarianNote}</p>
-        </div>
-        <div className="min-w-0 rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">처방</p>
-          <p className="mt-1 break-words text-slate-800">{record.prescription || '없음'}</p>
-        </div>
-        <div className="min-w-0 rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">진료 비용</p>
-          <p className="mt-1 overflow-hidden whitespace-nowrap text-slate-800" title={formatCurrency(record.cost)}>
-            {truncateWithDots(formatCurrency(record.cost))}
+      <div className="mt-5 min-h-0 overflow-y-auto pr-1">
+        <div className="border-y border-slate-100">
+          <p className={summaryHospitalRowClass}>
+            <span className={summaryHospitalLabelClass}>병원</span>
+            {hospitalNames[record.hospitalId] ?? '이름 없는 병원'}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>동물 종</span>
+            {pet?.species || '미입력'}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>반려동물</span>
+            {pet?.name || '미입력'}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>병명</span>
+            {record.diagnosis || '미입력'}
+          </p>
+          <p className={summaryRowClass}>
+            <span className={summaryLabelClass}>처방</span>
+            {record.prescription || '미입력'}
           </p>
         </div>
-        <div className="col-span-2 rounded-lg bg-emerald-50/70 p-4">
-          <p className="text-xs text-slate-400">메모</p>
-          <p className="mt-1 leading-6 text-slate-800">{record.memo || '아직 메모가 없어요'}</p>
-        </div>
+
+        <section className="mt-5 border-t border-slate-100 pt-5">
+          <h2 className="text-base font-semibold text-slate-900">수의사 의견</h2>
+          <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-600">
+            {record.veterinarianNote.trim() || '작성된 수의사 의견이 없습니다.'}
+          </p>
+        </section>
+
+        <section className="mt-5 border-t border-slate-100 pt-5">
+          <h2 className="text-base font-semibold text-slate-900">메모</h2>
+          <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-600">
+            {record.memo.trim() || '작성된 메모가 없습니다.'}
+          </p>
+        </section>
+
+        {(record.imageUrls ?? []).length > 0 ? (
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {(record.imageUrls ?? []).map((imageUrl) => (
+              <img
+                key={imageUrl}
+                src={imageUrl}
+                alt="진료 기록 이미지"
+                className="h-32 w-full rounded-lg object-cover"
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
-
-      {(record.imageUrls ?? []).length > 0 ? (
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {(record.imageUrls ?? []).map((imageUrl) => (
-            <img
-              key={imageUrl}
-              src={imageUrl}
-              alt="진료 기록 이미지"
-              className="h-24 w-full rounded-lg object-cover"
-            />
-          ))}
-        </div>
-      ) : null}
-
-    </div>
+    </article>
   );
 }
 
@@ -174,8 +194,7 @@ function PetCards({ pets, selectedPetId, onSelect }: PetCardsProps) {
 function RecordCards({
   records,
   hospitalNames,
-  petNames,
-  activeRecordId,
+  petsById,
   onDelete,
   onEdit,
   onSelect,
@@ -191,28 +210,45 @@ function RecordCards({
   return (
     <>
       <div className="mt-4 space-y-3">
-        {visibleRecords.map((record) => (
-          <article
-            key={record.id}
-            className={`w-full rounded-lg border px-4 py-4 text-left shadow-[0_8px_18px_rgba(15,118,110,0.07)] ${
-              activeRecordId === record.id ? 'border-emerald-300 bg-white' : 'border-white bg-white/90'
-            }`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <button type="button" onClick={() => onSelect(record.id)} className="min-w-0 flex-1 text-left">
-                <p className="flex items-center gap-2 text-sm text-slate-400">
-                  <Icon name="calendar" className="h-4 w-4" />
-                  {formatDate(record.date)}
-                </p>
-                <p className="mt-3 text-lg font-semibold text-slate-900">{record.diagnosis}</p>
-                <p className="mt-1 text-sm font-medium text-emerald-700">{petNames[record.petId] ?? '반려동물 미선택'}</p>
-                <p className="mt-1 text-sm text-slate-500">{hospitalNames[record.hospitalId]}</p>
-              </button>
-              <div className="flex shrink-0 gap-2">
+        {visibleRecords.map((record) => {
+          const pet = petsById[record.petId];
+          const hospitalName = hospitalNames[record.hospitalId] ?? '이름 없는 병원';
+
+          return (
+            <article
+              key={record.id}
+              className="relative block w-full rounded-lg border border-emerald-100 bg-white p-4 text-left shadow-[0_8px_20px_rgba(15,118,110,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(15,118,110,0.12)]"
+            >
+              <button
+                type="button"
+                onClick={() => onSelect(record.id)}
+                className="absolute inset-0 z-0 rounded-lg"
+                aria-label={`${hospitalName} 진료 기록 상세보기`}
+              />
+
+              <div className="pointer-events-none relative z-10 flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1 text-left">
+                  <span className={`${compactBadgeClass} bg-emerald-50 text-emerald-700`}>
+                    {pet ? getAnimalLabel(pet.animalType) : '동물 미선택'}
+                  </span>
+
+                  <div className="mt-3 border-y border-slate-100">
+                    <p className={`${summaryHospitalRowClass} block w-full truncate text-left`} title={hospitalName}>
+                      <span className={summaryHospitalLabelClass}>동물 병원</span>
+                      {hospitalName}
+                    </p>
+                    <p className={summaryRowClass}>
+                      <span className={summaryLabelClass}>동물 종</span>
+                      {pet?.species || '미입력'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pointer-events-auto flex shrink-0 gap-1.5">
                 <button
                   type="button"
                   onClick={() => onEdit(record)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-50 text-emerald-700"
                   aria-label="진료 기록 수정"
                 >
                   <Icon name="edit" className="h-4 w-4" />
@@ -220,7 +256,7 @@ function RecordCards({
                 <button
                   type="button"
                   onClick={() => onDelete(record.id)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-500"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-rose-50 text-rose-500"
                   aria-label="진료 기록 삭제"
                 >
                   <Icon name="trash" className="h-4 w-4" />
@@ -228,7 +264,8 @@ function RecordCards({
               </div>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {hasMore ? (
@@ -365,11 +402,6 @@ export function MyPetPage() {
     return acc;
   }, {});
 
-  const petNames = pets.reduce<Record<string, string>>((acc, pet) => {
-    acc[pet.id] = pet.name;
-    return acc;
-  }, {});
-
   function openDirectRecordEditor() {
     setDraftRecord(null);
     setEditingRecord(null);
@@ -431,13 +463,14 @@ export function MyPetPage() {
             >
               <Icon name="chevron" className="h-6 w-6 rotate-180" />
             </button>
+            <h1 className="mt-4 text-2xl font-semibold text-white">진료 기록 상세</h1>
           </header>
 
           <section className="mt-2">
             <RecordDetailCard
               record={expandedRecord}
               hospitalNames={hospitalNames}
-              petNames={petNames}
+              petsById={petsById}
               actionSlot={
                 <>
                   <button
@@ -584,8 +617,7 @@ export function MyPetPage() {
             key={`records-${selectedPet?.id ?? 'all'}-${visibleRecords.length}`}
             records={visibleRecords}
             hospitalNames={hospitalNames}
-            petNames={petNames}
-            activeRecordId={activeRecordId}
+            petsById={petsById}
             onEdit={(record) => {
               setDraftRecord(null);
               setEditingRecord(record);
@@ -608,7 +640,7 @@ export function MyPetPage() {
                 <RecordDetailCard
                   record={record}
                   hospitalNames={hospitalNames}
-                  petNames={petNames}
+                  petsById={petsById}
                 />
                 <button
                   type="button"

@@ -426,6 +426,24 @@ export async function upsertPet(userId: string, pet: Pet) {
   if (error) throw error;
 }
 
+export async function updateReviewsForPetRemote(userId: string, pet: Pet) {
+  if (!isSupabaseConfigured || !supabase) {
+    return;
+  }
+
+  const { error } = await supabase
+    .from('reviews')
+    .update({
+      animal_type: pet.animalType,
+      species: pet.species,
+      pet_name: pet.name,
+    })
+    .eq('user_id', userId)
+    .eq('pet_id', pet.id);
+
+  if (error) throw error;
+}
+
 export async function deletePetRemote(petId: string) {
   if (!isSupabaseConfigured || !supabase) {
     return;

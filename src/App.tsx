@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { BottomNav } from './components/BottomNav';
 import { useAuth } from './context/AuthContext';
 import { useAppContext } from './context/AppContext';
@@ -8,8 +8,11 @@ import { HomePage } from './pages/HomePage';
 import { MyPetPage } from './pages/MyPetPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ReviewsPage } from './pages/ReviewsPage';
+import { LaunchPage } from './pages/LaunchPage';
 
 const FORCE_AUTH_VIEW_KEY = 'exopet-force-auth-view';
+const FORCE_AUTH_VIEW_EVENT = 'exopet-force-auth-view-change';
+const NEW_ACCOUNT_WELCOME_EVENT = 'exopet-new-account-welcome';
 
 function getForceAuthView() {
   if (typeof window === 'undefined') {
@@ -53,9 +56,12 @@ function AppRoutes() {
 export default function App() {
   const { authReady, loginIdRecoveryResult, passwordRecovery, session } = useAuth();
   const { appReady, user } = useAppContext();
+  const navigate = useNavigate();
+  const previousSessionUserIdRef = useRef<string | null>(null);
   const [forceAuthView, setForceAuthView] = useState(() => {
     return getForceAuthView();
   });
+  const [showNewAccountWelcome, setShowNewAccountWelcome] = useState(false);
   const isUserHydrated = !session || (appReady && user.id === session.user.id);
 
   useEffect(() => {
@@ -69,13 +75,52 @@ export default function App() {
 
     syncForceAuthView();
     window.addEventListener('focus', syncForceAuthView);
+    window.addEventListener(FORCE_AUTH_VIEW_EVENT, syncForceAuthView);
 
-    return () => window.removeEventListener('focus', syncForceAuthView);
+    return () => {
+      window.removeEventListener('focus', syncForceAuthView);
+      window.removeEventListener(FORCE_AUTH_VIEW_EVENT, syncForceAuthView);
+    };
   }, []);
 
   useEffect(() => {
-    setForceAuthView(getForceAuthView());
-  }, [session]);
+    const showWelcome = () => {
+      setShowNewAccountWelcome(true);
+      navigate('/', { replace: true });
+    };
+
+    window.addEventListener(NEW_ACCOUNT_WELCOME_EVENT, showWelcome);
+    return () => window.removeEventListener(NEW_ACCOUNT_WELCOME_EVENT, showWelcome);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!session) {
+      previousSessionUserIdRef.current = null;
+      return;
+    }
+
+    if (!authReady || !isUserHydrated || passwordRecovery || loginIdRecoveryResult) {
+      return;
+    }
+
+    if (previousSessionUserIdRef.current !== session.user.id) {
+      previousSessionUserIdRef.current = session.user.id;
+      navigate('/', { replace: true });
+    }
+  }, [authReady, isUserHydrated, loginIdRecoveryResult, navigate, passwordRecovery, session]);
+
+  useEffect(() => {
+    if (!showNewAccountWelcome || !session || !isUserHydrated) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowNewAccountWelcome(false);
+      navigate('/', { replace: true });
+    }, 1400);
+
+    return () => window.clearTimeout(timer);
+  }, [isUserHydrated, navigate, session, showNewAccountWelcome]);
 
   if (!authReady || !isUserHydrated) {
     return (
@@ -95,6 +140,10 @@ export default function App() {
 
   if (passwordRecovery) {
     return <AuthPage />;
+  }
+
+  if (showNewAccountWelcome) {
+    return <LaunchPage mode="splash" onEnter={() => undefined} />;
   }
 
   return <AppRoutes />;

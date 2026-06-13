@@ -399,14 +399,9 @@ export function ReviewsPage() {
     routeState?.openComposer,
   ]);
 
-  const myReviews = useMemo(
-    () => reviews.filter((review) => review.isMine || review.userId === user.id),
-    [reviews, user.id],
-  );
-
   const countScopedReviews = useMemo(
     () =>
-      myReviews
+      reviews
         .filter((review) => (hospitalFilterId ? review.hospitalId === hospitalFilterId : true))
         .filter((review) => {
           if (!normalizedSearchKeyword) {
@@ -415,7 +410,7 @@ export function ReviewsPage() {
 
           return matchesReviewSearch(review, hospitalById[review.hospitalId], normalizedSearchKeyword);
         }),
-    [hospitalById, hospitalFilterId, myReviews, normalizedSearchKeyword],
+    [hospitalById, hospitalFilterId, normalizedSearchKeyword, reviews],
   );
 
   const animalFilteredReviews = useMemo(

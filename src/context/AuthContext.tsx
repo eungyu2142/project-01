@@ -34,6 +34,8 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 const FORCE_AUTH_VIEW_KEY = 'exopet-force-auth-view';
+const FORCE_AUTH_VIEW_EVENT = 'exopet-force-auth-view-change';
+const NEW_ACCOUNT_WELCOME_EVENT = 'exopet-new-account-welcome';
 
 function hasRecoveryParams() {
   if (typeof window === 'undefined') {
@@ -82,22 +84,23 @@ function setForceAuthView(enabled: boolean) {
 
   if (enabled) {
     window.sessionStorage.setItem(FORCE_AUTH_VIEW_KEY, 'true');
-    return;
+  } else {
+    window.sessionStorage.removeItem(FORCE_AUTH_VIEW_KEY);
   }
 
-  window.sessionStorage.removeItem(FORCE_AUTH_VIEW_KEY);
+  window.dispatchEvent(new Event(FORCE_AUTH_VIEW_EVENT));
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured);
   const [session, setSession] = useState<Session | null>(null);
-  const [passwordRecovery, setPasswordRecovery] = useState(hasRecoveryParams);
+  const [passwordRecovery, setPasswordRecovery] = useState(
+    () => isSupabaseConfigured && hasRecoveryParams(),
+  );
   const [loginIdRecoveryResult, setLoginIdRecoveryResult] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
-      setAuthReady(true);
-      setPasswordRecovery(false);
       return;
     }
 
@@ -220,6 +223,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (error) {
           throw error;
         }
+
+        if (data.session && typeof window !== 'undefined') {
+          window.dispatchEvent(new Event(NEW_ACCOUNT_WELCOME_EVENT));
+        }
+
+        setForceAuthView(false);
+        setLoginIdRecoveryResult(null);
 
         return {
           requiresEmailConfirmation: !data.session,
